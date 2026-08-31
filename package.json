@@ -1,6 +1,7 @@
 {
   "name": "volt-garage",
   "private": true,
+  "license": "SEE LICENSE IN LICENSE",
   "engines": {
     "node": ">=18"
   },

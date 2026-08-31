@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://e-commerce-pr01-voltgarage.netlify.app/sitemap.xml

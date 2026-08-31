@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <!-- Meta -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Poznaj kolekcje VOLT GARAGE i wybierz kategorię akcesoriów do wnętrza, nadwozia oraz garażu – od emblematów i naklejek po gadżety premium."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#0f172a" />
+    <!-- Title -->
+    <title>Kolekcje | VOLT GARAGE – kategorie akcesoriów</title>
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://e-commerce-pr01-voltgarage.netlify.app/pages/collections.html"
+    />
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Kolekcje | VOLT GARAGE – kategorie akcesoriów" />
+    <meta
+      property="og:description"
+      content="Poznaj kolekcje VOLT GARAGE i wybierz kategorię akcesoriów do wnętrza, nadwozia oraz garażu – od emblematów i naklejek po gadżety premium."
+    />
+    <meta
+      property="og:url"
+      content="https://e-commerce-pr01-voltgarage.netlify.app/pages/collections.html"
+    />
+    <meta
+      property="og:image"
+      content="https://e-commerce-pr01-voltgarage.netlify.app/assets/images/og/og-1200x630.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Kolekcje | VOLT GARAGE – kategorie akcesoriów" />
+    <meta
+      name="twitter:description"
+      content="Poznaj kolekcje VOLT GARAGE i wybierz kategorię akcesoriów do wnętrza, nadwozia oraz garażu – od emblematów i naklejek po gadżety premium."
+    />
+    <meta
+      name="twitter:image"
+      content="https://e-commerce-pr01-voltgarage.netlify.app/assets/images/og/og-1200x630.jpg"
+    />
+    <!-- Favicons + manifest -->
+    <link rel="icon" href="/assets/icons/favicon/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon/favicon.svg" />
+    <link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <!-- Theme preload -->
+    <script data-theme-preload>
+      (function () {
+        var storageKey = 'vg_theme';
+        var theme = null;
+        try {
+          theme = localStorage.getItem(storageKey);
+        } catch (e) {
+          theme = null;
+        }
+        if (theme !== 'light' && theme !== 'dark') {
+          var prefersDark =
+            window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          theme = prefersDark ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <!-- Preloads -->
+    <link
+      rel="preload"
+      href="/assets/fonts/space-grotesk/SpaceGrotesk-700.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/main.css" />
+  </head>
+
+  <!-- Body -->
+  <body class="page page--collections">
+    <!-- @include src/partials/header.html -->
+
+    <main id="main">
+      <nav class="breadcrumbs" aria-label="Okruszki">
+        <ol>
+          <li><a href="../index.html">Strona główna</a></li>
+          <li>Kolekcje / Kategorie</li>
+        </ol>
+      </nav>
+
+      <section class="page-hero">
+        <div class="container">
+          <h1>Kolekcje / Kategorie</h1>
+          <p>Wybierz interesującą Cię kategorię i przejdź prosto do filtrowanego sklepu.</p>
+          <span class="page-hero-mark" aria-hidden="true"></span>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+          <div class="grid-3">
+            <!-- Emblematy -->
+            <article class="card" data-reveal>
+              <span class="badge">Emblematy</span>
+              <p>Detale do grilla, maski i frontu auta z wyraźnym akcentem stylu premium.</p>
+              <div class="tag-list">
+                <a class="btn btn-outline" href="shop.html?category=Emblematy">Zobacz produkty</a>
+              </div>
+            </article>
+            <!-- Naklejki -->
+            <article class="card" data-reveal>
+              <span class="badge">Naklejki</span>
+              <p>
+                Matowe i odblaskowe wzory, które dodają sylwetce auta bardziej indywidualnego
+                charakteru.
+              </p>
+              <div class="tag-list">
+                <a class="btn btn-outline" href="shop.html?category=Naklejki">Zobacz produkty</a>
+              </div>
+            </article>
+            <!-- Gadżety -->
+            <article class="card" data-reveal>
+              <span class="badge">Gadżety</span>
+              <p>Akcesoria do garażu, codziennej jazdy i dopracowanego stylu kierowcy.</p>
+              <div class="tag-list">
+                <a class="btn btn-outline" href="shop.html?category=Gadżety">Zobacz produkty</a>
+              </div>
+            </article>
+            <!-- Wnętrze -->
+            <article class="card" data-reveal>
+              <span class="badge">Wnętrze</span>
+              <p>Dodatki do kabiny, które łączą wygodę, estetykę i lepsze wykończenie wnętrza.</p>
+              <div class="tag-list">
+                <a class="btn btn-outline" href="shop.html?category=Wnętrze">Zobacz produkty</a>
+              </div>
+            </article>
+            <!-- Zewnętrzne -->
+            <article class="card" data-reveal>
+              <span class="badge">Zewnętrzne</span>
+              <p>
+                Elementy do nadwozia i zewnętrznych stref auta o bardziej dopracowanym wyglądzie.
+              </p>
+              <div class="tag-list">
+                <a class="btn btn-outline" href="shop.html?category=Zewnętrzne">Zobacz produkty</a>
+              </div>
+            </article>
+            <!-- Detailing -->
+            <article class="card" data-reveal>
+              <span class="badge">Detailing</span>
+              <p>Zestawy i akcesoria do pielęgnacji dla aut zadbanych w każdym detalu.</p>
+              <div class="tag-list">
+                <a class="btn btn-outline" href="shop.html?category=Gadżety">Zobacz produkty</a>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="container collections-cta">
+          <div class="tag-list">
+            <a class="btn btn-accent" href="shop.html">Zobacz wszystkie produkty</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- @include src/partials/footer.html -->
+
+    <script type="module" src="../js/main.js"></script>
+  </body>
+</html>

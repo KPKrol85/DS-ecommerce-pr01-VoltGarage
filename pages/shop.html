@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <!-- Meta -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Przeglądaj wszystkie produkty VOLT GARAGE – emblematy, naklejki, gadżety i akcesoria samochodowe premium z wygodnym filtrowaniem kategorii."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#0f172a" />
+    <!-- Title -->
+    <title>Sklep | VOLT GARAGE – wszystkie produkty</title>
+    <!-- Canonical -->
+    <link rel="canonical" href="https://e-commerce-pr01-voltgarage.netlify.app/pages/shop.html" />
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Sklep | VOLT GARAGE – wszystkie produkty" />
+    <meta
+      property="og:description"
+      content="Przeglądaj wszystkie produkty VOLT GARAGE – emblematy, naklejki, gadżety i akcesoria samochodowe premium z wygodnym filtrowaniem kategorii."
+    />
+    <meta
+      property="og:url"
+      content="https://e-commerce-pr01-voltgarage.netlify.app/pages/shop.html"
+    />
+    <meta
+      property="og:image"
+      content="https://e-commerce-pr01-voltgarage.netlify.app/assets/images/og/og-1200x630.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Sklep | VOLT GARAGE – wszystkie produkty" />
+    <meta
+      name="twitter:description"
+      content="Przeglądaj wszystkie produkty VOLT GARAGE – emblematy, naklejki, gadżety i akcesoria samochodowe premium z wygodnym filtrowaniem kategorii."
+    />
+    <meta
+      name="twitter:image"
+      content="https://e-commerce-pr01-voltgarage.netlify.app/assets/images/og/og-1200x630.jpg"
+    />
+    <!-- Favicons + manifest -->
+    <link rel="icon" href="/assets/icons/favicon/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon/favicon.svg" />
+    <link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <!-- Theme preload -->
+    <script data-theme-preload>
+      (function () {
+        var storageKey = 'vg_theme';
+        var theme = null;
+        try {
+          theme = localStorage.getItem(storageKey);
+        } catch (e) {
+          theme = null;
+        }
+        if (theme !== 'light' && theme !== 'dark') {
+          var prefersDark =
+            window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          theme = prefersDark ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <!-- Preloads -->
+    <link
+      rel="preload"
+      href="/assets/fonts/space-grotesk/SpaceGrotesk-700.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/main.css" />
+  </head>
+  <body class="page page--shop">
+    <!-- @include src/partials/header.html -->
+
+    <main id="main">
+      <nav class="breadcrumbs" aria-label="Okruszki">
+        <ol>
+          <li><a href="../index.html">Strona główna</a></li>
+          <li>Sklep</li>
+        </ol>
+      </nav>
+
+      <section class="page-hero">
+        <div class="container">
+          <h1>Sklep</h1>
+          <p>Przeglądaj kolekcję akcesoriów dla fanów motoryzacji.</p>
+          <span class="page-hero-mark" aria-hidden="true"></span>
+        </div>
+      </section>
+
+      <section>
+        <div class="container page-layout">
+          <div class="notice" id="filter-summary">Darmowa wysyłka od 300 zł.</div>
+          <aside
+            class="filter-panel"
+            data-reveal
+            aria-labelledby="filter-heading"
+            aria-describedby="filter-summary"
+          >
+            <div class="input-group search-field" data-search>
+              <label for="filter-search">Szukaj produktu</label>
+              <div class="search-input">
+                <input
+                  type="search"
+                  id="filter-search"
+                  name="search"
+                  placeholder="Szukaj produktu&hellip;"
+                  list="search-suggestions"
+                  autocomplete="off"
+                  data-search-input
+                />
+                <button
+                  class="search-clear"
+                  type="button"
+                  aria-label="Wyczyść wyszukiwanie"
+                  data-search-clear
+                  hidden
+                >
+                  ×
+                </button>
+              </div>
+              <datalist
+                class="search-suggestions"
+                id="search-suggestions"
+                data-search-suggestions
+                aria-live="polite"
+              ></datalist>
+            </div>
+            <div class="input-group">
+              <label for="filter-category">Kategoria</label>
+              <select id="filter-category" name="category" data-native-select="true">
+                <option value="all">Wszystkie</option>
+                <option value="Emblematy">Emblematy</option>
+                <option value="Naklejki">Naklejki</option>
+                <option value="Gadżety">Gadżety</option>
+                <option value="Wnętrze">Wnętrze</option>
+                <option value="Zewnętrzne">Zewnętrzne</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label for="filter-price">Cena do <span data-price-output>400</span> zł</label>
+              <input type="range" min="50" max="450" value="400" id="filter-price" name="price" />
+            </div>
+            <div class="input-group">
+              <label for="filter-sort">Sortowanie</label>
+              <select id="filter-sort" name="sort">
+                <option value="featured">Polecane</option>
+                <option value="price-asc">Cena rosnąco</option>
+                <option value="price-desc">Cena malejąco</option>
+                <option value="name-asc">Nazwa A-Z</option>
+              </select>
+            </div>
+          </aside>
+
+          <div>
+            <div class="section-title">
+              <h2 id="filter-heading">Produkty</h2>
+              <span data-result-count class="result-count" aria-live="polite">0 produktów</span>
+            </div>
+            <div class="grid-3 products" data-products="shop">
+              <p class="state-block state-block--empty products-fallback">
+                Produkty ładują się dynamicznie. Włącz JavaScript, aby przeglądać pełny katalog.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- @include src/partials/footer.html -->
+
+    <script type="module" src="../js/main.js"></script>
+  </body>
+</html>

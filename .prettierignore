@@ -1,0 +1,8 @@
+node_modules/
+css/main.min.css
+js/main.min.js
+assets/images/_optimized/
+tools/image-optimizer/output/
+build/
+dist/
+output/

@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <!-- Meta -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Sprawdź koszyk VOLT GARAGE, przejrzyj wybrane produkty, wartość zamówienia oraz przygotuj się do szybkiej finalizacji zakupu."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#0f172a" />
+    <!-- Title -->
+    <title>Koszyk | VOLT GARAGE – Twoje produkty</title>
+    <!-- Canonical -->
+    <link rel="canonical" href="https://e-commerce-pr01-voltgarage.netlify.app/pages/cart.html" />
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Koszyk | VOLT GARAGE – Twoje produkty" />
+    <meta
+      property="og:description"
+      content="Sprawdź koszyk VOLT GARAGE, przejrzyj wybrane produkty, wartość zamówienia oraz przygotuj się do szybkiej finalizacji zakupu."
+    />
+    <meta
+      property="og:url"
+      content="https://e-commerce-pr01-voltgarage.netlify.app/pages/cart.html"
+    />
+    <meta
+      property="og:image"
+      content="https://e-commerce-pr01-voltgarage.netlify.app/assets/images/og/og-1200x630.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Koszyk | VOLT GARAGE – Twoje produkty" />
+    <meta
+      name="twitter:description"
+      content="Sprawdź koszyk VOLT GARAGE, przejrzyj wybrane produkty, wartość zamówienia oraz przygotuj się do szybkiej finalizacji zakupu."
+    />
+    <meta
+      name="twitter:image"
+      content="https://e-commerce-pr01-voltgarage.netlify.app/assets/images/og/og-1200x630.jpg"
+    />
+    <!-- Favicons + manifest -->
+    <link rel="icon" href="/assets/icons/favicon/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon/favicon.svg" />
+    <link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <!-- Theme preload -->
+    <script data-theme-preload>
+      (function () {
+        var storageKey = 'vg_theme';
+        var theme = null;
+        try {
+          theme = localStorage.getItem(storageKey);
+        } catch (e) {
+          theme = null;
+        }
+        if (theme !== 'light' && theme !== 'dark') {
+          var prefersDark =
+            window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          theme = prefersDark ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <!-- Preloads -->
+    <link
+      rel="preload"
+      href="/assets/fonts/space-grotesk/SpaceGrotesk-700.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/main.css" />
+  </head>
+  <body class="page page--cart">
+    <!-- @include src/partials/header.html -->
+
+    <main id="main">
+      <nav class="breadcrumbs" aria-label="Okruszki">
+        <ol>
+          <li><a href="../index.html">Strona główna</a></li>
+          <li>Koszyk</li>
+        </ol>
+      </nav>
+      <!-- Hero Section -->
+      <section class="page-hero">
+        <div class="container">
+          <h1>Koszyk</h1>
+          <p>Sprawdź podsumowanie i przejdź do zamówienia.</p>
+          <span class="page-hero-mark" aria-hidden="true"></span>
+        </div>
+      </section>
+
+      <section>
+        <div class="container page-layout">
+          <div class="table-like" data-cart-items></div>
+          <aside class="total-panel" aria-live="polite" data-cart-summary data-reveal>
+            <h3>
+              Podsumowanie
+              <span class="total-panel__icon" aria-hidden="true">
+                <svg
+                  class="total-panel__icon-svg"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M4 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                  <path d="M15 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                  <path d="M17 17h-11v-14h-2" />
+                  <path d="M6 5l14 1l-1 7h-13" />
+                </svg>
+              </span>
+            </h3>
+            <div class="stacked">
+              <span>Wartość produktów: <strong data-cart-subtotal>0 zł</strong></span>
+              <span>Dostawa: <strong data-cart-shipping>0 zł</strong></span>
+              <span>Razem: <strong data-cart-total>0 zł</strong></span>
+            </div>
+            <a class="btn btn-accent" href="checkout.html">Przejdź do zamówienia</a>
+            <p class="notice">Zmiany w koszyku są aktualizowane automatycznie.</p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <!-- @include src/partials/footer.html -->
+
+    <script type="module" src="../js/main.js"></script>
+  </body>
+</html>

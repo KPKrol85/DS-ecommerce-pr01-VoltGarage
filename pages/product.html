@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <!-- Meta -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Sprawdź szczegóły produktu VOLT GARAGE, dostępne warianty, dopasowanie oraz akcesoria samochodowe premium przygotowane dla kierowców ceniących styl."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#0f172a" />
+    <!-- Title -->
+    <title>Produkt | VOLT GARAGE</title>
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://e-commerce-pr01-voltgarage.netlify.app/pages/product.html"
+    />
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Produkt | VOLT GARAGE" />
+    <meta
+      property="og:description"
+      content="Sprawdź szczegóły produktu VOLT GARAGE, dostępne warianty, dopasowanie oraz akcesoria samochodowe premium przygotowane dla kierowców ceniących styl."
+    />
+    <meta
+      property="og:url"
+      content="https://e-commerce-pr01-voltgarage.netlify.app/pages/product.html"
+    />
+    <meta
+      property="og:image"
+      content="https://e-commerce-pr01-voltgarage.netlify.app/assets/images/og/og-1200x630.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Produkt | VOLT GARAGE" />
+    <meta
+      name="twitter:description"
+      content="Sprawdź szczegóły produktu VOLT GARAGE, dostępne warianty, dopasowanie oraz akcesoria samochodowe premium przygotowane dla kierowców ceniących styl."
+    />
+    <meta
+      name="twitter:image"
+      content="https://e-commerce-pr01-voltgarage.netlify.app/assets/images/og/og-1200x630.jpg"
+    />
+    <!-- Favicons + manifest -->
+    <link rel="icon" href="/assets/icons/favicon/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon/favicon.svg" />
+    <link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <!-- Theme preload -->
+    <script data-theme-preload>
+      (function () {
+        var storageKey = 'vg_theme';
+        var theme = null;
+        try {
+          theme = localStorage.getItem(storageKey);
+        } catch (e) {
+          theme = null;
+        }
+        if (theme !== 'light' && theme !== 'dark') {
+          var prefersDark =
+            window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          theme = prefersDark ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <!-- Preloads -->
+    <link
+      rel="preload"
+      href="/assets/fonts/space-grotesk/SpaceGrotesk-700.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/main.css" />
+  </head>
+  <body class="page page--product">
+    <!-- @include src/partials/header.html -->
+
+    <main id="main">
+      <nav class="breadcrumbs" aria-label="Okruszki">
+        <ol>
+          <li><a href="../index.html">Strona główna</a></li>
+          <li>Szczegóły produktu</li>
+        </ol>
+      </nav>
+
+      <section class="page-hero">
+        <div class="container">
+          <h1>Szczegóły produktu</h1>
+          <p>Wybierz dopasowanie i dodaj do koszyka.</p>
+          <span class="page-hero-mark" aria-hidden="true"></span>
+        </div>
+      </section>
+
+      <section>
+        <div class="container" data-product-details></div>
+      </section>
+
+      <section>
+        <div class="container">
+          <div class="section-title">
+            <h2>Powiązane produkty</h2>
+          </div>
+
+          <div class="grid-3 products" data-products="related">
+            <p class="state-block state-block--empty products-fallback">
+              Powiązane produkty ładują się dynamicznie. Włącz JavaScript, aby wyświetlić
+              rekomendacje.
+            </p>
+          </div>
+        </div>
+
+        <div class="container product-cta">
+          <div class="tag-list">
+            <a class="btn btn-accent" href="shop.html">Zobacz wszystkie produkty</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- @include src/partials/footer.html -->
+
+    <script type="module" src="../js/main.js"></script>
+  </body>
+</html>

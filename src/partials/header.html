@@ -1,0 +1,165 @@
+<header class="site-header" data-header>
+  <a class="skip-link" href="#main">Przejdź do treści</a>
+  <div class="container header-inner">
+    <a class="brand" href="{{rootPrefix}}index.html">
+      <img
+        class="brand-logo"
+        src="{{rootPrefix}}assets/images/logo/logo.svg"
+        alt=""
+        aria-hidden="true"
+        width="120"
+        height="32"
+        decoding="async"
+      />
+      <span class="brand-text">VOLT GARAGE</span>
+    </a>
+    <nav aria-label="Główne">
+      <ul class="nav" id="primary-nav">
+        <li class="nav-item"><a href="{{rootPrefix}}index.html">Strona główna</a></li>
+        <li class="nav-item" data-dropdown>
+          <button
+            class="nav-button"
+            type="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+            data-dropdown-toggle
+          >
+            Sklep
+          </button>
+          <ul class="dropdown-menu" data-dropdown-menu>
+            <li>
+              <a class="dropdown-subitem" href="{{pagesPrefix}}shop.html">Wszystkie produkty</a>
+            </li>
+            <li><a class="dropdown-subitem" href="{{pagesPrefix}}new-arrivals.html">Nowości</a></li>
+            <li><a class="dropdown-subitem" href="{{pagesPrefix}}product.html">Produkt</a></li>
+            <li>
+              <a class="dropdown-subitem" href="{{pagesPrefix}}collections.html"
+                >Kolekcje / Kategorie</a
+              >
+            </li>
+            <li><a class="dropdown-subitem" href="{{pagesPrefix}}promotions.html">Promocje</a></li>
+          </ul>
+        </li>
+        <li class="nav-item" data-dropdown>
+          <button
+            class="nav-button"
+            type="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+            data-dropdown-toggle
+          >
+            Kontakt
+          </button>
+          <ul class="dropdown-menu" data-dropdown-menu>
+            <li><a class="dropdown-subitem" href="{{pagesPrefix}}contact.html">Formularz</a></li>
+            <li><a class="dropdown-subitem" href="{{pagesPrefix}}checkout.html">Dostawa</a></li>
+            <li><a class="dropdown-subitem" href="{{pagesPrefix}}cart.html">Zwroty</a></li>
+          </ul>
+        </li>
+        <li class="nav-item" data-dropdown>
+          <button
+            class="nav-button"
+            type="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+            data-dropdown-toggle
+          >
+            Informacje
+          </button>
+          <ul class="dropdown-menu" data-dropdown-menu>
+            <li>
+              <a class="dropdown-subitem" href="{{pagesPrefix}}privacy-policy.html"
+                >Polityka prywatności</a
+              >
+            </li>
+            <li><a class="dropdown-subitem" href="{{pagesPrefix}}cookies.html">Cookies</a></li>
+            <li><a class="dropdown-subitem" href="{{pagesPrefix}}terms.html">Regulamin</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <button
+        class="theme-toggle"
+        id="theme-toggle"
+        data-theme-toggle
+        title="Toggle theme"
+        aria-label="auto"
+        aria-live="polite"
+        aria-pressed="false"
+        type="button"
+      >
+        <svg class="sun-and-moon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24">
+          <mask class="moon" id="moon-mask">
+            <rect x="0" y="0" width="100%" height="100%" fill="white"></rect>
+            <circle cx="24" cy="10" r="6" fill="black"></circle>
+          </mask>
+          <circle
+            class="sun"
+            cx="12"
+            cy="12"
+            r="6"
+            mask="url(#moon-mask)"
+            fill="currentColor"
+          ></circle>
+          <g class="sun-beams" stroke="currentColor">
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </g>
+        </svg>
+      </button>
+      <a class="cart-link" href="{{pagesPrefix}}cart.html" aria-label="Koszyk">
+        <span class="cart-link__icon">
+          <svg
+            class="cart-link__svg"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M4 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+            <path d="M15 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+            <path d="M17 17h-11v-14h-2" />
+            <path d="M6 5l14 1l-1 7h-13" />
+          </svg>
+        </span>
+        <span class="cart-count" data-cart-count>0</span>
+      </a>
+      <button
+        class="nav-toggle"
+        type="button"
+        aria-label="Otwórz menu"
+        aria-controls="primary-nav"
+        aria-expanded="false"
+        data-nav-toggle
+      >
+        <svg
+          class="nav-toggle__icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path class="line line--top" d="M3.75 6.75h16.5" />
+          <path class="line line--middle" d="M3.75 12h16.5" />
+          <path class="line line--bottom" d="M3.75 17.25h16.5" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>

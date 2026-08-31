@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <!-- Meta -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Brak połączenia z siecią w VOLT GARAGE. Spróbuj ponownie za chwilę, aby wrócić do przeglądania produktów i zamówienia."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#0f172a" />
+    <!-- Title -->
+    <title>Offline | VOLT GARAGE</title>
+    <!-- Canonical -->
+    <link rel="canonical" href="https://e-commerce-pr01-voltgarage.netlify.app/" />
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Offline | VOLT GARAGE" />
+    <meta
+      property="og:description"
+      content="Brak połączenia z siecią w VOLT GARAGE. Spróbuj ponownie za chwilę, aby wrócić do przeglądania produktów i zamówienia."
+    />
+    <meta property="og:url" content="https://e-commerce-pr01-voltgarage.netlify.app/" />
+    <meta
+      property="og:image"
+      content="https://e-commerce-pr01-voltgarage.netlify.app/assets/images/og/og-1200x630.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Offline | VOLT GARAGE" />
+    <meta
+      name="twitter:description"
+      content="Brak połączenia z siecią w VOLT GARAGE. Spróbuj ponownie za chwilę, aby wrócić do przeglądania produktów i zamówienia."
+    />
+    <meta
+      name="twitter:image"
+      content="https://e-commerce-pr01-voltgarage.netlify.app/assets/images/og/og-1200x630.jpg"
+    />
+    <!-- Favicons + manifest -->
+    <link rel="icon" href="/assets/icons/favicon/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon/favicon.svg" />
+    <link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <!-- Theme preload -->
+    <script data-theme-preload>
+      (function () {
+        var storageKey = 'vg_theme';
+        var theme = null;
+        try {
+          theme = localStorage.getItem(storageKey);
+        } catch (e) {
+          theme = null;
+        }
+        if (theme !== 'light' && theme !== 'dark') {
+          var prefersDark =
+            window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          theme = prefersDark ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <!-- Preloads -->
+    <link
+      rel="preload"
+      href="/assets/fonts/space-grotesk/SpaceGrotesk-700.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/main.css" />
+  </head>
+
+  <!-- Body -->
+  <body class="page page--stats page--offline">
+    <!-- @include src/partials/header.html -->
+
+    <main id="main">
+      <section aria-labelledby="status-title">
+        <div class="container stats-shell">
+          <article class="card stats-card" data-reveal>
+            <span class="badge stats-card__eyebrow">Offline / Brak połączenia</span>
+            <div class="stats-card__content">
+              <h1 id="status-title" class="stats-card__title">Sieć chwilowo nie odpowiada.</h1>
+              <p class="stats-card__lead">
+                Wygląda na to, że połączenie zostało przerwane. Odśwież widok, gdy internet wróci,
+                albo przejdź na stronę główną, aby sprawdzić wcześniej zapisane sekcje serwisu.
+              </p>
+            </div>
+            <ul class="stats-card__meta">
+              <li>Po odzyskaniu połączenia spróbuj ponownie otworzyć tę samą stronę.</li>
+              <li>Niektóre ostatnio odwiedzone podstrony mogą być nadal dostępne lokalnie.</li>
+            </ul>
+            <div class="stats-card__actions">
+              <a class="btn btn-accent" href="offline.html">Spróbuj ponownie</a>
+              <a class="btn btn-outline" href="index.html">Wróć na stronę główną</a>
+            </div>
+            <p class="stats-card__support">
+              <a href="pages/shop.html">Przejdź do sklepu</a>
+              <a href="pages/contact.html">Kontakt po odzyskaniu sieci</a>
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <!-- @include src/partials/footer.html -->
+
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>

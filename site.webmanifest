@@ -1,0 +1,75 @@
+{
+  "name": "Volt Garage",
+  "short_name": "Volt Garage",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#0f172a",
+  "background_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/assets/icons/favicon/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icons/favicon/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Sklep",
+      "short_name": "Sklep",
+      "url": "/pages/shop.html",
+      "icons": [
+        {
+          "src": "/assets/icons/shortcuts/shortcut-shop.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Nowości",
+      "short_name": "Nowości",
+      "url": "/pages/new-arrivals.html",
+      "icons": [
+        {
+          "src": "/assets/icons/shortcuts/shortcut-new.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Promocje",
+      "short_name": "Promo",
+      "url": "/pages/promotions.html",
+      "icons": [
+        {
+          "src": "/assets/icons/shortcuts/shortcut-sale.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/assets/icons/screenshots/desktop-home.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/assets/icons/screenshots/mobile-home.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ]
+}

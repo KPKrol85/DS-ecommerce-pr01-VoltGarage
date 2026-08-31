@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <!-- Meta -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="VOLT GARAGE – akcesoria samochodowe premium, emblematy, naklejki i gadżety, które podkreślają charakter auta i garażowy styl."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#0f172a" />
+    <!-- Title -->
+    <title>VOLT GARAGE | Sklep z akcesoriami samochodowymi</title>
+    <!-- Canonical -->
+    <link rel="canonical" href="https://e-commerce-pr01-voltgarage.netlify.app/" />
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="VOLT GARAGE | Sklep z akcesoriami samochodowymi" />
+    <meta
+      property="og:description"
+      content="VOLT GARAGE – akcesoria samochodowe premium, emblematy, naklejki i gadżety, które podkreślają charakter auta i garażowy styl."
+    />
+    <meta property="og:url" content="https://e-commerce-pr01-voltgarage.netlify.app/" />
+    <meta
+      property="og:image"
+      content="https://e-commerce-pr01-voltgarage.netlify.app/assets/images/og/og-1200x630.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="VOLT GARAGE | Sklep z akcesoriami samochodowymi" />
+    <meta
+      name="twitter:description"
+      content="VOLT GARAGE – akcesoria samochodowe premium, emblematy, naklejki i gadżety, które podkreślają charakter auta i garażowy styl."
+    />
+    <meta
+      name="twitter:image"
+      content="https://e-commerce-pr01-voltgarage.netlify.app/assets/images/og/og-1200x630.jpg"
+    />
+    <!-- Favicons + manifest -->
+    <link rel="icon" href="/assets/icons/favicon/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon/favicon.svg" />
+    <link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <!-- Theme preload -->
+    <script data-theme-preload>
+      (function () {
+        var storageKey = 'vg_theme';
+        var theme = null;
+        try {
+          theme = localStorage.getItem(storageKey);
+        } catch (e) {
+          theme = null;
+        }
+        if (theme !== 'light' && theme !== 'dark') {
+          var prefersDark =
+            window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          theme = prefersDark ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <!-- Preloads -->
+    <link
+      rel="preload"
+      href="/assets/fonts/space-grotesk/SpaceGrotesk-700.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/assets/images/_optimized/hero/hero-05-1280x720.avif"
+      type="image/avif"
+      imagesrcset="
+      /assets/images/_optimized/hero/hero-05-800x600.avif 800w,
+      /assets/images/_optimized/hero/hero-05-1280x720.avif 1280w,
+      /assets/images/_optimized/hero/hero-05-1920x1080.avif 1920w
+    "
+      imagesizes="100vw"
+    />
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/main.css" />
+    <!-- JSON-LD -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "OnlineStore",
+        "@id": "https://e-commerce-pr01-voltgarage.netlify.app/#store",
+        "name": "VOLT GARAGE",
+        "url": "https://e-commerce-pr01-voltgarage.netlify.app/",
+        "description": "VOLT GARAGE – akcesoria samochodowe premium, emblematy, naklejki i gadżety, które podkreślają charakter auta i garażowy styl.",
+        "logo": "https://e-commerce-pr01-voltgarage.netlify.app/assets/images/logo/logo-512.png",
+        "image": "https://e-commerce-pr01-voltgarage.netlify.app/assets/images/og/og-1200x630.jpg",
+        "sameAs": [
+          "https://www.facebook.com/kpkrol85",
+          "https://x.com/KP_Code_85",
+          "https://github.com/KPKrol85",
+          "https://www.instagram.com/kpkrol85/",
+          "https://www.linkedin.com/in/kamil-krol-256522279/"
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": "https://e-commerce-pr01-voltgarage.netlify.app/#website",
+        "url": "https://e-commerce-pr01-voltgarage.netlify.app/",
+        "name": "VOLT GARAGE",
+        "description": "VOLT GARAGE – akcesoria samochodowe premium, emblematy, naklejki i gadżety, które podkreślają charakter auta i garażowy styl.",
+        "publisher": {
+          "@id": "https://e-commerce-pr01-voltgarage.netlify.app/#store"
+        }
+      }
+    </script>
+  </head>
+
+  <!-- Body -->
+  <body class="page page--home">
+    <!-- @include src/partials/header.html -->
+
+    <!-- Main -->
+    <main id="main">
+      <!-- Hero -->
+      <section class="hero">
+        <picture class="hero-media" aria-hidden="true">
+          <source
+            type="image/avif"
+            srcset="
+              assets/images/_optimized/hero/hero-05-800x600.avif    800w,
+              assets/images/_optimized/hero/hero-05-1280x720.avif  1280w,
+              assets/images/_optimized/hero/hero-05-1920x1080.avif 1920w
+            "
+            sizes="100vw"
+          />
+          <source
+            type="image/webp"
+            srcset="
+              assets/images/_optimized/hero/hero-05-800x600.webp    800w,
+              assets/images/_optimized/hero/hero-05-1280x720.webp  1280w,
+              assets/images/_optimized/hero/hero-05-1920x1080.webp 1920w
+            "
+            sizes="100vw"
+          />
+          <img
+            src="assets/images/hero/hero-05-1280x720.jpg"
+            srcset="
+              assets/images/hero/hero-05-800x600.jpg    800w,
+              assets/images/hero/hero-05-1280x720.jpg  1280w,
+              assets/images/hero/hero-05-1920x1080.jpg 1920w
+            "
+            sizes="100vw"
+            width="1920"
+            height="1080"
+            alt=""
+            loading="eager"
+            fetchpriority="high"
+          />
+        </picture>
+        <div class="container hero-grid">
+          <div data-reveal>
+            <span class="badge">Nowa kolekcja 2025</span>
+            <h1 class="hero-title">
+              VOLT GARAGE
+              <br />
+              Twój styl. Twoje auto. Twoje zasady.
+            </h1>
+            <p>
+              Ekskluzywne emblematy, naklejki i gadżety w sportowym stylu. Twój garaż, twoje zasady.
+            </p>
+            <div class="tag-list">
+              <a class="btn btn-accent" href="pages/shop.html">Przejdź do sklepu</a>
+              <a class="btn btn-outline" href="pages/contact.html">Porozmawiaj z nami</a>
+            </div>
+          </div>
+          <div class="hero-card" data-reveal>
+            <h3>Pakiet startowy VOLT</h3>
+            <p>Limitowany zestaw akcesoriów, który od razu buduje charakter auta.</p>
+            <div class="stats">
+              <div class="stat">
+                <strong>42</strong>
+                <p>Nowe produkty</p>
+              </div>
+              <div class="stat">
+                <strong>42</strong>
+                <p>Nowe produkty</p>
+              </div>
+              <div class="stat">
+                <strong>4.9/5</strong>
+                <p>Ocena klientów</p>
+              </div>
+              <div class="stat">
+                <strong>48h</strong>
+                <p>Wysyłka ekspresowa</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Featured products -->
+      <section>
+        <div class="container">
+          <div class="section-title">
+            <h2>Polecane produkty</h2>
+          </div>
+          <div class="grid-3 products products--featured" data-products="featured">
+            <p class="state-block state-block--empty products-fallback">
+              Produkty ładują się dynamicznie. Włącz JavaScript, aby zobaczyć pełną listę
+              polecanych.
+            </p>
+          </div>
+          <div class="section-actions">
+            <a class="btn btn-outline" href="pages/shop.html">Zobacz wszystkie</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Promo section -->
+      <section>
+        <div class="container promo" data-reveal>
+          <div>
+            <h2>Akcesoria z charakterem</h2>
+            <p>
+              Buduj wnętrze i zewnętrzną linię auta z elementami premium, które wyglądają jak z auta
+              koncepcyjnego.
+            </p>
+          </div>
+          <div class="tag-list">
+            <span class="category-pill">Emblematy</span>
+            <span class="category-pill">Naklejki</span>
+            <span class="category-pill">Gadżety</span>
+            <span class="category-pill">Wnętrze</span>
+            <span class="category-pill">Zewnętrzne</span>
+            <span class="category-pill">Detailing</span>
+          </div>
+          <a href="pages/shop.html" class="btn btn-accent">Przejdź do sklepu</a>
+        </div>
+      </section>
+
+      <!-- Why choose us -->
+      <section>
+        <div class="container">
+          <div class="section-title">
+            <h2>Dlaczego VOLT GARAGE</h2>
+          </div>
+          <div class="grid-3">
+            <div class="card card--feature" data-reveal>
+              <h3 class="card-title">Projekt premium</h3>
+              <p>Minimalistyczne wzory i dopracowane detale w stylu motoryzacyjnym.</p>
+            </div>
+            <div class="card card--feature" data-reveal>
+              <h3 class="card-title">Szybka wysyłka</h3>
+              <p>Produkty gotowe do wysyłki w 24-48 h, ze śledzeniem przesyłki i wsparciem.</p>
+            </div>
+            <div class="card card--feature" data-reveal>
+              <h3 class="card-title">Gwarancja dopasowania</h3>
+              <p>Pomagamy w doborze akcesoriów i dopasowaniu do modelu.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Newsletter -->
+      <section>
+        <div class="container promo" data-reveal>
+          <div>
+            <h2>Zapisz się do biuletynu</h2>
+            <p>Dostęp do premier, dropów i limitowanych akcesoriów.</p>
+          </div>
+          <form class="footer-form" aria-label="Biuletyn">
+            <label class="promo-input">
+              <span>E-mail</span>
+              <input id="newsletter-email" type="email" placeholder="kontakt@kp-code.pl" required />
+            </label>
+            <button class="btn btn-accent" type="submit">Dołączam</button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <!-- @include src/partials/footer.html -->
+
+    <!-- Scripts -->
+    <script type="module" src="./js/main.js"></script>
+  </body>
+</html>

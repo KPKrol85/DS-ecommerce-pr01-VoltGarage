@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <!-- Meta -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Strona nie została znaleziona w VOLT GARAGE. Wróć do sklepu i przeglądaj akcesoria samochodowe, kolekcje oraz aktualne nowości."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#0f172a" />
+    <!-- Title -->
+    <title>404 | VOLT GARAGE</title>
+    <!-- Canonical -->
+    <link rel="canonical" href="https://e-commerce-pr01-voltgarage.netlify.app/" />
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="404 | VOLT GARAGE" />
+    <meta
+      property="og:description"
+      content="Strona nie została znaleziona w VOLT GARAGE. Wróć do sklepu i przeglądaj akcesoria samochodowe, kolekcje oraz aktualne nowości."
+    />
+    <meta property="og:url" content="https://e-commerce-pr01-voltgarage.netlify.app/" />
+    <meta
+      property="og:image"
+      content="https://e-commerce-pr01-voltgarage.netlify.app/assets/images/og/og-1200x630.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="404 | VOLT GARAGE" />
+    <meta
+      name="twitter:description"
+      content="Strona nie została znaleziona w VOLT GARAGE. Wróć do sklepu i przeglądaj akcesoria samochodowe, kolekcje oraz aktualne nowości."
+    />
+    <meta
+      name="twitter:image"
+      content="https://e-commerce-pr01-voltgarage.netlify.app/assets/images/og/og-1200x630.jpg"
+    />
+    <!-- Favicons + manifest -->
+    <link rel="icon" href="/assets/icons/favicon/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon/favicon.svg" />
+    <link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <!-- Theme preload -->
+    <script data-theme-preload>
+      (function () {
+        var storageKey = 'vg_theme';
+        var theme = null;
+        try {
+          theme = localStorage.getItem(storageKey);
+        } catch (e) {
+          theme = null;
+        }
+        if (theme !== 'light' && theme !== 'dark') {
+          var prefersDark =
+            window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          theme = prefersDark ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <!-- Preloads -->
+    <link
+      rel="preload"
+      href="/assets/fonts/space-grotesk/SpaceGrotesk-700.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/main.css" />
+  </head>
+
+  <!-- Body -->
+  <body class="page page--stats page--404">
+    <!-- @include src/partials/header.html -->
+
+    <!-- Main -->
+    <main id="main">
+      <section aria-labelledby="status-title">
+        <div class="container stats-shell">
+          <article class="card stats-card" data-reveal>
+            <span class="badge stats-card__eyebrow">404 / Nie znaleziono strony</span>
+            <div class="stats-card__content">
+              <h1 id="status-title" class="stats-card__title">Ten adres już nie prowadzi dalej.</h1>
+              <p class="stats-card__lead">
+                Link mógł się zmienić, wygasnąć albo został wpisany z błędem. Wróć do strony głównej
+                lub przejdź bezpośrednio do sklepu, aby kontynuować przeglądanie.
+              </p>
+            </div>
+            <ul class="stats-card__meta">
+              <li>Sprawdź pisownię adresu, jeśli wpisywałeś go ręcznie.</li>
+              <li>Najważniejsze kolekcje i produkty nadal są dostępne z poziomu sklepu.</li>
+            </ul>
+            <div class="stats-card__actions">
+              <a class="btn btn-accent" href="index.html">Wróć na stronę główną</a>
+              <a class="btn btn-outline" href="pages/shop.html">Przejdź do sklepu</a>
+            </div>
+            <p class="stats-card__support">
+              <a href="pages/contact.html">Potrzebujesz pomocy?</a>
+              <a href="pages/collections.html">Zobacz kolekcje</a>
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <!-- @include src/partials/footer.html -->
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>

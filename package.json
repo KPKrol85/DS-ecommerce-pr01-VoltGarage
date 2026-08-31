@@ -1,0 +1,52 @@
+{
+  "name": "volt-garage",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "img:opt": "node tools/image-optimizer/optimize-images.mjs --only=jpg",
+    "img:opt:png": "node tools/image-optimizer/optimize-images.mjs --only=png",
+    "img:opt:all": "node tools/image-optimizer/optimize-images.mjs --only=all",
+    "img:opt:out": "node tools/image-optimizer/optimize-images.mjs --mode=output --out=tools/image-optimizer/output --only=all",
+    "img:opt:dry": "node tools/image-optimizer/optimize-images.mjs --dry-run --only=all",
+    "build:css": "postcss css/main.css -o css/main.min.css --no-map -u postcss-import cssnano",
+    "build:js": "esbuild js/main.js --bundle --minify --format=esm --platform=browser --target=es2022 --outfile=js/main.min.js",
+    "build:assets": "npm run build:css && npm run build:js",
+    "build:dist": "node scripts/build-dist.js",
+    "build": "npm run build:assets && npm run build:dist",
+    "preview": "node scripts/preview-dist.js",
+    "preview:dist": "npm run preview",
+    "build:preview": "npm run build && npm run preview",
+    "qa": "npm run qa:html && npm run validate:jsonld && npm run qa:links && npm run qa:js && npm run qa:css",
+    "qa:format": "npm run format:check",
+    "qa:html": "html-validate --config htmlvalidate.json index.html 404.html offline.html thank-you.html pages/cart.html pages/checkout.html pages/collections.html pages/contact.html pages/cookies.html pages/new-arrivals.html pages/privacy-policy.html pages/product.html pages/promotions.html pages/shop.html pages/terms.html",
+    "qa:js": "eslint --max-warnings 0 \"js/**/*.js\" \"scripts/**/*.js\" \"tools/**/*.mjs\" --ignore-pattern \"js/**/*.min.js\"",
+    "qa:css": "stylelint --max-warnings 0 \"css/**/*.css\" --ignore-pattern \"css/**/*.min.css\"",
+    "format": "prettier . --write",
+    "format:html-tight": "prettier --write \"index.html\" \"404.html\" \"offline.html\" \"thank-you.html\" \"pages/**/*.html\" && node scripts/format-html-tight.js",
+    "format:check": "prettier . --check",
+    "validate:jsonld": "node scripts/validate-jsonld.js",
+    "qa:links": "node scripts/validate-internal-links.js",
+    "qa:smoke": "node scripts/qa-smoke-lighthouse.js",
+    "qa:smoke:enforce": "node scripts/qa-smoke-lighthouse.js --enforce"
+  },
+  "devDependencies": {
+    "chalk": "^5.3.0",
+    "cssnano": "^6.1.0",
+    "esbuild": "^0.25.1",
+    "eslint": "^8.57.0",
+    "fast-glob": "^3.3.2",
+    "html-validate": "^10.4.0",
+    "lighthouse": "^12.8.2",
+    "minimist": "^1.2.8",
+    "postcss": "^8.4.38",
+    "postcss-cli": "^11.0.0",
+    "postcss-import": "^16.1.0",
+    "prettier": "^3.7.4",
+    "sharp": "^0.33.2",
+    "stylelint": "^16.13.0",
+    "stylelint-config-recommended": "^14.0.0",
+    "terser": "^5.31.0"
+  }
+}

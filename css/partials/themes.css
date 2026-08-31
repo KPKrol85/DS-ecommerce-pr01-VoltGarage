@@ -1,0 +1,156 @@
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../../assets/fonts/manrope/Manrope-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../../assets/fonts/manrope/Manrope-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../../assets/fonts/manrope/Manrope-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../../assets/fonts/space-grotesk/SpaceGrotesk-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../../assets/fonts/space-grotesk/SpaceGrotesk-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../../assets/fonts/space-grotesk/SpaceGrotesk-700.woff2') format('woff2');
+}
+
+:root {
+  /* Font families */
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Manrope', sans-serif;
+  /* Font sizes */
+  --fs-01: clamp(0.5rem, 0.48rem + 0.08vw, 0.625rem);
+  --fs-02: clamp(0.625rem, 0.6rem + 0.1vw, 0.75rem);
+  --fs-03: clamp(0.75rem, 0.72rem + 0.14vw, 0.875rem);
+  --fs-04: clamp(0.875rem, 0.84rem + 0.18vw, 1rem);
+  --fs-05: clamp(1rem, 0.96rem + 0.24vw, 1.125rem);
+  --fs-06: clamp(1.125rem, 1.06rem + 0.32vw, 1.25rem);
+  --fs-07: clamp(1.25rem, 1.14rem + 0.46vw, 1.5rem);
+  --fs-08: clamp(1.5rem, 1.28rem + 0.9vw, 2rem);
+  --fs-h1: clamp(2rem, 1.64rem + 1.4vw, 2.75rem);
+  --fs-h2: var(--fs-07);
+  /* Line heights */
+  --lh-01: 1.1;
+  --lh-02: 1.4;
+  --lh-03: 1.6;
+  /* Font weights */
+  --fw-01: 500;
+  --fw-02: 600;
+  --fw-03: 700;
+  /* Letter spacing */
+  --ls-01: -0.02em;
+  --ls-02: 0;
+  --ls-03: 0.02em;
+  --ls-04: 0.08em;
+  /* Section Spacing */
+  --section-footer-bottom: 24px;
+  --section-py-lg: 72px;
+  /* Spacing */
+  --space-01: 0.25rem;
+  --space-02: 0.5rem;
+  --space-03: 0.75rem;
+  --space-04: 1rem;
+  --space-05: 1.25rem;
+  --space-06: 1.5rem;
+  --space-07: 2rem;
+  --space-08: 2.5rem;
+  --space-09: 4rem;
+  /* Radius */
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+  --radius-badge: 20px 6px 20px 12px;
+  /* Shadow */
+  --shadow-sm: 0 8px 24px rgba(14, 19, 28, 0.08);
+  --shadow-md: 0 16px 48px rgba(14, 19, 28, 0.14);
+  --shadow-lg: 0 28px 80px rgba(7, 10, 16, 0.18);
+  /* Transition */
+  --transition-fast: 150ms ease;
+  --transition-base: 240ms ease;
+  --transition-slow: 420ms ease;
+  /* Easing */
+  --ease-3: cubic-bezier(0.25, 0, 0.3, 1);
+  --ease-out-5: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-elastic-3: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-elastic-4: cubic-bezier(0.34, 1.8, 0.64, 1);
+  /* Logo sizes */
+  --logo-footer-size: 104px;
+  --logo-header-size: clamp(40px, 4vw, 46px);
+  --logo-mark-size: clamp(104px, 12vw, 208px);
+}
+
+:root,
+[data-theme='light'] {
+  --color-text: #10131a;
+  --color-bg: #f4f6f8;
+  --color-surface: #ffffff;
+  --color-surface-alt: #e9edf1;
+  --color-muted: #4b5565;
+  --color-primary: #ff5d2d;
+  --color-ink: var(--color-text);
+  --color-ink-muted: var(--color-muted);
+  --color-border: #d5dbe4;
+  --color-border-strong: color-mix(in srgb, var(--color-border) 60%, var(--color-ink));
+  --color-accent: var(--color-primary);
+  --color-danger: #f87171;
+  --color-card: #fdfdfd;
+  --color-hero: #0f1520;
+  --color-hero-text: #fef7ef;
+  --color-hero-text-muted: #1a1a1a;
+  --gradient-hero: radial-gradient(circle at 20% 20%, #ff8b5f 0%, #1c212b 55%, #0c0f14 100%);
+  --hero-light-base: #f5f7fa;
+  --hero-light-accent: color-mix(in srgb, var(--color-accent) 10%, transparent);
+  --hero-light-glow: color-mix(in srgb, var(--color-accent) 6%, transparent);
+  --icon-fill: var(--color-ink);
+  --icon-fill-hover: var(--color-accent);
+}
+
+[data-theme='dark'] {
+  --color-text: #f5f7fb;
+  --color-bg: #0c0f14;
+  --color-surface: #151a22;
+  --color-surface-alt: #1d2330;
+  --color-muted: #9aa7bb;
+  --color-primary: #ff6a3d;
+  --color-ink: var(--color-text);
+  --color-ink-muted: var(--color-muted);
+  --color-border: #2a3242;
+  --color-border-strong: color-mix(in srgb, var(--color-border) 65%, var(--color-ink));
+  --color-accent: var(--color-primary);
+  --color-danger: #f87171;
+  --color-card: #131821;
+  --color-hero: #0c0f14;
+  --color-hero-text: #fef2e9;
+  --color-hero-text-muted: rgba(255, 255, 255, 0.75);
+  --gradient-hero: radial-gradient(circle at 20% 20%, #ff6a3d 0%, #1d2330 52%, #0c0f14 100%);
+  --icon-fill: var(--color-ink);
+  --icon-fill-hover: var(--color-accent);
+}

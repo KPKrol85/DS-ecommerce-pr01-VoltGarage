@@ -4,346 +4,352 @@
 
 ### Przegląd projektu
 
-Volt Garage to statyczny, wielostronicowy front-end sklepu z akcesoriami motoryzacyjnymi. Projekt działa na HTML, CSS i Vanilla JavaScript (ES Modules), renderuje katalog produktów z lokalnego pliku JSON i zawiera przepływ koszyk/checkout po stronie klienta.
+Volt Garage to demonstracyjny, statyczny front-end wielostronicowego sklepu z akcesoriami motoryzacyjnymi, przygotowany jako projekt portfolio KP_Code Digital Studio. Warstwa źródłowa korzysta z HTML, CSS oraz modułów Vanilla JavaScript, a katalog produktów jest renderowany z lokalnego pliku `data/products.json`.
 
-Repozytorium zawiera także przygotowanie pod publikację statyczną: bundling assetów, generowanie katalogu `dist/`, konfigurację nagłówków i przekierowań oraz podstawowe elementy PWA (manifest, service worker, strona offline).
+Projekt prezentuje interfejs katalogu, koszyka i checkoutu, ale nie jest aktywnym sklepem. Nie zawiera backendu sprzedażowego, kont użytkowników, płatności ani zapisu zamówień; wysłanie formularza checkoutu jest symulowane w przeglądarce. Formularz kontaktowy stanowi osobny przepływ skonfigurowany dla Netlify Forms.
+
+### Wersja online
+
+[Volt Garage — publiczna wersja demonstracyjna](https://e-commerce-pr01-voltgarage.netlify.app/)
 
 ### Kluczowe funkcje
 
-- Wielostronicowa struktura: strona główna, sklep, szczegóły produktu, nowości, promocje, kolekcje, kontakt, koszyk, checkout oraz strony prawne.
-- Dynamiczne renderowanie list produktów i strony produktu na podstawie `data/products.json`.
-- Filtrowanie katalogu po kategorii, cenie, sortowaniu oraz wyszukiwaniu z podpowiedziami.
-- Koszyk zapisany w `localStorage` (dodawanie, usuwanie, zmiana ilości, podsumowanie kosztów).
-- Formularze kontaktu/checkout z walidacją po stronie klienta i komunikatami błędów.
-- Przełączanie motywu jasny/ciemny z preloadem ustawianym przed załadowaniem CSS.
-- Dynamiczne JSON-LD dla breadcrumbs i list produktów oraz statyczne JSON-LD dla strony głównej.
-- Rejestracja Service Workera z fallbackiem offline i komunikatami o aktualizacji.
+- Wielostronicowa nawigacja obejmująca stronę główną, katalog, szczegóły produktu, nowości, promocje, kolekcje, kontakt, koszyk, checkout oraz strony prawne.
+- Dynamiczne listy i szczegóły produktów z obsługą stanów ładowania, pustego wyniku i błędu.
+- Filtrowanie katalogu według kategorii i ceny, sortowanie oraz wyszukiwanie z podpowiedziami.
+- Koszyk w `localStorage`: dodawanie i usuwanie pozycji, zmiana ilości oraz obliczanie wartości produktów, dostawy i sumy.
+- Walidacja formularzy po stronie klienta z komunikatami pól i przenoszeniem fokusu do pierwszego błędu; formularz kontaktowy zachowuje natywną wysyłkę do Netlify Forms.
+- Jasny i ciemny motyw oparty na preferencji systemowej oraz ustawieniu zapisanym w `localStorage`.
+- Manifest aplikacji, Service Worker, częściowa obsługa offline oraz komunikaty instalacji i aktualizacji zależne od możliwości przeglądarki.
 
 ### Stack technologiczny
 
-**Runtime (front-end)**
+**Front-end**
 
-- HTML5
-- CSS (architektura oparta o partiale)
-- Vanilla JavaScript (ES Modules)
-- Dane produktów: JSON (`data/products.json`)
+- semantyczny HTML5,
+- CSS z custom properties i entry pointem składającym partiale,
+- Vanilla JavaScript w modułach ES,
+- przeglądarkowe API: Fetch, `localStorage`, Service Worker i Cache Storage,
+- lokalne dane JSON.
 
-**Narzędzia i jakość**
+**Build i kontrola jakości**
 
-- Node.js `>=18`
-- PostCSS (`postcss-cli`, `postcss-import`, `cssnano`)
-- esbuild
-- Prettier
-- ESLint
-- Stylelint
-- html-validate
-- Lighthouse (skrypt smoke QA)
-- sharp (optymalizacja obrazów)
+- Node.js `>=18` oraz npm,
+- PostCSS, `postcss-import` i cssnano,
+- esbuild,
+- Prettier, ESLint, Stylelint i html-validate,
+- własne walidatory linków wewnętrznych i JSON-LD,
+- Lighthouse do testów smoke,
+- sharp, fast-glob i minimist w narzędziu optymalizacji obrazów.
+
+### Architektura
+
+- Pliki HTML w katalogu głównym i `pages/` są kanonicznymi dokumentami stron. Zawierają dyrektywy `@include`, które podczas budowania rozwijają współdzielone partiale `src/partials/header.html` i `src/partials/footer.html`.
+- `js/main.js` uruchamia moduły tylko dla elementów obecnych na bieżącej stronie. Funkcje katalogu i koszyka znajdują się w `js/features/`, dostęp do danych i pamięci w `js/services/`, a zachowania interfejsu w `js/ui/`.
+- `data/products.json` jest kanonicznym źródłem katalogu. Dane są pobierane przez Fetch API i przechowywane w pamięci na czas bieżącej sesji strony.
+- `css/main.css` importuje warstwy z `css/partials/`. PostCSS składa i minifikuje je do produkcyjnego arkusza.
+- `scripts/build-dist.js` tworzy `dist/`, rozwija partiale HTML, kopiuje pliki statyczne i przełącza dokumenty na minifikowane assety.
 
 ### Struktura projektu
 
 ```text
 .
-├─ index.html
-├─ 404.html
-├─ offline.html
-├─ thank-you.html
-├─ pages/                 # Podstrony sklepu i stron prawnych
-├─ src/partials/          # Partiale HTML (header/footer) składane w buildzie dist
-├─ css/
-│  ├─ main.css            # Główny entry CSS (import partiali)
-│  ├─ main.min.css        # Wersja produkcyjna
-│  └─ partials/
-├─ js/
-│  ├─ main.js             # Bootstrap aplikacji
-│  ├─ main.min.js         # Bundle produkcyjny
-│  ├─ features/           # Produkty, filtry, koszyk
-│  ├─ ui/                 # Moduły UI (theme, header, modal, accessibility, PWA)
-│  ├─ services/           # Dostęp do danych i storage
-│  └─ core/               # Event bus i obsługa błędów
-├─ data/products.json
-├─ assets/                # Obrazy, fonty, favicony, ikony
-├─ scripts/               # Build dist, preview, walidatory QA
-├─ tools/image-optimizer/ # Narzędzia optymalizacji obrazów
-├─ sw.js
-├─ site.webmanifest
-├─ _headers
-├─ _redirects
-├─ robots.txt
-└─ sitemap.xml
+├── index.html                 # Strona główna i źródłowy entry HTML
+├── pages/                     # Widoki sklepu, checkoutu, kontaktu i stron prawnych
+├── src/partials/              # Współdzielone partiale headera i footera
+├── css/
+│   ├── main.css               # Kanoniczny entry CSS
+│   ├── main.min.css           # Wygenerowany asset produkcyjny
+│   └── partials/              # Warstwy stylów
+├── js/
+│   ├── main.js                # Entry modułów aplikacji
+│   ├── main.min.js            # Wygenerowany bundle produkcyjny
+│   ├── core/                  # Zdarzenia i obsługa błędów
+│   ├── features/              # Produkty, filtry i koszyk
+│   ├── services/              # Dane produktów i bezpieczny dostęp do storage
+│   └── ui/                    # Nawigacja, motyw, dostępność, PWA i JSON-LD
+├── data/products.json         # Lokalne dane produktowe
+├── assets/                    # Obrazy, fonty, ikony i warianty zoptymalizowane
+├── scripts/                   # Build, preview i walidatory QA
+├── tools/image-optimizer/     # Pipeline optymalizacji obrazów
+├── sw.js                      # Kanoniczny Service Worker
+├── site.webmanifest           # Manifest aplikacji
+├── _headers                   # Nagłówki dla hostingu statycznego
+├── _redirects                 # Reguła strony 404
+├── robots.txt
+├── sitemap.xml
+├── package.json
+└── LICENSE
 ```
 
-### Instalacja i konfiguracja
+### Instalacja
+
+Wymagany jest Node.js w wersji zgodnej z `>=18`. Repozytorium używa npm i zawiera `package-lock.json`.
 
 ```bash
-npm install
-```
-
-Wymagane środowisko: Node.js w wersji zgodnej z `>=18`.
-
-### Development lokalny
-
-Repozytorium nie zawiera dedykowanego dev-servera z hot reload. Praca lokalna opiera się na edycji plików źródłowych oraz uruchamianiu walidacji i builda.
-
-Najczęściej używane komendy:
-
-```bash
-npm run qa
-npm run qa:html
-npm run qa:js
-npm run qa:css
-npm run qa:links
-npm run validate:jsonld
-npm run format:check
+npm ci
 ```
 
 ### Build produkcyjny
 
 ```bash
 npm run build
-```
-
-Build obejmuje:
-
-- minifikację CSS do `css/main.min.css`,
-- bundling i minifikację JS do `js/main.min.js`,
-- generowanie katalogu `dist/` ze składaniem partiali HTML i podmianą referencji na assety `.min`.
-
-Podgląd buildu `dist`:
-
-```bash
 npm run preview
 ```
 
-### Deployment
+`npm run build` generuje `css/main.min.css` i `js/main.min.js`, a następnie odtwarza pakiet wdrożeniowy `dist/`. `npm run preview` udostępnia istniejący katalog `dist/` pod adresem `http://127.0.0.1:4173`; repozytorium nie zawiera osobnego serwera developerskiego z hot reload.
 
-Repozytorium zawiera pliki konfiguracyjne dla hostingu statycznego:
+`css/main.min.css`, `js/main.min.js` i `dist/` są wynikami procesu budowania i nie powinny być edytowane ręcznie. Katalog `dist/` nie jest wersjonowany.
 
-- `_headers` (nagłówki bezpieczeństwa i cache-control),
-- `_redirects` (fallback 404),
-- `robots.txt`,
-- `sitemap.xml`.
+### Testy i walidacja
+
+```bash
+npm run qa
+npm run format:check
+npm run qa:smoke
+npm run qa:smoke:enforce
+```
+
+- `npm run qa` sprawdza źródłowy HTML, JSON-LD, linki wewnętrzne, JavaScript i CSS.
+- `npm run format:check` weryfikuje formatowanie bez zapisu zmian.
+- `npm run qa:smoke` uruchamia raportowe audyty Lighthouse dla strony głównej, katalogu i strony produktu.
+- `npm run qa:smoke:enforce` używa tego samego zakresu, ale zwraca błąd po niespełnieniu skonfigurowanych progów.
+
+Są to skonfigurowane workflow jakości; repozytorium nie deklaruje pokrycia testami ani formalnej zgodności na podstawie samych skryptów.
+
+### Wdrożenie
+
+`dist/` jest kompletnym pakietem hostingu statycznego. Build kopiuje do niego m.in. `site.webmanifest`, `sw.js`, `robots.txt`, `sitemap.xml`, `_headers` i `_redirects`.
+
+Publiczna wersja demonstracyjna jest hostowana w Netlify. `_headers` definiuje politykę CSP, podstawowe nagłówki ochronne i reguły cache, a `_redirects` kieruje nieznalezione ścieżki do `404.html`. Repozytorium nie zawiera polecenia wdrożeniowego ani workflow CI/CD.
 
 ### Dostępność
 
-W kodzie zaimplementowano m.in.:
+Implementacja zawiera konkretne mechanizmy dostępności, bez deklarowania formalnej zgodności WCAG:
 
-- skip link do głównej treści (`#main`),
-- nawigację opartą o semantyczne elementy i przyciski z atrybutami ARIA,
-- widoczne style `:focus-visible`,
-- obsługę trybu klawiaturowego (`using-keyboard`),
-- ograniczenie animacji dla `prefers-reduced-motion`,
-- focus trap dla modalu projektu,
-- walidację formularzy z `aria-invalid`, `aria-describedby` i komunikatami live.
+- skip link do `#main`, semantyczne landmarki i natywne kontrolki,
+- nawigację rozwijaną z synchronizacją `aria-expanded`, obsługą `Escape` i klawiszy strzałek,
+- style `:focus-visible` i rozpoznawanie nawigacji klawiaturą,
+- focus trap i przywracanie fokusu dla modalu informacyjnego,
+- `prefers-reduced-motion` dla ograniczenia animacji,
+- stany `aria-busy`, regiony `aria-live` oraz formularze z `aria-invalid` i `aria-describedby`.
 
 ### SEO
 
-Wdrożone elementy SEO obejmują:
+Dokumenty HTML zawierają tytuły, opisy, adresy canonical, metadane Open Graph i Twitter Cards. Strona główna udostępnia statyczne dane `OnlineStore` i `WebSite`, a JavaScript generuje `BreadcrumbList`, `ItemList` i `Product` zależnie od widoku. Repozytorium zawiera również `robots.txt`, `sitemap.xml` i obrazy social preview w `assets/images/og/`.
 
-- `title`, `meta description`, canonical, Open Graph i Twitter cards na stronach,
-- statyczne JSON-LD (`OnlineStore`, `WebSite`) na stronie głównej,
-- dynamiczne JSON-LD (`BreadcrumbList`, `ItemList`, `Product`) zależnie od widoku,
-- `robots.txt` i `sitemap.xml`,
-- assety Open Graph w `assets/images/og`.
+Te mechanizmy opisują warstwę metadanych; nie stanowią deklaracji wyników pozycjonowania.
+
+### PWA i obsługa offline
+
+`site.webmanifest` definiuje tryb `standalone`, ikony, skróty oraz zrzuty ekranu. `js/main.js` rejestruje `/sw.js`, a moduł `js/ui/pwa-prompts.js` obsługuje zdarzenia instalacji, zmianę stanu online/offline i komunikat o dostępnej aktualizacji.
+
+Service Worker precache'uje `/` i `/offline.html`, stosuje strategię network-first dla nawigacji oraz cache dla odwiedzonych dokumentów, stylów, skryptów, obrazów i fontów. Obsługa offline jest częściowa: zależy od wcześniejszej instalacji Service Workera i zawartości zapisanej w cache, więc nie gwarantuje dostępności wszystkich tras przy pierwszej wizycie offline.
 
 ### Wydajność
 
-Zaimplementowane mechanizmy związane z wydajnością:
+- Build łączy i minifikuje CSS oraz JavaScript.
+- Hero używa responsywnego `srcset` oraz formatów AVIF/WebP z fallbackiem JPG.
+- Karty produktów używają AVIF/WebP z fallbackiem JPG/PNG, lazy loadingiem, asynchronicznym dekodowaniem i zadeklarowanymi wymiarami.
+- Lokalne fonty WOFF2 korzystają z `font-display: swap`; strona główna preloaduje kluczowy font i obraz hero.
+- `_headers` ustawia długie cache dla assetów oraz wymusza rewalidację HTML.
 
-- obrazy responsywne (`picture`, AVIF/WebP + fallback),
-- `loading` i `decoding` dla obrazów,
-- deklarowane wymiary grafik w kluczowych widokach,
-- preload czcionki i hero image na stronie głównej,
-- `font-display: swap` dla fontów,
-- bundling i minifikacja CSS/JS,
-- cache w Service Workerze (HTML oraz assety statyczne) z obsługą strony offline.
+Repozytorium nie przechowuje w README aktualnych wyników Lighthouse ani Core Web Vitals.
+
+### Dane i trwałość stanu
+
+- Katalog produktów pochodzi wyłącznie z `data/products.json`; aplikacja nie pobiera go z zewnętrznego API.
+- Koszyk (`volt_cart`), motyw (`vg_theme`), akceptacja modalu projektu i odrzucenie komunikatu instalacji są zapisywane lokalnie w przeglądarce.
+- Formularz kontaktowy ma konfigurację Netlify Forms i po poprawnej walidacji korzysta z natywnego żądania `POST`.
+- Formularz checkoutu wyświetla lokalny komunikat powodzenia i resetuje pola. Nie zapisuje ani nie wysyła zamówienia i nie obsługuje płatności.
+
+Projekt nie implementuje bazy danych, uwierzytelniania, kont użytkowników ani synchronizacji między urządzeniami.
 
 ### Utrzymanie projektu
 
-- Główny punkt wejścia logiki aplikacji: `js/main.js`.
-- Moduły domenowe (produkty, filtry, koszyk): `js/features/`.
-- Moduły UI (header, theme, PWA, accessibility, structured data): `js/ui/`.
-- Skrypty build/QA: `scripts/`.
-- Konfiguracja jakości kodu: `.eslintrc.cjs`, `.stylelintrc.cjs`, `.prettierrc.json`, `htmlvalidate.json`.
-- Źródło danych produktowych: `data/products.json`.
+- Zmiany wspólnego headera lub footera należy wprowadzać w `src/partials/`, a wynik odtwarzać przez build.
+- Zmiany katalogu produktów należy wprowadzać w `data/products.json`; widoki produktów i dane strukturalne są budowane z tego źródła w runtime.
+- Po zmianie tras trzeba zsynchronizować dokumenty HTML, `package.json`, `sitemap.xml`, `site.webmanifest` oraz listy używane przez walidatory.
+- Obrazy źródłowe znajdują się w `assets/images/`, a ich pipeline i tryby zapisu opisuje `tools/image-optimizer/README.md`.
+- `dist/`, `css/main.min.css` i `js/main.min.js` są artefaktami generowanymi; kanonicznymi źródłami pozostają HTML, `src/partials/`, `css/main.css`, `css/partials/` i `js/main.js` wraz z importowanymi modułami.
 
-### Roadmap
+### Licencja
 
-- Dodać automatyczne testy E2E dla kluczowych flow (sklep, koszyk, checkout).
-- Rozdzielić dane produktowe i metadane SEO na spójne moduły źródłowe.
-- Rozszerzyć walidację CI o obowiązkowe uruchomienie `qa` i `build` na każdym PR.
-- Ujednolicić katalog ikon/shortcutów manifestu (usunąć duplikaty i katalogi robocze).
+Kod i materiały należące do właściciela projektu są udostępniane na warunkach **Własnościowej Licencji Projektu KP_CODE, wersja 1.0**. Projekt nie jest oprogramowaniem open source. Szczegółowe dozwolone użycie, ograniczenia i zasady dotyczące materiałów podmiotów trzecich znajdują się w pliku [LICENSE](LICENSE).
 
 ## EN
 
 ### Project Overview
 
-Volt Garage is a static, multi-page front-end for an automotive accessories store. The project uses HTML, CSS, and Vanilla JavaScript (ES Modules), renders product catalog views from a local JSON file, and includes a client-side cart/checkout flow.
+Volt Garage is a demonstrational, static front-end for a multi-page automotive accessories store, created as a KP_Code Digital Studio portfolio project. Its source layer uses HTML, CSS, and Vanilla JavaScript modules, while the product catalog is rendered from the local `data/products.json` file.
 
-The repository also includes static deployment preparation: asset bundling, `dist/` generation, security/cache headers and redirects configuration, and baseline PWA elements (manifest, service worker, offline page).
+The project presents catalog, cart, and checkout interfaces, but it is not an active store. It has no commerce backend, user accounts, payments, or order persistence; submitting the checkout form is simulated in the browser. The contact form is a separate flow configured for Netlify Forms.
+
+### Live Version
+
+[Volt Garage — public demo](https://e-commerce-pr01-voltgarage.netlify.app/)
 
 ### Key Features
 
-- Multi-page structure: home, shop, product details, new arrivals, promotions, collections, contact, cart, checkout, and legal pages.
-- Dynamic product list and product detail rendering from `data/products.json`.
-- Catalog filtering by category, price, sorting, and search with suggestions.
-- `localStorage`-based cart (add/remove/update quantity, totals summary).
-- Contact/checkout forms with client-side validation and inline error messaging.
-- Light/dark theme switching with pre-CSS theme preload.
-- Dynamic JSON-LD injection for breadcrumbs and product lists, plus static homepage JSON-LD.
-- Service Worker registration with offline fallback and update prompts.
+- Multi-page navigation covering the homepage, catalog, product details, new arrivals, promotions, collections, contact, cart, checkout, and legal pages.
+- Dynamic product lists and details with loading, empty, and error states.
+- Catalog filtering by category and price, sorting, and search suggestions.
+- `localStorage` cart with item addition and removal, quantity updates, and product, shipping, and total calculations.
+- Client-side form validation with field feedback and focus transfer to the first error; the contact form preserves native submission to Netlify Forms.
+- Light and dark themes based on the system preference and a setting persisted in `localStorage`.
+- App manifest, Service Worker, partial offline behavior, and browser-capability-dependent installation and update prompts.
 
 ### Tech Stack
 
-**Runtime (front-end)**
+**Front-end**
 
-- HTML5
-- CSS (partials-based architecture)
-- Vanilla JavaScript (ES Modules)
-- Product data: JSON (`data/products.json`)
+- semantic HTML5,
+- CSS with custom properties and a partial-composing entry point,
+- Vanilla JavaScript with ES modules,
+- browser APIs: Fetch, `localStorage`, Service Worker, and Cache Storage,
+- local JSON data.
 
-**Tooling and quality**
+**Build and quality assurance**
 
-- Node.js `>=18`
-- PostCSS (`postcss-cli`, `postcss-import`, `cssnano`)
-- esbuild
-- Prettier
-- ESLint
-- Stylelint
-- html-validate
-- Lighthouse (smoke QA script)
-- sharp (image optimization)
+- Node.js `>=18` and npm,
+- PostCSS, `postcss-import`, and cssnano,
+- esbuild,
+- Prettier, ESLint, Stylelint, and html-validate,
+- custom internal-link and JSON-LD validators,
+- Lighthouse for smoke checks,
+- sharp, fast-glob, and minimist in the image optimization tool.
+
+### Architecture
+
+- HTML files in the repository root and `pages/` are the canonical page documents. They contain `@include` directives expanded during the build from the shared `src/partials/header.html` and `src/partials/footer.html` partials.
+- `js/main.js` initializes modules only for elements present on the current page. Catalog and cart features live in `js/features/`, data and storage access in `js/services/`, and interface behavior in `js/ui/`.
+- `data/products.json` is the canonical catalog source. The data is loaded through the Fetch API and held in memory for the current page session.
+- `css/main.css` imports layers from `css/partials/`. PostCSS assembles and minifies them into the production stylesheet.
+- `scripts/build-dist.js` creates `dist/`, expands HTML partials, copies static files, and switches documents to the minified assets.
 
 ### Project Structure
 
 ```text
 .
-├─ index.html
-├─ 404.html
-├─ offline.html
-├─ thank-you.html
-├─ pages/                 # Store and legal subpages
-├─ src/partials/          # HTML partials (header/footer) assembled in dist build
-├─ css/
-│  ├─ main.css            # Main CSS entry (imports partials)
-│  ├─ main.min.css        # Production output
-│  └─ partials/
-├─ js/
-│  ├─ main.js             # App bootstrap
-│  ├─ main.min.js         # Production bundle
-│  ├─ features/           # Products, filters, cart
-│  ├─ ui/                 # UI modules (theme, header, modal, accessibility, PWA)
-│  ├─ services/           # Data and storage access
-│  └─ core/               # Event bus and error handling
-├─ data/products.json
-├─ assets/                # Images, fonts, favicons, icons
-├─ scripts/               # Dist build, preview, QA validators
-├─ tools/image-optimizer/ # Image optimization tools
-├─ sw.js
-├─ site.webmanifest
-├─ _headers
-├─ _redirects
-├─ robots.txt
-└─ sitemap.xml
+├── index.html                 # Homepage and source HTML entry
+├── pages/                     # Store, checkout, contact, and legal views
+├── src/partials/              # Shared header and footer partials
+├── css/
+│   ├── main.css               # Canonical CSS entry
+│   ├── main.min.css           # Generated production asset
+│   └── partials/              # Style layers
+├── js/
+│   ├── main.js                # Application module entry
+│   ├── main.min.js            # Generated production bundle
+│   ├── core/                  # Events and error handling
+│   ├── features/              # Products, filters, and cart
+│   ├── services/              # Product data and safe storage access
+│   └── ui/                    # Navigation, theme, accessibility, PWA, and JSON-LD
+├── data/products.json         # Local product data
+├── assets/                    # Images, fonts, icons, and optimized variants
+├── scripts/                   # Build, preview, and QA validators
+├── tools/image-optimizer/     # Image optimization pipeline
+├── sw.js                      # Canonical Service Worker
+├── site.webmanifest           # Application manifest
+├── _headers                   # Static-hosting headers
+├── _redirects                 # 404 rule
+├── robots.txt
+├── sitemap.xml
+├── package.json
+└── LICENSE
 ```
 
-### Setup and Installation
+### Installation
+
+Node.js compatible with `>=18` is required. The repository uses npm and includes `package-lock.json`.
 
 ```bash
-npm install
-```
-
-Required environment: Node.js version compatible with `>=18`.
-
-### Local Development
-
-The repository does not provide a dedicated hot-reload dev server. Local work is based on editing source files and running QA/build scripts.
-
-Most used commands:
-
-```bash
-npm run qa
-npm run qa:html
-npm run qa:js
-npm run qa:css
-npm run qa:links
-npm run validate:jsonld
-npm run format:check
+npm ci
 ```
 
 ### Production Build
 
 ```bash
 npm run build
-```
-
-The build process includes:
-
-- CSS minification to `css/main.min.css`,
-- JS bundling and minification to `js/main.min.js`,
-- `dist/` generation with HTML partial assembly and `.min` asset reference rewrites.
-
-Preview `dist` build:
-
-```bash
 npm run preview
 ```
 
+`npm run build` generates `css/main.min.css` and `js/main.min.js`, then recreates the deployable `dist/` package. `npm run preview` serves the existing `dist/` directory at `http://127.0.0.1:4173`; the repository does not provide a separate hot-reload development server.
+
+`css/main.min.css`, `js/main.min.js`, and `dist/` are build outputs and should not be edited manually. The `dist/` directory is not versioned.
+
+### Testing and Validation
+
+```bash
+npm run qa
+npm run format:check
+npm run qa:smoke
+npm run qa:smoke:enforce
+```
+
+- `npm run qa` checks source HTML, JSON-LD, internal links, JavaScript, and CSS.
+- `npm run format:check` verifies formatting without writing changes.
+- `npm run qa:smoke` runs report-only Lighthouse audits for the homepage, catalog, and product page.
+- `npm run qa:smoke:enforce` uses the same scope but returns a failure when configured thresholds are not met.
+
+These are configured quality workflows; their presence alone does not establish test coverage or formal compliance.
+
 ### Deployment
 
-The repository includes static hosting configuration files:
+`dist/` is the complete static-hosting package. The build copies files including `site.webmanifest`, `sw.js`, `robots.txt`, `sitemap.xml`, `_headers`, and `_redirects` into it.
 
-- `_headers` (security and cache-control headers),
-- `_redirects` (404 fallback),
-- `robots.txt`,
-- `sitemap.xml`.
+The public demo is hosted on Netlify. `_headers` defines a CSP, baseline protective headers, and caching rules, while `_redirects` sends unresolved paths to `404.html`. The repository does not contain a deployment command or CI/CD workflow.
 
 ### Accessibility
 
-The codebase implements, among others:
+The implementation includes concrete accessibility mechanisms without claiming formal WCAG compliance:
 
-- a skip link targeting the main content (`#main`),
-- semantic navigation with button-based controls and ARIA attributes,
-- visible `:focus-visible` states,
-- keyboard-mode handling (`using-keyboard`),
-- reduced motion behavior for `prefers-reduced-motion`,
-- focus trap handling for the project modal,
-- form validation with `aria-invalid`, `aria-describedby`, and live status feedback.
+- a skip link to `#main`, semantic landmarks, and native controls,
+- dropdown navigation with synchronized `aria-expanded`, `Escape`, and arrow-key handling,
+- `:focus-visible` styles and keyboard-navigation detection,
+- a focus trap and focus restoration for the informational modal,
+- `prefers-reduced-motion` behavior,
+- `aria-busy` states, `aria-live` regions, and forms using `aria-invalid` and `aria-describedby`.
 
 ### SEO
 
-Implemented SEO surface includes:
+The HTML documents contain titles, descriptions, canonical URLs, Open Graph metadata, and Twitter Cards. The homepage exposes static `OnlineStore` and `WebSite` data, while JavaScript generates `BreadcrumbList`, `ItemList`, and `Product` data for the relevant views. The repository also includes `robots.txt`, `sitemap.xml`, and social preview images in `assets/images/og/`.
 
-- `title`, `meta description`, canonical, Open Graph, and Twitter cards across pages,
-- static homepage JSON-LD (`OnlineStore`, `WebSite`),
-- dynamic JSON-LD (`BreadcrumbList`, `ItemList`, `Product`) per view,
-- `robots.txt` and `sitemap.xml`,
-- Open Graph assets in `assets/images/og`.
+These mechanisms describe the metadata layer; they do not claim search-ranking results.
+
+### PWA and Offline Support
+
+`site.webmanifest` defines `standalone` display mode, icons, shortcuts, and screenshots. `js/main.js` registers `/sw.js`, while `js/ui/pwa-prompts.js` handles installation events, online/offline status changes, and update messaging.
+
+The Service Worker precaches `/` and `/offline.html`, uses a network-first strategy for navigation, and caches visited documents, styles, scripts, images, and fonts. Offline support is partial: it depends on prior Service Worker installation and cached content, so it does not guarantee that every route is available on a first offline visit.
 
 ### Performance
 
-Implemented performance-related mechanisms:
+- The build bundles and minifies CSS and JavaScript.
+- The hero uses responsive `srcset` resources and AVIF/WebP formats with a JPG fallback.
+- Product cards use AVIF/WebP with JPG/PNG fallbacks, lazy loading, asynchronous decoding, and declared dimensions.
+- Local WOFF2 fonts use `font-display: swap`; the homepage preloads a key font and hero image.
+- `_headers` configures long-lived caching for assets and revalidation for HTML.
 
-- responsive images (`picture`, AVIF/WebP + fallback),
-- image `loading` and `decoding` attributes,
-- explicit image dimensions in key views,
-- homepage font and hero-image preload,
-- `font-display: swap` for webfonts,
-- CSS/JS bundling and minification,
-- Service Worker caching (HTML and static assets) with offline fallback.
+The repository does not record current Lighthouse or Core Web Vitals results in this README.
+
+### Data and State Persistence
+
+- The product catalog comes exclusively from `data/products.json`; the application does not retrieve it from an external API.
+- The cart (`volt_cart`), theme (`vg_theme`), project-modal acceptance, and install-prompt dismissal are persisted locally in the browser.
+- The contact form is configured for Netlify Forms and uses a native `POST` request after successful validation.
+- The checkout form displays a local success message and resets its fields. It does not persist or transmit an order and does not process payments.
+
+The project does not implement a database, authentication, user accounts, or cross-device synchronization.
 
 ### Project Maintenance
 
-- Main app logic entry point: `js/main.js`.
-- Domain modules (products, filters, cart): `js/features/`.
-- UI modules (header, theme, PWA, accessibility, structured data): `js/ui/`.
-- Build/QA scripts: `scripts/`.
-- Code quality configuration: `.eslintrc.cjs`, `.stylelintrc.cjs`, `.prettierrc.json`, `htmlvalidate.json`.
-- Product data source: `data/products.json`.
+- Shared header or footer changes belong in `src/partials/`, followed by build regeneration.
+- Catalog changes belong in `data/products.json`; product views and structured data are built from this source at runtime.
+- Route changes require synchronization across the HTML documents, `package.json`, `sitemap.xml`, `site.webmanifest`, and validator inventories.
+- Source images live in `assets/images/`; `tools/image-optimizer/README.md` documents their pipeline and write modes.
+- `dist/`, `css/main.min.css`, and `js/main.min.js` are generated artifacts; the canonical sources are the HTML documents, `src/partials/`, `css/main.css`, `css/partials/`, and `js/main.js` with its imported modules.
 
-### Roadmap
+### License
 
-- Add E2E tests for key flows (shop, cart, checkout).
-- Separate product data and SEO metadata into consistent source modules.
-- Extend CI validation to require `qa` and `build` for every PR.
-- Clean up manifest icon/shortcut directories (remove duplicates and working folders).
+Code and materials owned by the project owner are provided under the **KP_CODE Proprietary Project License, version 1.0**. The project is not open-source software. Detailed permitted uses, restrictions, and rules for third-party materials are defined in [LICENSE](LICENSE).

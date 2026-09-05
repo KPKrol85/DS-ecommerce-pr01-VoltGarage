@@ -31,7 +31,7 @@
   z-index: 0;
   opacity: var(--page-hero-mark-opacity);
   transform: translateY(-30%);
-  background: url('../../assets/images/logo/logo-mark.svg') center / contain no-repeat;
+  background: url('/assets/images/logo/logo-mark.svg') center / contain no-repeat;
   animation: page-hero-mark-in 0.9s ease-out forwards;
 }
 .page-hero h1 {

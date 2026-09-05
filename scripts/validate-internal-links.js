@@ -2,33 +2,8 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 
 const ROOT_DIR = process.cwd();
-const HTML_EXT = '.html';
-const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'src']);
 const HREF_REGEX = /\bhref\s*=\s*(?:"([^"]*)"|'([^']*)')/gi;
 const EXCLUDED_SCHEMES = new Set(['http', 'https', 'mailto', 'tel', 'javascript', 'data']);
-
-async function collectHtmlFiles(dir) {
-  const entries = await fs.readdir(dir, { withFileTypes: true });
-  const files = [];
-
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-
-    if (entry.isDirectory()) {
-      if (SKIP_DIRS.has(entry.name)) {
-        continue;
-      }
-      files.push(...(await collectHtmlFiles(fullPath)));
-      continue;
-    }
-
-    if (entry.isFile() && entry.name.endsWith(HTML_EXT)) {
-      files.push(fullPath);
-    }
-  }
-
-  return files;
-}
 
 function getLineNumber(content, index) {
   return content.slice(0, index).split('\n').length;
@@ -84,7 +59,11 @@ async function resolveExistingTarget(sourceFile, href) {
 
   const hasExtension = Boolean(path.extname(basePath));
   const endsWithSlash = cleanHref.endsWith('/');
-  const candidates = createCandidatePaths(basePath, hasExtension, endsWithSlash);
+  const publicPath = path.join(ROOT_DIR, 'public', path.relative(ROOT_DIR, basePath));
+  const candidates = [
+    ...createCandidatePaths(basePath, hasExtension, endsWithSlash),
+    ...createCandidatePaths(publicPath, hasExtension, endsWithSlash),
+  ];
 
   for (const candidate of candidates) {
     try {
@@ -134,11 +113,16 @@ async function validateFileLinks(filePath, content) {
 }
 
 async function main() {
-  const htmlFiles = await collectHtmlFiles(ROOT_DIR);
+  const { discoverHtml, renderHtml } = await import('./html.mjs');
+  const htmlFiles = discoverHtml(ROOT_DIR).map((file) => path.join(ROOT_DIR, file));
   const errors = [];
 
   for (const filePath of htmlFiles) {
-    const content = await fs.readFile(filePath, 'utf8');
+    const content = await renderHtml(
+      ROOT_DIR,
+      path.relative(ROOT_DIR, filePath),
+      await fs.readFile(filePath, 'utf8')
+    );
     errors.push(...(await validateFileLinks(filePath, content)));
   }
 

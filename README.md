@@ -4,7 +4,7 @@
 
 ### Przegląd projektu
 
-Volt Garage to demonstracyjny, statyczny front-end wielostronicowego sklepu z akcesoriami motoryzacyjnymi, przygotowany jako projekt portfolio KP_Code Digital Studio. Warstwa źródłowa korzysta z HTML, CSS oraz modułów Vanilla JavaScript, a katalog produktów jest renderowany z lokalnego pliku `data/products.json`.
+Volt Garage to demonstracyjny, statyczny front-end wielostronicowego sklepu z akcesoriami motoryzacyjnymi, przygotowany jako projekt portfolio KP_Code Digital Studio. Warstwa źródłowa korzysta z HTML, CSS oraz modułów Vanilla JavaScript, a katalog produktów jest renderowany z lokalnego pliku `public/data/products.json`.
 
 Projekt prezentuje interfejs katalogu, koszyka i checkoutu, ale nie jest aktywnym sklepem. Nie zawiera backendu sprzedażowego, kont użytkowników, płatności ani zapisu zamówień; wysłanie formularza checkoutu jest symulowane w przeglądarce. Formularz kontaktowy stanowi osobny przepływ skonfigurowany dla Netlify Forms.
 
@@ -34,61 +34,73 @@ Projekt prezentuje interfejs katalogu, koszyka i checkoutu, ale nie jest aktywny
 
 **Build i kontrola jakości**
 
-- Node.js `>=18` oraz npm,
-- PostCSS, `postcss-import` i cssnano,
-- esbuild,
+- Node.js `^20.19.0 || >=22.12.0` oraz npm,
+- Vite 8.2.2 jako system development/build/preview,
 - Prettier, ESLint, Stylelint i html-validate,
-- własne walidatory linków wewnętrznych i JSON-LD,
+- własne walidatory linków wewnętrznych, JSON-LD i pakietu produkcyjnego oraz testy kontraktu budowania,
 - Lighthouse do testów smoke,
 - sharp, fast-glob i minimist w narzędziu optymalizacji obrazów.
 
 ### Architektura
 
-- Pliki HTML w katalogu głównym i `pages/` są kanonicznymi dokumentami stron. Zawierają dyrektywy `@include`, które podczas budowania rozwijają współdzielone partiale `src/partials/header.html` i `src/partials/footer.html`.
+- Projekt pozostaje Vanilla HTML/CSS/JavaScript MPA. Vite 8.2.2 obsługuje development, build i preview, automatycznie wykrywając wszystkie 15 dokumentów HTML w katalogu głównym i `pages/`.
+- Wspólny renderer `scripts/html.mjs`, podłączony przez `scripts/vite-volt-garage.mjs`, rozwija `@include`, warunki i tokeny zarówno w trybie dev, jak i podczas budowania. Partiale `src/partials/header.html` i `src/partials/footer.html` pozostają źródłami; ich edycja przeładowuje stronę w dev. Brakujące lub niedozwolone include'y, cykle i nierozwiązane tokeny powodują błąd.
 - `js/main.js` uruchamia moduły tylko dla elementów obecnych na bieżącej stronie. Funkcje katalogu i koszyka znajdują się w `js/features/`, dostęp do danych i pamięci w `js/services/`, a zachowania interfejsu w `js/ui/`.
-- `data/products.json` jest kanonicznym źródłem katalogu. Dane są pobierane przez Fetch API i przechowywane w pamięci na czas bieżącej sesji strony.
-- `css/main.css` importuje warstwy z `css/partials/`. PostCSS składa i minifikuje je do produkcyjnego arkusza.
-- `scripts/build-dist.js` tworzy `dist/`, rozwija partiale HTML, kopiuje pliki statyczne i przełącza dokumenty na minifikowane assety.
+- `public/data/products.json` jest kanonicznym źródłem katalogu, dostępnym pod `/data/products.json`. Fetch API pobiera dane z rewalidacją, a aplikacja przechowuje je w pamięci na czas bieżącej sesji strony.
+- `css/main.css` importuje warstwy z `css/partials/`. Vite przetwarza CSS i moduły JS, minifikuje je oraz aktualizuje odwołania w produkcyjnym HTML.
+- `public/` zawiera statyczne zasoby kopiowane bez zmiany nazw do `dist/`, z zachowaniem URL-i takich jak `/assets/`, `/data/products.json` i `/site.webmanifest`. Kanoniczny `src/sw.js` jest osobno przekształcany w produkcyjny `dist/sw.js`.
 
 ### Struktura projektu
 
 ```text
 .
-├── index.html                 # Strona główna i źródłowy entry HTML
-├── pages/                     # Widoki sklepu, checkoutu, kontaktu i stron prawnych
-├── src/partials/              # Współdzielone partiale headera i footera
+├── index.html                             # Strona główna i źródłowy entry HTML
+├── 404.html, offline.html, thank-you.html # Pozostałe główne dokumenty HTML
+├── pages/                                 # 11 widoków sklepu, kontaktu i stron prawnych
+├── src/
+│   ├── partials/                          # Współdzielone partiale headera i footera
+│   └── sw.js                              # Kanoniczny Service Worker
 ├── css/
-│   ├── main.css               # Kanoniczny entry CSS
-│   ├── main.min.css           # Wygenerowany asset produkcyjny
-│   └── partials/              # Warstwy stylów
+│   ├── main.css                           # Kanoniczny entry CSS
+│   └── partials/                          # Warstwy stylów
 ├── js/
-│   ├── main.js                # Entry modułów aplikacji
-│   ├── main.min.js            # Wygenerowany bundle produkcyjny
-│   ├── core/                  # Zdarzenia i obsługa błędów
-│   ├── features/              # Produkty, filtry i koszyk
-│   ├── services/              # Dane produktów i bezpieczny dostęp do storage
-│   └── ui/                    # Nawigacja, motyw, dostępność, PWA i JSON-LD
-├── data/products.json         # Lokalne dane produktowe
-├── assets/                    # Obrazy, fonty, ikony i warianty zoptymalizowane
-├── scripts/                   # Build, preview i walidatory QA
-├── tools/image-optimizer/     # Pipeline optymalizacji obrazów
-├── sw.js                      # Kanoniczny Service Worker
-├── site.webmanifest           # Manifest aplikacji
-├── _headers                   # Nagłówki dla hostingu statycznego
-├── _redirects                 # Reguła strony 404
-├── robots.txt
-├── sitemap.xml
+│   ├── main.js                            # Entry modułów aplikacji
+│   ├── core/                              # Zdarzenia i obsługa błędów
+│   ├── features/                          # Produkty, filtry i koszyk
+│   ├── services/                          # Dane produktów i bezpieczny dostęp do storage
+│   └── ui/                                # Nawigacja, motyw, dostępność, PWA i JSON-LD
+├── public/                                # Zasoby kopiowane z zachowaniem publicznych URL-i
+│   ├── assets/                            # Obrazy, fonty, ikony i warianty _optimized
+│   ├── data/products.json                 # Lokalne dane produktowe
+│   ├── site.webmanifest                   # Manifest aplikacji
+│   ├── _headers, _redirects               # Nagłówki i reguła 404 dla Netlify
+│   └── robots.txt, sitemap.xml, humans.txt # Pliki statyczne serwisu
+├── scripts/                               # Integracja Vite, renderer HTML, walidatory i testy
+├── tools/image-optimizer/                 # Narzędzie generowania wariantów obrazów
+├── vite.config.mjs                        # Konfiguracja Vite MPA
+├── dist/                                  # Generowany pakiet produkcyjny; ignorowany przez Git
+│   ├── build/                             # CSS/JS z hashem zawartości
+│   ├── .vite/manifest.json                # Manifest wyników Vite
+│   └── ...                                # HTML, kopie public/ i wygenerowany sw.js
 ├── package.json
 └── LICENSE
 ```
 
 ### Instalacja
 
-Wymagany jest Node.js w wersji zgodnej z `>=18`. Repozytorium używa npm i zawiera `package-lock.json`.
+Wymagany jest Node.js w wersji zgodnej z `^20.19.0 || >=22.12.0`. Repozytorium używa npm i zawiera `package-lock.json`.
 
 ```bash
 npm ci
 ```
+
+### Tryb developerski
+
+```bash
+npm run dev
+```
+
+Vite udostępnia źródła domyślnie pod `http://127.0.0.1:5173`, obsługuje aktualizacje modułów i przeładowanie po zmianie partiali HTML. Port jest ścisły. Rejestracja Service Workera jest w dev wyłączona; obsługę PWA sprawdza się na buildzie produkcyjnym przez preview.
 
 ### Build produkcyjny
 
@@ -97,31 +109,39 @@ npm run build
 npm run preview
 ```
 
-`npm run build` generuje `css/main.min.css` i `js/main.min.js`, a następnie odtwarza pakiet wdrożeniowy `dist/`. `npm run preview` udostępnia istniejący katalog `dist/` pod adresem `http://127.0.0.1:4173`; repozytorium nie zawiera osobnego serwera developerskiego z hot reload.
+`npm run build` odtwarza `dist/` z zachowaniem wszystkich tras HTML. CSS i JavaScript otrzymują nazwy z hashem zawartości w `dist/build/`, np. `main-[hash].css` i `main-[hash].js`. Build zapisuje też `dist/.vite/manifest.json`, kopiuje `public/`, generuje `dist/sw.js` i uruchamia walidację pakietu.
 
-`css/main.min.css`, `js/main.min.js` i `dist/` są wynikami procesu budowania i nie powinny być edytowane ręcznie. Katalog `dist/` nie jest wersjonowany.
+`npm run preview` udostępnia istniejący `dist/` przez Vite pod adresem `http://127.0.0.1:4173`; po zmianie źródeł należy ponownie wykonać build. Port jest ścisły: zajęty port powoduje błąd.
+
+HTML, CSS i JS pozostają czytelnymi, nieminifikowanymi źródłami. Produkcyjne bundle powstają wyłącznie w `dist/`; cały ten katalog jest generowany, ignorowany przez Git i nie powinien być edytowany ręcznie.
 
 ### Testy i walidacja
 
 ```bash
 npm run qa
 npm run format:check
+npm run build
+npm run qa:package
 npm run qa:smoke
 npm run qa:smoke:enforce
 ```
 
-- `npm run qa` sprawdza źródłowy HTML, JSON-LD, linki wewnętrzne, JavaScript i CSS.
+- `npm run qa` sprawdza źródłowy HTML, JSON-LD, linki wewnętrzne, JavaScript, CSS oraz kontrakt budowania przez `qa:build`.
 - `npm run format:check` weryfikuje formatowanie bez zapisu zmian.
-- `npm run qa:smoke` uruchamia raportowe audyty Lighthouse dla strony głównej, katalogu i strony produktu.
-- `npm run qa:smoke:enforce` używa tego samego zakresu, ale zwraca błąd po niespełnieniu skonfigurowanych progów.
+- `npm run qa:build` uruchamia testy Node dla renderera HTML i kontraktu pakietu; można je wykonać również osobno.
+- `npm run qa:package` sprawdza istniejący `dist/`, w tym trasy, odwołania do zasobów, hashowane bundle, manifesty i kopie plików publicznych. Ta sama walidacja jest automatyczną częścią `build`.
+- `npm run qa:smoke` wykonuje świeży build, uruchamia Vite preview i audytuje stronę główną, katalog oraz stronę produktu przez zainstalowany Lighthouse. Domyślnie raportuje przekroczenia progów bez blokowania.
+- `npm run qa:smoke:enforce` używa tego samego zakresu, ale zwraca błąd po niespełnieniu skonfigurowanych progów. Oba tryby wymagają dostępnego Chrome/Chromium i wolnego portu preview.
 
-Są to skonfigurowane workflow jakości; repozytorium nie deklaruje pokrycia testami ani formalnej zgodności na podstawie samych skryptów.
+Są to skonfigurowane workflow jakości; repozytorium nie deklaruje pokrycia testami ani formalnej zgodności na podstawie samych skryptów. Dokładne komendy i ustawienia smoke opisuje [dokumentacja konfiguracji](docs/settings.md).
 
 ### Wdrożenie
 
-`dist/` jest kompletnym pakietem hostingu statycznego. Build kopiuje do niego m.in. `site.webmanifest`, `sw.js`, `robots.txt`, `sitemap.xml`, `_headers` i `_redirects`.
+Kontrakt budowania w Netlify: polecenie `npm run build`, katalog publikacji `dist`, Node.js zgodny z `^20.19.0 || >=22.12.0`. `dist/` zawiera wszystkie strony, hashowane bundle, wygenerowany `sw.js` i kopie zasobów z `public/`, w tym `site.webmanifest`, `robots.txt`, `sitemap.xml`, `humans.txt`, `_headers` i `_redirects`.
 
-Publiczna wersja demonstracyjna jest hostowana w Netlify. `_headers` definiuje politykę CSP, podstawowe nagłówki ochronne i reguły cache, a `_redirects` kieruje nieznalezione ścieżki do `404.html`. Repozytorium nie zawiera polecenia wdrożeniowego ani workflow CI/CD.
+Publiczna wersja demonstracyjna jest hostowana w Netlify. Źródłowy `public/_headers` definiuje politykę CSP, podstawowe nagłówki ochronne i cache, a `public/_redirects` kieruje nieznalezione ścieżki do `404.html`. Roczne cache `immutable` dotyczy wyłącznie `/build/*`; HTML, `/assets/*`, `/data/*`, manifest i Service Worker wymagają rewalidacji.
+
+Vite preview służy do lokalnej inspekcji pakietu i nie stosuje reguł Netlify z `_headers` ani `_redirects`. Dokumentacja opisuje konfigurację wdrożenia; nie potwierdza wdrożenia migracji ani działania nagłówków, przekierowań czy formularzy w Netlify. Repozytorium nie zawiera polecenia wdrożeniowego ani workflow CI/CD.
 
 ### Dostępność
 
@@ -136,29 +156,33 @@ Implementacja zawiera konkretne mechanizmy dostępności, bez deklarowania forma
 
 ### SEO
 
-Dokumenty HTML zawierają tytuły, opisy, adresy canonical, metadane Open Graph i Twitter Cards. Strona główna udostępnia statyczne dane `OnlineStore` i `WebSite`, a JavaScript generuje `BreadcrumbList`, `ItemList` i `Product` zależnie od widoku. Repozytorium zawiera również `robots.txt`, `sitemap.xml` i obrazy social preview w `assets/images/og/`.
+Dokumenty HTML zawierają tytuły, opisy, adresy canonical, metadane Open Graph i Twitter Cards. Strona główna udostępnia statyczne dane `OnlineStore` i `WebSite`, a JavaScript generuje `BreadcrumbList`, `ItemList` i `Product` zależnie od widoku. Repozytorium zawiera również `public/robots.txt`, `public/sitemap.xml` i obrazy social preview w `public/assets/images/og/`.
 
 Te mechanizmy opisują warstwę metadanych; nie stanowią deklaracji wyników pozycjonowania.
 
 ### PWA i obsługa offline
 
-`site.webmanifest` definiuje tryb `standalone`, ikony, skróty oraz zrzuty ekranu. `js/main.js` rejestruje `/sw.js`, a moduł `js/ui/pwa-prompts.js` obsługuje zdarzenia instalacji, zmianę stanu online/offline i komunikat o dostępnej aktualizacji.
+`public/site.webmanifest`, dostępny pod `/site.webmanifest`, definiuje tryb `standalone`, ikony, skróty oraz zrzuty ekranu. `js/main.js` rejestruje `/sw.js` wyłącznie w buildzie produkcyjnym, z `updateViaCache: 'none'`. Moduł `js/ui/pwa-prompts.js` obsługuje zdarzenia instalacji, zmianę stanu online/offline i komunikat o dostępnej aktualizacji.
 
-Service Worker precache'uje `/` i `/offline.html`, stosuje strategię network-first dla nawigacji oraz cache dla odwiedzonych dokumentów, stylów, skryptów, obrazów i fontów. Obsługa offline jest częściowa: zależy od wcześniejszej instalacji Service Workera i zawartości zapisanej w cache, więc nie gwarantuje dostępności wszystkich tras przy pierwszej wizycie offline.
+Kanoniczny worker znajduje się w `src/sw.js`. Integracja Vite generuje `dist/sw.js`, wstrzykując identyfikator wdrożenia obliczony z zawartości wyników budowania, plików `public/` i źródła workera oraz listę precache. Zwykła zmiana zawartości nie wymaga ręcznego numerowania wydania; `CACHE_SCHEMA` opisuje zmiany kontraktu cache.
+
+Precache obejmuje `/`, `/offline.html`, wygenerowane bundle, lokalne fonty i logotypy. Nawigacja i zasoby o stałych URL-ach korzystają z network-first z rewalidacją i fallbackiem do cache; hashowane CSS/JS z `/build/` korzystają z cache-first. Cache runtime ma limity 20 dokumentów i 60 zasobów. Aktywacja usuwa wyłącznie nieaktualne cache z prefiksem `volt-garage-`.
+
+Obsługa offline jest częściowa: zależy od wcześniejszej instalacji Service Workera i zapisanej zawartości. Przy niedostępnej sieci worker zwraca zapisaną stronę albo `/offline.html`; nie gwarantuje dostępności wszystkich tras przy pierwszej wizycie offline.
 
 ### Wydajność
 
-- Build łączy i minifikuje CSS oraz JavaScript.
+- Vite łączy i minifikuje CSS oraz JavaScript, nadając plikom wynikowym hashe zawartości.
 - Hero używa responsywnego `srcset` oraz formatów AVIF/WebP z fallbackiem JPG.
 - Karty produktów używają AVIF/WebP z fallbackiem JPG/PNG, lazy loadingiem, asynchronicznym dekodowaniem i zadeklarowanymi wymiarami.
 - Lokalne fonty WOFF2 korzystają z `font-display: swap`; strona główna preloaduje kluczowy font i obraz hero.
-- `_headers` ustawia długie cache dla assetów oraz wymusza rewalidację HTML.
+- `public/_headers` ustawia roczne cache `immutable` wyłącznie dla `/build/*`; HTML i zasoby o stałych URL-ach podlegają rewalidacji.
 
 Repozytorium nie przechowuje w README aktualnych wyników Lighthouse ani Core Web Vitals.
 
 ### Dane i trwałość stanu
 
-- Katalog produktów pochodzi wyłącznie z `data/products.json`; aplikacja nie pobiera go z zewnętrznego API.
+- Katalog produktów pochodzi wyłącznie z `public/data/products.json`; aplikacja nie pobiera go z zewnętrznego API.
 - Koszyk (`volt_cart`), motyw (`vg_theme`), akceptacja modalu projektu i odrzucenie komunikatu instalacji są zapisywane lokalnie w przeglądarce.
 - Formularz kontaktowy ma konfigurację Netlify Forms i po poprawnej walidacji korzysta z natywnego żądania `POST`.
 - Formularz checkoutu wyświetla lokalny komunikat powodzenia i resetuje pola. Nie zapisuje ani nie wysyła zamówienia i nie obsługuje płatności.
@@ -167,11 +191,11 @@ Projekt nie implementuje bazy danych, uwierzytelniania, kont użytkowników ani 
 
 ### Utrzymanie projektu
 
-- Zmiany wspólnego headera lub footera należy wprowadzać w `src/partials/`, a wynik odtwarzać przez build.
-- Zmiany katalogu produktów należy wprowadzać w `data/products.json`; widoki produktów i dane strukturalne są budowane z tego źródła w runtime.
-- Po zmianie tras trzeba zsynchronizować dokumenty HTML, `package.json`, `sitemap.xml`, `site.webmanifest` oraz listy używane przez walidatory.
-- Obrazy źródłowe znajdują się w `assets/images/`, a ich pipeline i tryby zapisu opisuje `tools/image-optimizer/README.md`.
-- `dist/`, `css/main.min.css` i `js/main.min.js` są artefaktami generowanymi; kanonicznymi źródłami pozostają HTML, `src/partials/`, `css/main.css`, `css/partials/` i `js/main.js` wraz z importowanymi modułami.
+- Zmiany wspólnego headera lub footera należy wprowadzać w `src/partials/`; Vite rozwija je w dev i podczas budowania.
+- Zmiany katalogu produktów należy wprowadzać w `public/data/products.json`; widoki produktów i dane strukturalne są budowane z tego źródła w runtime.
+- Build i walidatory odkrywają dokumenty przez `*.html` i `pages/**/*.html`. Po zmianie tras trzeba nadal zaktualizować linki, `public/sitemap.xml`, skróty w `public/site.webmanifest` oraz zakres smoke, jeśli dotyczy.
+- Obrazy źródłowe znajdują się w `public/assets/images/`, a warianty WebP/AVIF w `public/assets/images/_optimized/`. [Dokumentacja narzędzia](tools/image-optimizer/README.md) opisuje generowanie wariantów; build kopiuje gotowe zasoby i nie uruchamia optymalizatora.
+- `dist/` jest generowanym wynikiem. Kanonicznymi źródłami pozostają HTML, `src/partials/`, `src/sw.js`, `css/main.css`, `css/partials/`, `js/main.js` wraz z importowanymi modułami oraz zasoby w `public/`.
 
 ### Licencja
 
@@ -181,7 +205,7 @@ Kod i materiały należące do właściciela projektu są udostępniane na warun
 
 ### Project Overview
 
-Volt Garage is a demonstrational, static front-end for a multi-page automotive accessories store, created as a KP_Code Digital Studio portfolio project. Its source layer uses HTML, CSS, and Vanilla JavaScript modules, while the product catalog is rendered from the local `data/products.json` file.
+Volt Garage is a demonstrational, static front-end for a multi-page automotive accessories store, created as a KP_Code Digital Studio portfolio project. Its source layer uses HTML, CSS, and Vanilla JavaScript modules, while the product catalog is rendered from the local `public/data/products.json` file.
 
 The project presents catalog, cart, and checkout interfaces, but it is not an active store. It has no commerce backend, user accounts, payments, or order persistence; submitting the checkout form is simulated in the browser. The contact form is a separate flow configured for Netlify Forms.
 
@@ -211,61 +235,73 @@ The project presents catalog, cart, and checkout interfaces, but it is not an ac
 
 **Build and quality assurance**
 
-- Node.js `>=18` and npm,
-- PostCSS, `postcss-import`, and cssnano,
-- esbuild,
+- Node.js `^20.19.0 || >=22.12.0` and npm,
+- Vite 8.2.2 as the development/build/preview system,
 - Prettier, ESLint, Stylelint, and html-validate,
-- custom internal-link and JSON-LD validators,
+- custom internal-link, JSON-LD, and production-package validators, plus build-contract tests,
 - Lighthouse for smoke checks,
 - sharp, fast-glob, and minimist in the image optimization tool.
 
 ### Architecture
 
-- HTML files in the repository root and `pages/` are the canonical page documents. They contain `@include` directives expanded during the build from the shared `src/partials/header.html` and `src/partials/footer.html` partials.
+- The project remains a Vanilla HTML/CSS/JavaScript MPA. Vite 8.2.2 handles development, build, and preview, automatically discovering all 15 HTML documents in the repository root and `pages/`.
+- The shared `scripts/html.mjs` renderer, integrated through `scripts/vite-volt-garage.mjs`, expands `@include`, conditionals, and tokens in both dev and production builds. The `src/partials/header.html` and `src/partials/footer.html` partials remain source files; editing them reloads the page in dev. Missing or disallowed includes, cycles, and unresolved tokens fail validation.
 - `js/main.js` initializes modules only for elements present on the current page. Catalog and cart features live in `js/features/`, data and storage access in `js/services/`, and interface behavior in `js/ui/`.
-- `data/products.json` is the canonical catalog source. The data is loaded through the Fetch API and held in memory for the current page session.
-- `css/main.css` imports layers from `css/partials/`. PostCSS assembles and minifies them into the production stylesheet.
-- `scripts/build-dist.js` creates `dist/`, expands HTML partials, copies static files, and switches documents to the minified assets.
+- `public/data/products.json` is the canonical catalog source, served at `/data/products.json`. The Fetch API retrieves it with revalidation, and the application holds it in memory for the current page session.
+- `css/main.css` imports layers from `css/partials/`. Vite processes CSS and JS modules, minifies them, and updates references in production HTML.
+- `public/` holds static resources copied without renaming into `dist/`, preserving URLs such as `/assets/`, `/data/products.json`, and `/site.webmanifest`. The canonical `src/sw.js` is separately transformed into production `dist/sw.js`.
 
 ### Project Structure
 
 ```text
 .
-├── index.html                 # Homepage and source HTML entry
-├── pages/                     # Store, checkout, contact, and legal views
-├── src/partials/              # Shared header and footer partials
+├── index.html                             # Homepage and source HTML entry
+├── 404.html, offline.html, thank-you.html # Other root HTML documents
+├── pages/                                 # 11 store, contact, and legal views
+├── src/
+│   ├── partials/                          # Shared header and footer partials
+│   └── sw.js                              # Canonical Service Worker
 ├── css/
-│   ├── main.css               # Canonical CSS entry
-│   ├── main.min.css           # Generated production asset
-│   └── partials/              # Style layers
+│   ├── main.css                           # Canonical CSS entry
+│   └── partials/                          # Style layers
 ├── js/
-│   ├── main.js                # Application module entry
-│   ├── main.min.js            # Generated production bundle
-│   ├── core/                  # Events and error handling
-│   ├── features/              # Products, filters, and cart
-│   ├── services/              # Product data and safe storage access
-│   └── ui/                    # Navigation, theme, accessibility, PWA, and JSON-LD
-├── data/products.json         # Local product data
-├── assets/                    # Images, fonts, icons, and optimized variants
-├── scripts/                   # Build, preview, and QA validators
-├── tools/image-optimizer/     # Image optimization pipeline
-├── sw.js                      # Canonical Service Worker
-├── site.webmanifest           # Application manifest
-├── _headers                   # Static-hosting headers
-├── _redirects                 # 404 rule
-├── robots.txt
-├── sitemap.xml
+│   ├── main.js                            # Application module entry
+│   ├── core/                              # Events and error handling
+│   ├── features/                          # Products, filters, and cart
+│   ├── services/                          # Product data and safe storage access
+│   └── ui/                                # Navigation, theme, accessibility, PWA, and JSON-LD
+├── public/                                # Resources copied with public URLs preserved
+│   ├── assets/                            # Images, fonts, icons, and _optimized variants
+│   ├── data/products.json                 # Local product data
+│   ├── site.webmanifest                   # Application manifest
+│   ├── _headers, _redirects               # Netlify headers and 404 rule
+│   └── robots.txt, sitemap.xml, humans.txt # Static site files
+├── scripts/                               # Vite integration, HTML renderer, validators, and tests
+├── tools/image-optimizer/                 # Image variant generation tool
+├── vite.config.mjs                        # Vite MPA configuration
+├── dist/                                  # Generated production package; ignored by Git
+│   ├── build/                             # Content-hashed CSS/JS
+│   ├── .vite/manifest.json                # Vite output manifest
+│   └── ...                                # HTML, public/ copies, and generated sw.js
 ├── package.json
 └── LICENSE
 ```
 
 ### Installation
 
-Node.js compatible with `>=18` is required. The repository uses npm and includes `package-lock.json`.
+Node.js compatible with `^20.19.0 || >=22.12.0` is required. The repository uses npm and includes `package-lock.json`.
 
 ```bash
 npm ci
 ```
+
+### Development
+
+```bash
+npm run dev
+```
+
+Vite serves source files at `http://127.0.0.1:5173` by default, with module updates and reloads after HTML partial changes. The port is strict. Service Worker registration is disabled in dev; check PWA behavior against a production build through preview.
 
 ### Production Build
 
@@ -274,31 +310,39 @@ npm run build
 npm run preview
 ```
 
-`npm run build` generates `css/main.min.css` and `js/main.min.js`, then recreates the deployable `dist/` package. `npm run preview` serves the existing `dist/` directory at `http://127.0.0.1:4173`; the repository does not provide a separate hot-reload development server.
+`npm run build` recreates `dist/` while preserving every HTML route. CSS and JavaScript receive content-hashed filenames in `dist/build/`, such as `main-[hash].css` and `main-[hash].js`. The build also writes `dist/.vite/manifest.json`, copies `public/`, generates `dist/sw.js`, and runs package validation.
 
-`css/main.min.css`, `js/main.min.js`, and `dist/` are build outputs and should not be edited manually. The `dist/` directory is not versioned.
+`npm run preview` serves the existing `dist/` through Vite at `http://127.0.0.1:4173`; rebuild after source changes. The port is strict: an occupied port causes a failure.
+
+HTML, CSS, and JS remain readable, unminified sources. Production bundles are emitted only into `dist/`; the entire directory is generated, ignored by Git, and should not be edited manually.
 
 ### Testing and Validation
 
 ```bash
 npm run qa
 npm run format:check
+npm run build
+npm run qa:package
 npm run qa:smoke
 npm run qa:smoke:enforce
 ```
 
-- `npm run qa` checks source HTML, JSON-LD, internal links, JavaScript, and CSS.
+- `npm run qa` checks source HTML, JSON-LD, internal links, JavaScript, CSS, and the build contract through `qa:build`.
 - `npm run format:check` verifies formatting without writing changes.
-- `npm run qa:smoke` runs report-only Lighthouse audits for the homepage, catalog, and product page.
-- `npm run qa:smoke:enforce` uses the same scope but returns a failure when configured thresholds are not met.
+- `npm run qa:build` runs Node tests for the HTML renderer and package contract; it can also be run separately.
+- `npm run qa:package` checks the existing `dist/`, including routes, asset references, hashed bundles, manifests, and public-file copies. The same validation runs automatically as part of `build`.
+- `npm run qa:smoke` creates a fresh build, starts Vite preview, and audits the homepage, catalog, and product page using the installed Lighthouse dependency. Threshold misses are reported without blocking by default.
+- `npm run qa:smoke:enforce` uses the same scope but returns a failure when configured thresholds are not met. Both modes require an available Chrome/Chromium installation and a free preview port.
 
-These are configured quality workflows; their presence alone does not establish test coverage or formal compliance.
+These are configured quality workflows; their presence alone does not establish test coverage or formal compliance. Exact commands and smoke settings are documented in [project settings](docs/settings.md).
 
 ### Deployment
 
-`dist/` is the complete static-hosting package. The build copies files including `site.webmanifest`, `sw.js`, `robots.txt`, `sitemap.xml`, `_headers`, and `_redirects` into it.
+The Netlify build contract is `npm run build`, publish directory `dist`, and Node.js compatible with `^20.19.0 || >=22.12.0`. `dist/` contains every page, hashed bundles, the generated `sw.js`, and copies of resources from `public/`, including `site.webmanifest`, `robots.txt`, `sitemap.xml`, `humans.txt`, `_headers`, and `_redirects`.
 
-The public demo is hosted on Netlify. `_headers` defines a CSP, baseline protective headers, and caching rules, while `_redirects` sends unresolved paths to `404.html`. The repository does not contain a deployment command or CI/CD workflow.
+The public demo is hosted on Netlify. Source `public/_headers` defines a CSP, baseline protective headers, and caching, while `public/_redirects` sends unresolved paths to `404.html`. One-year `immutable` caching applies only to `/build/*`; HTML, `/assets/*`, `/data/*`, the manifest, and the Service Worker must revalidate.
+
+Vite preview supports local package inspection and does not apply Netlify rules from `_headers` or `_redirects`. This documents deployment configuration; it does not confirm deployment of the migration or Netlify header, redirect, or form behavior. The repository does not contain a deployment command or CI/CD workflow.
 
 ### Accessibility
 
@@ -313,29 +357,33 @@ The implementation includes concrete accessibility mechanisms without claiming f
 
 ### SEO
 
-The HTML documents contain titles, descriptions, canonical URLs, Open Graph metadata, and Twitter Cards. The homepage exposes static `OnlineStore` and `WebSite` data, while JavaScript generates `BreadcrumbList`, `ItemList`, and `Product` data for the relevant views. The repository also includes `robots.txt`, `sitemap.xml`, and social preview images in `assets/images/og/`.
+The HTML documents contain titles, descriptions, canonical URLs, Open Graph metadata, and Twitter Cards. The homepage exposes static `OnlineStore` and `WebSite` data, while JavaScript generates `BreadcrumbList`, `ItemList`, and `Product` data for the relevant views. The repository also includes `public/robots.txt`, `public/sitemap.xml`, and social preview images in `public/assets/images/og/`.
 
 These mechanisms describe the metadata layer; they do not claim search-ranking results.
 
 ### PWA and Offline Support
 
-`site.webmanifest` defines `standalone` display mode, icons, shortcuts, and screenshots. `js/main.js` registers `/sw.js`, while `js/ui/pwa-prompts.js` handles installation events, online/offline status changes, and update messaging.
+`public/site.webmanifest`, served at `/site.webmanifest`, defines `standalone` display mode, icons, shortcuts, and screenshots. `js/main.js` registers `/sw.js` only in production builds, with `updateViaCache: 'none'`. The `js/ui/pwa-prompts.js` module handles installation events, online/offline status changes, and update messaging.
 
-The Service Worker precaches `/` and `/offline.html`, uses a network-first strategy for navigation, and caches visited documents, styles, scripts, images, and fonts. Offline support is partial: it depends on prior Service Worker installation and cached content, so it does not guarantee that every route is available on a first offline visit.
+The canonical worker is `src/sw.js`. The Vite integration generates `dist/sw.js`, injecting a deployment ID derived from build-output content, `public/` files, and worker source, together with the precache list. Ordinary content changes require no manual release counter; `CACHE_SCHEMA` describes cache-contract changes.
+
+Precache includes `/`, `/offline.html`, generated bundles, local fonts, and logos. Navigation and stable-URL resources use network-first with revalidation and a cached fallback; hashed CSS/JS under `/build/` use cache-first. Runtime caches are limited to 20 documents and 60 resources. Activation removes only obsolete caches prefixed with `volt-garage-`.
+
+Offline support is partial: it depends on prior Service Worker installation and stored content. When the network is unavailable, the worker returns a cached page or `/offline.html`; it does not guarantee that every route is available on a first offline visit.
 
 ### Performance
 
-- The build bundles and minifies CSS and JavaScript.
+- Vite bundles and minifies CSS and JavaScript, assigning content hashes to output filenames.
 - The hero uses responsive `srcset` resources and AVIF/WebP formats with a JPG fallback.
 - Product cards use AVIF/WebP with JPG/PNG fallbacks, lazy loading, asynchronous decoding, and declared dimensions.
 - Local WOFF2 fonts use `font-display: swap`; the homepage preloads a key font and hero image.
-- `_headers` configures long-lived caching for assets and revalidation for HTML.
+- `public/_headers` sets one-year `immutable` caching only for `/build/*`; HTML and stable-URL resources revalidate.
 
 The repository does not record current Lighthouse or Core Web Vitals results in this README.
 
 ### Data and State Persistence
 
-- The product catalog comes exclusively from `data/products.json`; the application does not retrieve it from an external API.
+- The product catalog comes exclusively from `public/data/products.json`; the application does not retrieve it from an external API.
 - The cart (`volt_cart`), theme (`vg_theme`), project-modal acceptance, and install-prompt dismissal are persisted locally in the browser.
 - The contact form is configured for Netlify Forms and uses a native `POST` request after successful validation.
 - The checkout form displays a local success message and resets its fields. It does not persist or transmit an order and does not process payments.
@@ -344,11 +392,11 @@ The project does not implement a database, authentication, user accounts, or cro
 
 ### Project Maintenance
 
-- Shared header or footer changes belong in `src/partials/`, followed by build regeneration.
-- Catalog changes belong in `data/products.json`; product views and structured data are built from this source at runtime.
-- Route changes require synchronization across the HTML documents, `package.json`, `sitemap.xml`, `site.webmanifest`, and validator inventories.
-- Source images live in `assets/images/`; `tools/image-optimizer/README.md` documents their pipeline and write modes.
-- `dist/`, `css/main.min.css`, and `js/main.min.js` are generated artifacts; the canonical sources are the HTML documents, `src/partials/`, `css/main.css`, `css/partials/`, and `js/main.js` with its imported modules.
+- Shared header or footer changes belong in `src/partials/`; Vite expands them in dev and during the build.
+- Catalog changes belong in `public/data/products.json`; product views and structured data are built from this source at runtime.
+- The build and validators discover documents through `*.html` and `pages/**/*.html`. Route changes still require updates to links, `public/sitemap.xml`, shortcuts in `public/site.webmanifest`, and the smoke scope where relevant.
+- Source images live in `public/assets/images/`, with WebP/AVIF variants in `public/assets/images/_optimized/`. The [tool documentation](tools/image-optimizer/README.md) describes variant generation; the build copies prepared resources and does not run the optimizer.
+- `dist/` is generated output. The canonical sources remain the HTML documents, `src/partials/`, `src/sw.js`, `css/main.css`, `css/partials/`, `js/main.js` with its imported modules, and resources in `public/`.
 
 ### License
 

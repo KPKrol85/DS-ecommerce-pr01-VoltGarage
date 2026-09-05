@@ -89,13 +89,13 @@ const formatBytes = (bytes) => {
 const replaceExt = (filePath, ext) => `${filePath.slice(0, -path.extname(filePath).length)}.${ext}`;
 
 const projectRoot = process.cwd();
-const inputRoot = path.resolve(projectRoot, 'assets/images');
+const inputRoot = path.resolve(projectRoot, 'public/assets/images');
 const outputRoot =
   config.mode === 'output'
     ? path.resolve(projectRoot, config.out)
-    : path.resolve(projectRoot, 'assets/images/_optimized');
+    : path.resolve(projectRoot, 'public/assets/images/_optimized');
 
-const defaultGlob = 'assets/images/**/*.{jpg,jpeg,png,JPG,JPEG,PNG}';
+const defaultGlob = 'public/assets/images/**/*.{jpg,jpeg,png,JPG,JPEG,PNG}';
 const globPattern = config.glob || defaultGlob;
 
 const isOptimizedPath = (absPath) => absPath.split(path.sep).includes('_optimized');
@@ -188,7 +188,9 @@ const run = async () => {
       warnedOutsideRoot = true;
       warnings += 1;
       console.log(
-        chalk.yellow('WARN: Some files are outside assets/images; output paths will use basenames.')
+        chalk.yellow(
+          'WARN: Some files are outside public/assets/images; output paths will use basenames.'
+        )
       );
     }
 

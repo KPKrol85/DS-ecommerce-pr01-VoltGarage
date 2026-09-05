@@ -10,11 +10,6 @@ node_modules/
 
 /dist/
 
-# Minified assets are production-only artifacts and live in /dist/
-
-/css/*.min.css
-/js/*.min.js
-
 # Test and report output
 
 /reports/
@@ -73,6 +68,6 @@ Desktop.ini
 # ─────────────────────────────────────────────
 # Intentionally tracked — do not ignore:
 #
-# assets/
+# public/assets/
 # package-lock.json
 # ─────────────────────────────────────────────

@@ -1,6 +1,6 @@
 import { emit, events } from '../core/events.js';
 
-const DATA_URL = new URL('../../data/products.json', import.meta.url);
+const DATA_URL = '/data/products.json';
 
 let cachedProducts = null;
 
@@ -19,7 +19,7 @@ export const fetchProducts = async () => {
   emit(events.products.loading);
 
   try {
-    const response = await fetch(DATA_URL, { cache: 'force-cache' });
+    const response = await fetch(DATA_URL, { cache: 'no-cache' });
     const json = await handleResponse(response);
     cachedProducts = json;
     emit(events.products.loaded, { products: cachedProducts });

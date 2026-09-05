@@ -1,6 +1,6 @@
 module.exports = {
   extends: ['stylelint-config-recommended'],
-  ignoreFiles: ['assets/images/_optimized/**', 'tools/image-optimizer/output/**'],
+  ignoreFiles: ['public/assets/images/_optimized/**', 'tools/image-optimizer/output/**'],
   rules: {
     'block-no-empty': true,
     'declaration-block-no-duplicate-properties': [

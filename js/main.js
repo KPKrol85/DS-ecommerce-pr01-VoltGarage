@@ -198,9 +198,9 @@ const initApp = () => {
   // Delegacja klików musi być podpięta zawsze, niezależnie od chwili renderu.
   initAddToCartButtons();
   initProjectModal();
-  if ('serviceWorker' in navigator) {
+  if (import.meta.env.PROD && 'serviceWorker' in navigator) {
     const registrationPromise = navigator.serviceWorker
-      .register('/sw.js')
+      .register('/sw.js', { updateViaCache: 'none' })
       .catch((error) => console.error('[VOLT][sw]', error));
     initPwaPrompts(registrationPromise);
   }

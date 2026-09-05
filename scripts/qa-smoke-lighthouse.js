@@ -1,11 +1,8 @@
 const { spawn } = require('node:child_process');
-const http = require('node:http');
-const fs = require('node:fs/promises');
 const path = require('node:path');
 
 const HOST = process.env.SMOKE_HOST || '127.0.0.1';
 const PORT = Number(process.env.SMOKE_PORT || 4173);
-const ROOT_DIR = process.cwd();
 const KEY_PAGES = (process.env.SMOKE_PAGES || '/,/pages/shop.html,/pages/product.html')
   .split(',')
   .map((value) => value.trim())
@@ -20,28 +17,11 @@ const DEFAULT_THRESHOLDS = {
 
 const ENFORCE = process.argv.includes('--enforce') || process.env.SMOKE_ENFORCE === '1';
 
-const MIME_TYPES = {
-  '.html': 'text/html; charset=utf-8',
-  '.css': 'text/css; charset=utf-8',
-  '.js': 'application/javascript; charset=utf-8',
-  '.json': 'application/json; charset=utf-8',
-  '.svg': 'image/svg+xml',
-  '.png': 'image/png',
-  '.jpg': 'image/jpeg',
-  '.jpeg': 'image/jpeg',
-  '.webp': 'image/webp',
-  '.avif': 'image/avif',
-  '.woff2': 'font/woff2',
-  '.txt': 'text/plain; charset=utf-8',
-  '.xml': 'application/xml; charset=utf-8',
-  '.webmanifest': 'application/manifest+json; charset=utf-8',
-};
-
 function runCommand(command, args) {
   return new Promise((resolve) => {
     const child = spawn(command, args, {
       stdio: ['ignore', 'pipe', 'pipe'],
-      shell: true,
+      shell: false,
     });
     let stdout = '';
     let stderr = '';
@@ -62,92 +42,6 @@ function runCommand(command, args) {
       resolve({ success: code === 0, code, stdout, stderr, error: null });
     });
   });
-}
-
-async function resolveLighthouseRunner() {
-  const direct = process.env.SMOKE_LIGHTHOUSE_BIN || 'lighthouse';
-  const directVersion = await runCommand(direct, ['--version']);
-
-  if (directVersion.success) {
-    return { command: direct, prefixArgs: [] };
-  }
-
-  const npxVersion = await runCommand('npx', ['--yes', 'lighthouse', '--version']);
-  if (npxVersion.success) {
-    return { command: 'npx', prefixArgs: ['--yes', 'lighthouse'] };
-  }
-
-  return null;
-}
-
-function safePathFromUrl(urlPath) {
-  const [pathname] = urlPath.split('?');
-  const decoded = decodeURIComponent(pathname);
-  const withoutLeadingSlash = decoded.replace(/^\/+/, '');
-
-  if (!withoutLeadingSlash || withoutLeadingSlash === '.') {
-    return 'index.html';
-  }
-
-  return withoutLeadingSlash.endsWith('/')
-    ? path.join(withoutLeadingSlash, 'index.html')
-    : withoutLeadingSlash;
-}
-
-async function readFileForRequest(urlPath) {
-  const relativePath = safePathFromUrl(urlPath);
-  const fullPath = path.resolve(ROOT_DIR, relativePath);
-  const normalizedRoot = `${ROOT_DIR}${path.sep}`;
-
-  if (!fullPath.startsWith(normalizedRoot) && fullPath !== ROOT_DIR) {
-    return null;
-  }
-
-  try {
-    const stats = await fs.stat(fullPath);
-
-    if (stats.isDirectory()) {
-      const indexPath = path.join(fullPath, 'index.html');
-      return {
-        content: await fs.readFile(indexPath),
-        contentType: MIME_TYPES['.html'],
-      };
-    }
-
-    const extension = path.extname(fullPath).toLowerCase();
-    return {
-      content: await fs.readFile(fullPath),
-      contentType: MIME_TYPES[extension] || 'application/octet-stream',
-    };
-  } catch {
-    return null;
-  }
-}
-
-async function startStaticServer() {
-  const server = http.createServer(async (req, res) => {
-    const requestPath = req.url || '/';
-    const result = await readFileForRequest(requestPath);
-
-    if (!result) {
-      res.writeHead(404, { 'content-type': 'text/plain; charset=utf-8' });
-      res.end('Not found');
-      return;
-    }
-
-    res.writeHead(200, {
-      'content-type': result.contentType,
-      'cache-control': 'no-store',
-    });
-    res.end(result.content);
-  });
-
-  await new Promise((resolve, reject) => {
-    server.once('error', reject);
-    server.listen(PORT, HOST, resolve);
-  });
-
-  return server;
 }
 
 function toPercent(score) {
@@ -186,10 +80,10 @@ function printResults(results) {
   }
 }
 
-async function runLighthouseForPage(runner, page) {
+async function runLighthouseForPage(page) {
   const targetUrl = `http://${HOST}:${PORT}${page}`;
   const args = [
-    ...runner.prefixArgs,
+    path.join(path.dirname(require.resolve('lighthouse/package.json')), 'cli/index.js'),
     targetUrl,
     '--quiet',
     '--only-categories=performance,accessibility,best-practices,seo',
@@ -198,7 +92,7 @@ async function runLighthouseForPage(runner, page) {
     '--output-path=stdout',
   ];
 
-  const execution = await runCommand(runner.command, args);
+  const execution = await runCommand(process.execPath, args);
 
   if (!execution.success) {
     const details = execution.stderr || execution.stdout || 'No additional details';
@@ -223,27 +117,15 @@ async function runLighthouseForPage(runner, page) {
 }
 
 async function main() {
-  const runner = await resolveLighthouseRunner();
-
-  if (!runner) {
-    const message =
-      'Lighthouse CLI is not available. Install lighthouse or set SMOKE_LIGHTHOUSE_BIN.';
-
-    if (ENFORCE) {
-      throw new Error(message);
-    }
-
-    console.warn(`Smoke check skipped (report-only): ${message}`);
-    return;
-  }
-
-  const server = await startStaticServer();
+  const { build, preview } = await import('vite');
+  await build();
+  const server = await preview({ preview: { host: HOST, port: PORT, strictPort: true } });
 
   try {
     const results = [];
 
     for (const page of KEY_PAGES) {
-      results.push(await runLighthouseForPage(runner, page));
+      results.push(await runLighthouseForPage(page));
     }
 
     printResults(results);
@@ -274,7 +156,10 @@ async function main() {
       console.log('\nSmoke check baseline passed for all configured pages.');
     }
   } finally {
-    server.close();
+    await new Promise((resolve, reject) => {
+      server.httpServer.close((error) => (error ? reject(error) : resolve()));
+      server.httpServer.closeAllConnections();
+    });
   }
 }
 

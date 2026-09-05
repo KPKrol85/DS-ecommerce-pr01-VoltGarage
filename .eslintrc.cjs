@@ -8,14 +8,18 @@ module.exports = {
     ecmaVersion: 2022,
     sourceType: 'module',
   },
-  ignorePatterns: ['assets/images/_optimized/**', 'tools/image-optimizer/output/**', 'dist/**'],
+  ignorePatterns: [
+    'public/assets/images/_optimized/**',
+    'tools/image-optimizer/output/**',
+    'dist/**',
+  ],
   rules: {
     'no-undef': 'error',
     'no-unused-vars': 'error',
   },
   overrides: [
     {
-      files: ['tools/**/*.mjs'],
+      files: ['tools/**/*.mjs', 'scripts/**/*.mjs', 'vite.config.mjs'],
       env: {
         node: true,
       },

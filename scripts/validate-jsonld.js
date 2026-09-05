@@ -2,8 +2,6 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 
 const ROOT_DIR = process.cwd();
-const HTML_EXT = '.html';
-const SKIP_DIRS = new Set(['node_modules', '.git']);
 const JSON_LD_REGEX =
   /<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi;
 const PRODUCT_SCHEMA_SOURCE = 'js/features/products.js';
@@ -32,29 +30,6 @@ const TEMPLATE_RULES = [
     requireRuntimeProductSchema: true,
   },
 ];
-
-async function collectHtmlFiles(dir) {
-  const entries = await fs.readdir(dir, { withFileTypes: true });
-  const files = [];
-
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-
-    if (entry.isDirectory()) {
-      if (SKIP_DIRS.has(entry.name)) {
-        continue;
-      }
-      files.push(...(await collectHtmlFiles(fullPath)));
-      continue;
-    }
-
-    if (entry.isFile() && entry.name.endsWith(HTML_EXT)) {
-      files.push(fullPath);
-    }
-  }
-
-  return files;
-}
 
 function normalizeType(type) {
   if (typeof type !== 'string') return null;
@@ -171,13 +146,18 @@ async function validateRuntimeProductSchema() {
 }
 
 async function main() {
-  const htmlFiles = await collectHtmlFiles(ROOT_DIR);
+  const { discoverHtml, renderHtml } = await import('./html.mjs');
+  const htmlFiles = discoverHtml(ROOT_DIR).map((file) => path.join(ROOT_DIR, file));
   const errors = [];
   let checkedTemplateCount = 0;
 
   for (const filePath of htmlFiles) {
-    const content = await fs.readFile(filePath, 'utf8');
-    const relPath = path.relative(ROOT_DIR, filePath);
+    const content = await renderHtml(
+      ROOT_DIR,
+      path.relative(ROOT_DIR, filePath),
+      await fs.readFile(filePath, 'utf8')
+    );
+    const relPath = path.relative(ROOT_DIR, filePath).split(path.sep).join('/');
 
     const { errors: blockErrors, types } = validateJsonLdBlocks(relPath, content);
     errors.push(...blockErrors);

@@ -1,5 +1,0 @@
-VOLT GARAGE
-Projekt: statyczny front-end sklepu internetowego
-Autor: Kamil Król (KP_Code)
-Kontakt: kontakt@kp-code.pl
-URL: https://e-commerce-pr01-voltgarage.netlify.app/

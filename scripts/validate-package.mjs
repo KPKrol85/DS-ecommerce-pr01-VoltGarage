@@ -77,7 +77,6 @@ async function validatePackage(root, dist) {
     'data/products.json',
     'robots.txt',
     'sitemap.xml',
-    'humans.txt',
     '_headers',
     '_redirects',
     '.vite/manifest.json',

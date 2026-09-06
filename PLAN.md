@@ -27,11 +27,11 @@
 
 **Goal:** Every reference the application produces at runtime, and every link in a document served at an arbitrary URL, resolves to real content.
 
-- [ ] **PH1-01 — Repair and validate the product image contract** — **Priority:** High
-  - [ ] correct the `interior-mat` entry in `public/data/products.json` so its `image` value points at the raster that exists (`wnetrze-02.png`)
-  - [ ] add product-data asset checking to the `scripts/` validators — extended into an existing validator, or as a new `scripts/validate-product-assets.mjs` — asserting that every `image` path and every `_optimized` variant derived from `imageBase` resolves to a file
-  - [ ] wire the check into the `qa` script in `package.json` without weakening the existing members
-  - [ ] confirm the corrected reference in the cart `<img>` built by `js/features/cart.js`, and in the `Product` and `ItemList` image URLs built from the same field
+- [x] **PH1-01 — Repair and validate the product image contract** — **Priority:** High
+  - [x] correct the `interior-mat` entry in `public/data/products.json` so its `image` value points at the raster that exists (`wnetrze-02.png`)
+  - [x] add product-data asset checking to the `scripts/` validators — extended into an existing validator, or as a new `scripts/validate-product-assets.mjs` — asserting that every `image` path and every `_optimized` variant derived from `imageBase` resolves to a file
+  - [x] wire the check into the `qa` script in `package.json` without weakening the existing members
+  - [x] confirm the corrected reference in the cart `<img>` built by `js/features/cart.js`, and in the `Product` and `ItemList` image URLs built from the same field
   - **Completion condition:** every asset path declared in the catalog resolves in source, and a missing declared asset fails `npm run qa`.
   - **Source:** `daily-AUDIT.md` — P1-01, and the product-data half of "Extend validation to product-data asset paths and runtime-generated URLs"
 

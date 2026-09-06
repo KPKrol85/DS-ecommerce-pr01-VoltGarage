@@ -70,10 +70,10 @@
   - **Completion condition:** the rendered section performs exactly one verified outcome and never falls through to a meaningless default form navigation.
   - **Source:** `daily-AUDIT.md` — P1-05
 
-- [ ] **PH2-03 — Guard checkout submission on a non-empty cart** — **Priority:** Medium
-  - [ ] block the checkout success path in `js/main.js` when the stored cart is empty, and report that state in the form status region
-  - [ ] word the confirmation so it does not claim more than the simulated flow performs, matching how `README.md` already describes checkout
-  - [ ] verify with an empty cart, where `initCheckoutSummary` in `js/features/cart.js` renders `0 zł` across all three summary lines
+- [x] **PH2-03 — Guard checkout submission on a non-empty cart** — **Priority:** Medium
+  - [x] block the checkout success path in `js/main.js` when the stored cart is empty, and report that state in the form status region
+  - [x] word the confirmation so it does not claim more than the simulated flow performs, matching how `README.md` already describes checkout
+  - [x] verify with an empty cart, where `initCheckoutSummary` in `js/features/cart.js` renders `0 zł` across all three summary lines
   - **Completion condition:** a valid submission with nothing in the cart is refused with a clear message, and the accepted-submission message states only what the demonstration performs.
   - **Source:** `daily-AUDIT.md` — P2-06
 

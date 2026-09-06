@@ -19,6 +19,7 @@ All significant changes to this project are documented in this file.
 - Corrected the `interior-mat` product image reference to the existing PNG asset.
 - Corrected runtime structured-data URL resolution so relative product links preserve the current page directory.
 - Unified contact and checkout phone validation through a shared phone-field definition with corrected whitespace handling.
+- Replaced the non-functional homepage newsletter form with a single real navigation outcome to the new-arrivals catalog.
 
 ### Security
 
@@ -42,3 +43,4 @@ All significant changes to this project are documented in this file.
 - Added catalog product-image asset validation for raster and optimized variants, wired into `npm run qa`.
 - Added regression coverage for structured-data product, asset, breadcrumb, root-relative, and absolute URL resolution.
 - Added regression coverage for published phone formats, native pattern validation, and JavaScript phone validation consistency.
+- Added regression coverage for the homepage newsletter contract, preventing email collection and meaningless default form submission.

@@ -62,11 +62,11 @@
   - **Completion condition:** the required phone field accepts the space-separated and prefixed formats the project publishes, and both validation layers agree.
   - **Source:** `daily-AUDIT.md` — P1-04
 
-- [ ] **PH2-02 — Give the homepage newsletter control an honest outcome** — **Priority:** High
-  - [ ] decide the outcome for the newsletter section in `index.html`: route it through the same validated, demonstration-only flow the checkout uses, or remove the email-entry and submit affordance so nothing implies an address is registered
-  - [ ] if the validated flow is chosen, add the form hook `js/main.js` binds, a `name` attribute on the required email input, and a status region consistent with the other forms
-  - [ ] keep the wording inside the documented project scope — the repository contains no subscription destination, and introducing one is a separate product decision outside the current scope
-  - [ ] verify that submitting no longer performs a default GET that reloads the homepage and discards the address
+- [x] **PH2-02 — Give the homepage newsletter control an honest outcome** — **Priority:** High
+  - [x] decide the outcome for the newsletter section in `index.html`: route it through the same validated, demonstration-only flow the checkout uses, or remove the email-entry and submit affordance so nothing implies an address is registered
+  - [x] if the validated flow is chosen, add the form hook `js/main.js` binds, a `name` attribute on the required email input, and a status region consistent with the other forms
+  - [x] keep the wording inside the documented project scope — the repository contains no subscription destination, and introducing one is a separate product decision outside the current scope
+  - [x] verify that submitting no longer performs a default GET that reloads the homepage and discards the address
   - **Completion condition:** the rendered section performs exactly one verified outcome and never falls through to a meaningless default form navigation.
   - **Source:** `daily-AUDIT.md` — P1-05
 

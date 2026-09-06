@@ -54,11 +54,11 @@
 
 **Goal:** Every public form accepts the formats the site itself prints, and reports only the outcome it actually performs.
 
-- [ ] **PH2-01 — Correct the shared phone validation pattern** — **Priority:** High
-  - [ ] fix the doubled backslash in the `tel` pattern in `pages/contact.html` and `pages/checkout.html`, so the character class matches whitespace rather than a literal backslash and the letter `s`
-  - [ ] keep the two occurrences derived from one definition so they cannot drift; `js/main.js` sets `form.noValidate` and re-tests the same attribute with `new RegExp(field.pattern)`
-  - [ ] give the rejection message enough formatting guidance to be actionable
-  - [ ] verify that the formats the project prints in its own footer and contact page pass both the attribute and the JavaScript layer
+- [x] **PH2-01 — Correct the shared phone validation pattern** — **Priority:** High
+  - [x] fix the doubled backslash in the `tel` pattern in `pages/contact.html` and `pages/checkout.html`, so the character class matches whitespace rather than a literal backslash and the letter `s`
+  - [x] keep the two occurrences derived from one definition so they cannot drift; `js/main.js` sets `form.noValidate` and re-tests the same attribute with `new RegExp(field.pattern)`
+  - [x] give the rejection message enough formatting guidance to be actionable
+  - [x] verify that the formats the project prints in its own footer and contact page pass both the attribute and the JavaScript layer
   - **Completion condition:** the required phone field accepts the space-separated and prefixed formats the project publishes, and both validation layers agree.
   - **Source:** `daily-AUDIT.md` — P1-04
 

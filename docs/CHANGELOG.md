@@ -18,6 +18,7 @@ All significant changes to this project are documented in this file.
 - Moved the existing Volt Garage codebase from the shared portfolio into a dedicated project repository.
 - Corrected the `interior-mat` product image reference to the existing PNG asset.
 - Corrected runtime structured-data URL resolution so relative product links preserve the current page directory.
+- Unified contact and checkout phone validation through a shared phone-field definition with corrected whitespace handling.
 
 ### Security
 
@@ -40,3 +41,4 @@ All significant changes to this project are documented in this file.
 - Added configured validation for HTML, JSON-LD, internal links, JavaScript, CSS, and formatting, plus report-only and threshold-enforced Lighthouse smoke workflows.
 - Added catalog product-image asset validation for raster and optimized variants, wired into `npm run qa`.
 - Added regression coverage for structured-data product, asset, breadcrumb, root-relative, and absolute URL resolution.
+- Added regression coverage for published phone formats, native pattern validation, and JavaScript phone validation consistency.

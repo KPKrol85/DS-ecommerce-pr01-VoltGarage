@@ -56,7 +56,7 @@ const initForms = () => {
     email: (field, value) => (value && !isEmail(value) ? 'Podaj poprawny adres e-mail.' : ''),
     tel: (field, value) =>
       value && field.pattern && !new RegExp(field.pattern).test(value)
-        ? 'Podaj poprawny numer telefonu.'
+        ? 'Podaj poprawny numer telefonu, np. 533 537 091 lub +48 533 537 091.'
         : '',
   };
 

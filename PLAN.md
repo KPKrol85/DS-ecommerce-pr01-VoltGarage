@@ -35,10 +35,10 @@
   - **Completion condition:** every asset path declared in the catalog resolves in source, and a missing declared asset fails `npm run qa`.
   - **Source:** `daily-AUDIT.md` — P1-01, and the product-data half of "Extend validation to product-data asset paths and runtime-generated URLs"
 
-- [ ] **PH1-02 — Resolve runtime structured-data URLs against the current document** — **Priority:** High
-  - [ ] change the resolution base in `toAbsolute` (`js/ui/structured-data.js`) from `window.location.origin` to the current document URL, so relative hrefs keep their directory
-  - [ ] verify the resulting `ItemList` item URLs on `pages/shop.html`, `pages/new-arrivals.html`, and `pages/promotions.html`, where `getProductLink()` returns `product.html?id=…` and the deployed route is `/pages/product.html?id=…`
-  - [ ] confirm that breadcrumb and image URLs, which currently resolve correctly only because their `../` prefix collapses at the root, remain correct under the new base
+- [x] **PH1-02 — Resolve runtime structured-data URLs against the current document** — **Priority:** High
+  - [x] change the resolution base in `toAbsolute` (`js/ui/structured-data.js`) from `window.location.origin` to the current document URL, so relative hrefs keep their directory
+  - [x] verify the resulting `ItemList` item URLs on `pages/shop.html`, `pages/new-arrivals.html`, and `pages/promotions.html`, where `getProductLink()` returns `product.html?id=…` and the deployed route is `/pages/product.html?id=…`
+  - [x] confirm that breadcrumb and image URLs, which currently resolve correctly only because their `../` prefix collapses at the root, remain correct under the new base
   - **Completion condition:** every URL injected into runtime JSON-LD from a `pages/` document resolves to the route that document actually links to.
   - **Source:** `daily-AUDIT.md` — P1-02
 

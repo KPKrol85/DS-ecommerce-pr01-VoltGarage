@@ -1,13 +1,15 @@
 export const STORE_ID = 'https://e-commerce-pr01-voltgarage.netlify.app/#store';
 export const WEBSITE_ID = 'https://e-commerce-pr01-voltgarage.netlify.app/#website';
 
-export const toAbsolute = (href) => new URL(href, window.location.origin).href;
+const getDocumentBase = () => document.baseURI;
+
+export const toAbsolute = (href) => new URL(href, getDocumentBase()).href;
 
 const getCanonicalHref = () =>
   document.querySelector('link[rel="canonical"]')?.getAttribute('href') || '';
 
 const stripHash = (href) => {
-  const url = new URL(href, window.location.origin);
+  const url = new URL(href, getDocumentBase());
   url.hash = '';
   return url.href;
 };

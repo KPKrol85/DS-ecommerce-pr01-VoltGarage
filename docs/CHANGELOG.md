@@ -17,6 +17,7 @@ All significant changes to this project are documented in this file.
 - Aligned caching with Vite output: immutable headers apply only to hashed build assets, stable public URLs revalidate, and the custom Service Worker uses a content-derived deployment identity with cleanup limited to VoltGarage-owned caches.
 - Moved the existing Volt Garage codebase from the shared portfolio into a dedicated project repository.
 - Corrected the `interior-mat` product image reference to the existing PNG asset.
+- Corrected runtime structured-data URL resolution so relative product links preserve the current page directory.
 
 ### Security
 
@@ -38,3 +39,4 @@ All significant changes to this project are documented in this file.
 - Added build-contract tests and production-package validation, and switched Lighthouse smoke checks to fresh Vite output served by Vite preview using the installed Lighthouse dependency.
 - Added configured validation for HTML, JSON-LD, internal links, JavaScript, CSS, and formatting, plus report-only and threshold-enforced Lighthouse smoke workflows.
 - Added catalog product-image asset validation for raster and optimized variants, wired into `npm run qa`.
+- Added regression coverage for structured-data product, asset, breadcrumb, root-relative, and absolute URL resolution.

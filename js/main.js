@@ -13,6 +13,7 @@ import {
   initCartPage,
   initAddToCartButtons,
   initCheckoutSummary,
+  hasCartItems,
 } from './features/cart.js';
 import {
   initFeaturedProducts,
@@ -142,8 +143,16 @@ const initForms = () => {
       }
 
       event.preventDefault();
+      if (!hasCartItems()) {
+        if (status) {
+          status.textContent =
+            'Koszyk jest pusty. Dodaj co najmniej jeden produkt przed kontynuowaniem zamówienia.';
+        }
+        return;
+      }
       if (status) {
-        status.textContent = 'Dziękujemy! Twoje zgłoszenie zostało przyjęte.';
+        status.textContent =
+          'Symulacja checkoutu zakończyła się pomyślnie. Zamówienie nie zostało wysłane ani zapisane.';
       }
       form.reset();
       fields.forEach((field) => validateField(field));

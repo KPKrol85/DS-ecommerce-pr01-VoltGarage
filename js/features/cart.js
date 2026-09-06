@@ -19,6 +19,8 @@ const getCart = () => {
   }
 };
 
+export const hasCartItems = () => getCart().length > 0;
+
 const saveCart = (items) => {
   try {
     safeStorage.set(CART_KEY, JSON.stringify(items));

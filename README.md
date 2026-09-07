@@ -164,6 +164,8 @@ Te mechanizmy opisują warstwę metadanych; nie stanowią deklaracji wyników po
 
 `public/site.webmanifest`, dostępny pod `/site.webmanifest`, definiuje tryb `standalone`, ikony, skróty oraz zrzuty ekranu. `js/main.js` rejestruje `/sw.js` wyłącznie w buildzie produkcyjnym, z `updateViaCache: 'none'`. Moduł `js/ui/pwa-prompts.js` obsługuje zdarzenia instalacji, zmianę stanu online/offline i komunikat o dostępnej aktualizacji.
 
+Pierwsza instalacja i przejęcie kontroli nad stroną nie wymuszają przeładowania ani komunikatu o aktualizacji. Gdy otwarta strona jest już kontrolowana, nowy worker czeka, a aplikacja pokazuje powiadomienie o dostępnej wersji. Dopiero wybranie „Odśwież” uruchamia aktywację oczekującego workera; po przejęciu kontroli karta, w której wybrano tę akcję, przeładowuje się raz, aby użyć nowej wersji. Bez tej akcji strona nie przeładowuje się automatycznie.
+
 Kanoniczny worker znajduje się w `src/sw.js`. Integracja Vite generuje `dist/sw.js`, wstrzykując identyfikator wdrożenia obliczony z zawartości wyników budowania, plików `public/` i źródła workera oraz listę precache. Zwykła zmiana zawartości nie wymaga ręcznego numerowania wydania; `CACHE_SCHEMA` opisuje zmiany kontraktu cache.
 
 Precache obejmuje `/`, `/offline.html`, wygenerowane bundle, lokalne fonty i logotypy. Nawigacja i zasoby o stałych URL-ach korzystają z network-first z rewalidacją i fallbackiem do cache; hashowane CSS/JS z `/build/` korzystają z cache-first. Cache runtime ma limity 20 dokumentów i 60 zasobów. Aktywacja usuwa wyłącznie nieaktualne cache z prefiksem `volt-garage-`.
@@ -364,6 +366,8 @@ These mechanisms describe the metadata layer; they do not claim search-ranking r
 ### PWA and Offline Support
 
 `public/site.webmanifest`, served at `/site.webmanifest`, defines `standalone` display mode, icons, shortcuts, and screenshots. `js/main.js` registers `/sw.js` only in production builds, with `updateViaCache: 'none'`. The `js/ui/pwa-prompts.js` module handles installation events, online/offline status changes, and update messaging.
+
+The first installation and acquisition of page control trigger neither a reload nor an update notification. While an open page is already controlled, a new worker waits and the app shows an update notification. Choosing “Odśwież” (Refresh) activates the waiting worker; once it takes control, the tab where the action was chosen reloads once to use the new version. Without that action, the page does not reload automatically.
 
 The canonical worker is `src/sw.js`. The Vite integration generates `dist/sw.js`, injecting a deployment ID derived from build-output content, `public/` files, and worker source, together with the precache list. Ordinary content changes require no manual release counter; `CACHE_SCHEMA` describes cache-contract changes.
 

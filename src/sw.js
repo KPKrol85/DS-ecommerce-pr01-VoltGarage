@@ -43,7 +43,6 @@ self.addEventListener('install', (event) => {
     (async () => {
       const cache = await caches.open(STATIC_CACHE);
       await cache.addAll(PRECACHE_URLS.map((url) => new Request(url, { cache: 'reload' })));
-      await self.skipWaiting();
     })()
   );
 });

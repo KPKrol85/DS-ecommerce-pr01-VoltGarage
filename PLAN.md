@@ -81,12 +81,12 @@
 
 **Goal:** The worker, the update prompt, and the documentation describe one update-activation behavior.
 
-- [ ] **PH3-01 — Settle one Service Worker update contract** — **Priority:** High
-  - [ ] choose one contract: either remove `self.skipWaiting()` from the `install` handler in `src/sw.js` so the update prompt controls activation, or remove the prompt path and keep immediate activation
-  - [ ] align `js/ui/pwa-prompts.js` with the choice — its update toast posts `SKIP_WAITING` to `registration.waiting`, which cannot exist while the worker skips waiting during install
-  - [ ] guard the `controllerchange` reload against the first-install transition, where the controller changes from none to the worker claimed in `activate`
-  - [ ] update the PWA passages in `README.md` and the Service Worker notes in `docs/settings.md` to describe the contract that ends up implemented
-  - [ ] verify update and first-install behavior against a production build served through `npm run preview`, since registration is disabled in dev
+- [x] **PH3-01 — Settle one Service Worker update contract** — **Priority:** High
+  - [x] choose one contract: either remove `self.skipWaiting()` from the `install` handler in `src/sw.js` so the update prompt controls activation, or remove the prompt path and keep immediate activation
+  - [x] align `js/ui/pwa-prompts.js` with the choice — its update toast posts `SKIP_WAITING` to `registration.waiting`, which cannot exist while the worker skips waiting during install
+  - [x] guard the `controllerchange` reload against the first-install transition, where the controller changes from none to the worker claimed in `activate`
+  - [x] update the PWA passages in `README.md` and the Service Worker notes in `docs/settings.md` to describe the contract that ends up implemented
+  - [x] verify update and first-install behavior against a production build served through `npm run preview`, since registration is disabled in dev
   - **Completion condition:** one update contract is implemented in the worker, the prompt, and the documentation, and no page reload occurs without user action.
   - **Source:** `daily-AUDIT.md` — P1-06
 

@@ -21,6 +21,7 @@ All significant changes to this project are documented in this file.
 - Unified contact and checkout phone validation through a shared phone-field definition with corrected whitespace handling.
 - Replaced the non-functional homepage newsletter form with a single real navigation outcome to the new-arrivals catalog.
 - Guarded the simulated checkout success path against an empty cart and aligned the confirmation message with the project’s demonstration-only checkout scope.
+- Aligned the Service Worker update flow with explicit user-controlled activation, preventing automatic first-install reloads and unintended cross-tab refreshes
 
 ### Security
 
@@ -30,6 +31,7 @@ All significant changes to this project are documented in this file.
 
 - Reworked the Polish-first and English-second project README to document the verified architecture, workflows, source ownership, and deployment contract while clarifying the demonstrational checkout and absence of real orders or payments.
 - Added the KP_CODE Proprietary Project License and aligned the root package license metadata with the project license file.
+- Updated the PWA documentation in README and project settings to describe the waiting-worker update contract and user-triggered activation flow.
 
 ### Build and Tooling
 
@@ -46,3 +48,4 @@ All significant changes to this project are documented in this file.
 - Added regression coverage for published phone formats, native pattern validation, and JavaScript phone validation consistency.
 - Added regression coverage for the homepage newsletter contract, preventing email collection and meaningless default form submission.
 - Added regression coverage for empty-cart checkout refusal, current cart-state checks, preserved form data, and simulated checkout success behavior.
+- Added regression coverage for first-install control, waiting updates, user-approved activation, and single-reload Service Worker behavior.

@@ -129,6 +129,21 @@ export const initPwaPrompts = (registrationPromise) => {
   }
 
   if (registrationPromise) {
+    let hadController = Boolean(navigator.serviceWorker.controller);
+    let approvedWorker = null;
+
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      const controller = navigator.serviceWorker.controller;
+      if (!hadController) {
+        hadController = Boolean(controller);
+        return;
+      }
+      // Another tab can activate the shared worker without this page requesting a reload.
+      if (!controller || controller !== approvedWorker || refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
+
     registrationPromise.then((registration) => {
       if (!registration) return;
 
@@ -137,7 +152,8 @@ export const initPwaPrompts = (registrationPromise) => {
           {
             label: 'Odśwież',
             onClick: () => {
-              if (waiting) {
+              if (waiting && waiting === registration.waiting && waiting !== approvedWorker) {
+                approvedWorker = waiting;
                 waiting.postMessage('SKIP_WAITING');
               }
             },
@@ -145,11 +161,11 @@ export const initPwaPrompts = (registrationPromise) => {
         ]);
       };
 
-      if (registration.waiting) {
+      if (registration.waiting && navigator.serviceWorker.controller) {
         showUpdateToast(registration.waiting);
       }
 
-      registration.addEventListener('updatefound', () => {
+      const observeInstallingWorker = () => {
         const newWorker = registration.installing;
         if (newWorker) {
           newWorker.addEventListener('statechange', () => {
@@ -158,13 +174,9 @@ export const initPwaPrompts = (registrationPromise) => {
             }
           });
         }
-      });
-
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (refreshing) return;
-        refreshing = true;
-        window.location.reload();
-      });
+      };
+      registration.addEventListener('updatefound', observeInstallingWorker);
+      observeInstallingWorker();
     });
   }
 };

@@ -86,7 +86,7 @@ test('the shared header and footer reach the same routes from a fallback documen
     referencesIn(await render('index.html', SHARED_SHELL)).filter(isPageReference),
     `${ORIGIN}/index.html`
   );
-  assert.ok(home.length >= 12, 'the shared shell should link the whole navigation');
+  assert.ok(home.length >= 11, 'the shared shell should link the whole navigation');
   for (const file of FALLBACK_DOCUMENTS) {
     const shell = referencesIn(await render(file, SHARED_SHELL)).filter(isPageReference);
     assert.ok(

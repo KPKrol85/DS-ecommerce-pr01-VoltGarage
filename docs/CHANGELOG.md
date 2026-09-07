@@ -23,6 +23,7 @@ All significant changes to this project are documented in this file.
 - Guarded the simulated checkout success path against an empty cart and aligned the confirmation message with the project’s demonstration-only checkout scope.
 - Aligned the Service Worker update flow with explicit user-controlled activation, preventing automatic first-install reloads and unintended cross-tab refreshes
 - Made the 404 and offline fallback documents recoverable from nested URLs with root-absolute navigation and retry of the original failed request.
+- Removed misleading shared navigation entries for delivery and returns so link labels match the content of their destinations.
 
 ### Security
 
@@ -51,3 +52,4 @@ All significant changes to this project are documented in this file.
 - Added regression coverage for empty-cart checkout refusal, current cart-state checks, preserved form data, and simulated checkout success behavior.
 - Added regression coverage for first-install control, waiting updates, user-approved activation, and single-reload Service Worker behavior.
 - Added regression coverage for fallback link resolution, nested 404 recovery, and offline retry behavior.
+- Added regression coverage for shared navigation labels and destinations, including preserved access to checkout through the cart flow.

@@ -94,10 +94,10 @@
 
 **Goal:** The shared header and footer, and the catalog controls, describe their destinations and state correctly across all 15 documents.
 
-- [ ] **PH4-01 — Align shared navigation labels with their destinations** — **Priority:** Medium
-  - [ ] resolve the "Dostawa" and "Zwroty" entries in `src/partials/header.html` and `src/partials/footer.html`, which currently link to `checkout.html` and `cart.html`
-  - [ ] either point them at content that answers them or remove them until such content exists; adding a route also requires updating `public/sitemap.xml`, manifest shortcuts, and the smoke scope where relevant
-  - [ ] run `npm run qa:links` after the change
+- [x] **PH4-01 — Align shared navigation labels with their destinations** — **Priority:** Medium
+  - [x] resolve the "Dostawa" and "Zwroty" entries in `src/partials/header.html` and `src/partials/footer.html`, which currently link to `checkout.html` and `cart.html`
+  - [x] either point them at content that answers them or remove them until such content exists; adding a route also requires updating `public/sitemap.xml`, manifest shortcuts, and the smoke scope where relevant
+  - [x] run `npm run qa:links` after the change
   - **Completion condition:** no shared navigation entry names a topic its destination does not contain.
   - **Source:** `daily-AUDIT.md` — P2-01
 

@@ -52,9 +52,16 @@ test('shared includes retain context, nested includes, and both conditional bran
     '<a href="../index.html">Page</a><a href="shop.html">Shop</a>'
   );
   assert.equal(
-    await renderHtml(root, '404.html', source),
+    await renderHtml(root, 'thank-you.html', source),
     '<a href="index.html">Root</a><a href="pages/shop.html">Shop</a>'
   );
+  // The fallback documents are served at the URL that failed, so they link from the root.
+  for (const fallback of ['404.html', 'offline.html']) {
+    assert.equal(
+      await renderHtml(root, fallback, source),
+      '<a href="/index.html">Root</a><a href="/pages/shop.html">Shop</a>'
+    );
+  }
   assert.equal(
     await renderHtml(root, 'pages/nested/detail.html', source),
     '<a href="../../index.html">Page</a><a href="../shop.html">Shop</a>'

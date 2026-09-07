@@ -8,6 +8,7 @@ import { initGlobalErrorHandling } from './core/errors.js';
 import { emit, events, on } from './core/events.js';
 import { injectBreadcrumbJsonLd } from './ui/structured-data.js';
 import { initPwaPrompts } from './ui/pwa-prompts.js';
+import { initOfflineRetry } from './ui/offline-retry.js';
 import {
   initCart,
   initCartPage,
@@ -202,6 +203,7 @@ const initApp = () => {
   if (has('[data-cart-items]')) initCartPage();
   if (has('[data-checkout-summary]')) initCheckoutSummary();
   if (has('[data-contact-form], [data-checkout-form]')) initForms();
+  if (has('[data-offline-retry]')) initOfflineRetry();
   if (has('.breadcrumbs')) injectBreadcrumbJsonLd();
   // Przyczyna: przyciski są renderowane po async load produktów, więc selektor na starcie zwraca null.
   // Delegacja klików musi być podpięta zawsze, niezależnie od chwili renderu.

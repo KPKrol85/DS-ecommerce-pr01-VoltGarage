@@ -3,6 +3,9 @@ import path from 'node:path';
 import fg from 'fast-glob';
 
 const HTML_PATTERNS = ['*.html', 'pages/**/*.html'];
+// The Netlify catch-all serves 404.html, and the worker serves offline.html, at the URL whose
+// navigation failed. Their links must resolve from the site root, not the browser's directory.
+const FALLBACK_DOCUMENTS = new Set(['404.html', 'offline.html']);
 const INCLUDE_REGEX = /<!--\s*@include\s+(.+?)\s*-->/g;
 const TEMPLATE_REGEX = /{{([\s\S]*?)}}/g;
 
@@ -17,7 +20,9 @@ function assertNoTemplateArtifacts(content, filename) {
 function getTemplateContext(filename) {
   const normalized = filename.replaceAll('\\', '/');
   const directory = path.posix.dirname(normalized);
+  const isFallbackDocument = FALLBACK_DOCUMENTS.has(normalized);
   const prefix = (target) => {
+    if (isFallbackDocument) return target === '.' ? '/' : `/${target}/`;
     const relative = path.posix.relative(directory, target);
     return relative ? `${relative}/` : '';
   };

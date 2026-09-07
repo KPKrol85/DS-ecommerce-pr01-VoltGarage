@@ -42,11 +42,11 @@
   - **Completion condition:** every URL injected into runtime JSON-LD from a `pages/` document resolves to the route that document actually links to.
   - **Source:** `daily-AUDIT.md` — P1-02
 
-- [ ] **PH1-03 — Make the fallback documents recoverable from any URL** — **Priority:** High
-  - [ ] give `404.html` and `offline.html` root-absolute link targets, consistent with their already root-absolute CSS, font, icon, and manifest references
-  - [ ] cover the links these documents inherit from `src/partials/header.html` and `src/partials/footer.html`, which render document-relative because `rootPrefix` and `pagesPrefix` are computed from document depth in `scripts/html.mjs`
-  - [ ] make the primary action in `offline.html` re-request the failed navigation instead of linking to `offline.html` itself
-  - [ ] verify against a path below the root — the catch-all in `public/_redirects` serves `404.html` at any unmatched path, and `src/sw.js` returns the offline document while the browser keeps the requested URL
+- [x] **PH1-03 — Make the fallback documents recoverable from any URL** — **Priority:** High
+  - [x] give `404.html` and `offline.html` root-absolute link targets, consistent with their already root-absolute CSS, font, icon, and manifest references
+  - [x] cover the links these documents inherit from `src/partials/header.html` and `src/partials/footer.html`, which render document-relative because `rootPrefix` and `pagesPrefix` are computed from document depth in `scripts/html.mjs`
+  - [x] make the primary action in `offline.html` re-request the failed navigation instead of linking to `offline.html` itself
+  - [x] verify against a path below the root — the catch-all in `public/_redirects` serves `404.html` at any unmatched path, and `src/sw.js` returns the offline document while the browser keeps the requested URL
   - **Completion condition:** from a miss such as `/pages/typo.html`, every navigation control on both fallback documents leads to the intended page, and the offline retry re-attempts the original request.
   - **Source:** `daily-AUDIT.md` — P1-03, P2-07
 

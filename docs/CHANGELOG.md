@@ -25,6 +25,7 @@ All significant changes to this project are documented in this file.
 - Made the 404 and offline fallback documents recoverable from nested URLs with root-absolute navigation and retry of the original failed request.
 - Removed misleading shared navigation entries for delivery and returns so link labels match the content of their destinations.
 - Repaired heading hierarchy across the shared footer, homepage hero card, and cart summary so rendered documents no longer skip heading levels.
+- Gave the shared theme toggle a persistent accessible name, removed redundant live-region behavior, and kept `aria-pressed` as the source of theme state.
 
 ### Security
 
@@ -55,3 +56,4 @@ All significant changes to this project are documented in this file.
 - Added regression coverage for fallback link resolution, nested 404 recovery, and offline retry behavior.
 - Added regression coverage for shared navigation labels and destinations, including preserved access to checkout through the cart flow.
 - Added regression coverage for heading-outline integrity across all 15 rendered documents and verified the corrected hierarchy through the production build.
+- Added regression coverage for stable theme-toggle naming, pressed-state transitions, persistence, and system-theme behavior across the rendered site.

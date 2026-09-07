@@ -108,10 +108,10 @@
   - **Completion condition:** no rendered document skips a heading level between its own outline and the shared footer.
   - **Source:** `daily-AUDIT.md` — P2-02
 
-- [ ] **PH4-03 — Give the theme toggle a stable accessible name** — **Priority:** Medium
-  - [ ] stop overwriting the toggle's `aria-label` with the theme value in `reflectPreference` (`js/ui/theme.js`) and give the control a persistent descriptive name in `src/partials/header.html`
-  - [ ] let `aria-pressed` carry the state, and reconsider `aria-live="polite"` on the interactive control itself
-  - [ ] verify the announced name and pressed state after toggling in both directions
+- [x] **PH4-03 — Give the theme toggle a stable accessible name** — **Priority:** Medium
+  - [x] stop overwriting the toggle's `aria-label` with the theme value in `reflectPreference` (`js/ui/theme.js`) and give the control a persistent descriptive name in `src/partials/header.html`
+  - [x] let `aria-pressed` carry the state, and reconsider `aria-live="polite"` on the interactive control itself
+  - [x] verify the announced name and pressed state after toggling in both directions
   - **Completion condition:** the control is announced by what it does rather than by the current theme value, on every page.
   - **Source:** `daily-AUDIT.md` — P2-03
 

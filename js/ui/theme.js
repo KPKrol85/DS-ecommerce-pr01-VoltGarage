@@ -14,7 +14,6 @@ const resolveInitialTheme = (storedTheme) => storedTheme ?? getSystemTheme();
 const reflectPreference = (theme, toggle) => {
   document.documentElement.setAttribute('data-theme', theme);
   if (toggle) {
-    toggle.setAttribute('aria-label', theme);
     toggle.setAttribute('aria-pressed', String(theme === 'dark'));
   }
 };

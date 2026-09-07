@@ -74,7 +74,7 @@ Projekt prezentuje interfejs katalogu, koszyka i checkoutu, ale nie jest aktywny
 │   ├── data/products.json                 # Lokalne dane produktowe
 │   ├── site.webmanifest                   # Manifest aplikacji
 │   ├── _headers, _redirects               # Nagłówki i reguła 404 dla Netlify
-│   └── robots.txt, sitemap.xml, humans.txt # Pliki statyczne serwisu
+│   └── robots.txt, sitemap.xml            # Pliki statyczne serwisu
 ├── scripts/                               # Integracja Vite, renderer HTML, walidatory i testy
 ├── tools/image-optimizer/                 # Narzędzie generowania wariantów obrazów
 ├── vite.config.mjs                        # Konfiguracja Vite MPA
@@ -137,7 +137,7 @@ Są to skonfigurowane workflow jakości; repozytorium nie deklaruje pokrycia tes
 
 ### Wdrożenie
 
-Kontrakt budowania w Netlify: polecenie `npm run build`, katalog publikacji `dist`, Node.js zgodny z `^20.19.0 || >=22.12.0`. `dist/` zawiera wszystkie strony, hashowane bundle, wygenerowany `sw.js` i kopie zasobów z `public/`, w tym `site.webmanifest`, `robots.txt`, `sitemap.xml`, `humans.txt`, `_headers` i `_redirects`.
+Kontrakt budowania w Netlify: polecenie `npm run build`, katalog publikacji `dist`, Node.js zgodny z `^20.19.0 || >=22.12.0`. `dist/` zawiera wszystkie strony, hashowane bundle, wygenerowany `sw.js` i kopie zasobów z `public/`, w tym `site.webmanifest`, `robots.txt`, `sitemap.xml`, `_headers` i `_redirects`.
 
 Publiczna wersja demonstracyjna jest hostowana w Netlify. Źródłowy `public/_headers` definiuje politykę CSP, podstawowe nagłówki ochronne i cache, a `public/_redirects` kieruje nieznalezione ścieżki do `404.html`. Roczne cache `immutable` dotyczy wyłącznie `/build/*`; HTML, `/assets/*`, `/data/*`, manifest i Service Worker wymagają rewalidacji.
 
@@ -277,7 +277,7 @@ The project presents catalog, cart, and checkout interfaces, but it is not an ac
 │   ├── data/products.json                 # Local product data
 │   ├── site.webmanifest                   # Application manifest
 │   ├── _headers, _redirects               # Netlify headers and 404 rule
-│   └── robots.txt, sitemap.xml, humans.txt # Static site files
+│   └── robots.txt, sitemap.xml            # Static site files
 ├── scripts/                               # Vite integration, HTML renderer, validators, and tests
 ├── tools/image-optimizer/                 # Image variant generation tool
 ├── vite.config.mjs                        # Vite MPA configuration
@@ -340,7 +340,7 @@ These are configured quality workflows; their presence alone does not establish 
 
 ### Deployment
 
-The Netlify build contract is `npm run build`, publish directory `dist`, and Node.js compatible with `^20.19.0 || >=22.12.0`. `dist/` contains every page, hashed bundles, the generated `sw.js`, and copies of resources from `public/`, including `site.webmanifest`, `robots.txt`, `sitemap.xml`, `humans.txt`, `_headers`, and `_redirects`.
+The Netlify build contract is `npm run build`, publish directory `dist`, and Node.js compatible with `^20.19.0 || >=22.12.0`. `dist/` contains every page, hashed bundles, the generated `sw.js`, and copies of resources from `public/`, including `site.webmanifest`, `robots.txt`, `sitemap.xml`, `_headers`, and `_redirects`.
 
 The public demo is hosted on Netlify. Source `public/_headers` defines a CSP, baseline protective headers, and caching, while `public/_redirects` sends unresolved paths to `404.html`. One-year `immutable` caching applies only to `/build/*`; HTML, `/assets/*`, `/data/*`, the manifest, and the Service Worker must revalidate.
 

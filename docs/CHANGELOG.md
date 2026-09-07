@@ -30,6 +30,7 @@ All significant changes to this project are documented in this file.
 - Promoted Detailing to a first-class catalog category and aligned its product, shop filter, collection destination, and homepage presentation.
 - Removed the duplicated homepage hero statistic and balanced the remaining three-item stats layout.
 - Removed unreferenced and duplicated published assets, including obsolete hero sets, stray shortcut copies, orphan images, and mistyped product variants.
+- Removed stale `humans.txt` references from repository and deployment documentation to match the current public package.
 
 ### Security
 
@@ -65,3 +66,4 @@ All significant changes to this project are documented in this file.
 - Added regression coverage for category consistency across the catalog, shop filter, collection links, homepage pills, and filtered shop results.
 - Added regression coverage for unique homepage hero statistics and verified the three-item layout across responsive viewports and both themes.
 - Added published-asset inventory regression coverage and verified the reduced public package through production build and package validation.
+- Updated the build-contract fixture to match the current public-file inventory and verified all package-contract tests remain green.

@@ -99,7 +99,6 @@ test('package validation rejects missing bundles, public files, source URLs, and
     'data/products.json': '[]',
     'robots.txt': '',
     'sitemap.xml': '',
-    'humans.txt': '',
     _headers: '',
     _redirects: '',
   };

@@ -149,10 +149,10 @@
   - **Completion condition:** every file copied from `public/` into `dist/` is either referenced by the project or documented as intentionally retained.
   - **Source:** `daily-AUDIT.md` — P2-09
 
-- [ ] **PH6-02 — Remove the stale `humans.txt` references** — **Priority:** Medium
-  - [ ] remove the four `humans.txt` passages in `README.md` and the one in `docs/settings.md` that still describe it as a tracked `public/` file and as part of `dist/`
-  - [ ] drop the leftover `humans.txt` entry from the public-file fixture in `scripts/tests/build-contract.test.mjs`
-  - [ ] run `npm run qa:build` to confirm the package-contract tests still pass
+- [x] **PH6-02 — Remove the stale `humans.txt` references** — **Priority:** Medium
+  - [x] remove the four `humans.txt` passages in `README.md` and the one in `docs/settings.md` that still describe it as a tracked `public/` file and as part of `dist/`
+  - [x] drop the leftover `humans.txt` entry from the public-file fixture in `scripts/tests/build-contract.test.mjs`
+  - [x] run `npm run qa:build` to confirm the package-contract tests still pass
   - **Completion condition:** no tracked file describes `humans.txt` as part of the repository or the deployment package.
   - **Source:** `daily-AUDIT.md` — P2-10
 

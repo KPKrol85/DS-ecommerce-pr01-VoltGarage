@@ -13,7 +13,7 @@
   - CSS: [css/main.css](../css/main.css), importing `css/partials/`
   - JS: [js/main.js](../js/main.js), importing the application modules
   - Service Worker: [src/sw.js](../src/sw.js)
-- Static resource ownership: `public/`, including `assets/`, `data/products.json`, `site.webmanifest`, `_headers`, `_redirects`, `robots.txt`, `sitemap.xml`, and `humans.txt`
+- Static resource ownership: `public/`, including `assets/`, `data/products.json`, `site.webmanifest`, `_headers`, `_redirects`, `robots.txt`, and `sitemap.xml`
 - Build output: `dist/`, generated and ignored by Git
 
 ## NPM scripts

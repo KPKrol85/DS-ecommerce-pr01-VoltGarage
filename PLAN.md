@@ -115,9 +115,9 @@
   - **Completion condition:** the control is announced by what it does rather than by the current theme value, on every page.
   - **Source:** `daily-AUDIT.md` — P2-03
 
-- [ ] **PH4-04 — Keep the add-to-cart button label restorable** — **Priority:** Low
-  - [ ] in `initAddToCartButtons` (`js/features/cart.js`), capture the original label once per button or reset the pending timeout on each click, so a second click inside the 1200 ms window cannot capture the confirmation text
-  - [ ] verify by activating one card's button twice in quick succession and confirming the label and accessible name return to the original
+- [x] **PH4-04 — Keep the add-to-cart button label restorable** — **Priority:** Low
+  - [x] in `initAddToCartButtons` (`js/features/cart.js`), capture the original label once per button or reset the pending timeout on each click, so a second click inside the 1200 ms window cannot capture the confirmation text
+  - [x] verify by activating one card's button twice in quick succession and confirming the label and accessible name return to the original
   - **Completion condition:** repeated activation never leaves the button permanently showing the confirmation label.
   - **Source:** `daily-AUDIT.md` — P2-04
 

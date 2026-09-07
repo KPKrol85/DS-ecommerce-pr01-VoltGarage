@@ -7,6 +7,7 @@ import { logError } from '../core/errors.js';
 const CART_KEY = 'volt_cart';
 const FREE_SHIPPING = 300;
 const SHIPPING_FEE = 20;
+const ADDED_FEEDBACK_MS = 1200;
 
 const getCart = () => {
   const raw = safeStorage.get(CART_KEY);
@@ -54,6 +55,11 @@ export const initCart = () => {
   window.addEventListener('cart:updated', updateCount);
 };
 
+// Przyczyna: powtórny klik w oknie potwierdzenia zapamiętywał "Dodano" jako etykietę wyjściową.
+// Stan trzymany per przycisk: etykieta czytana raz, a każdy klik restartuje pojedynczy timer.
+const originalLabels = new WeakMap();
+const restoreTimers = new WeakMap();
+
 export const initAddToCartButtons = () => {
   document.addEventListener('click', (event) => {
     const button = event.target.closest('[data-add-to-cart]');
@@ -63,13 +69,20 @@ export const initAddToCartButtons = () => {
     if (!id) return;
     const qtySelect = document.querySelector('[data-qty-select]');
     const qty = qtySelect ? Number(qtySelect.value) : 1;
-    const originalLabel = button.textContent;
+    if (!originalLabels.has(button)) {
+      originalLabels.set(button, button.textContent);
+    }
+    clearTimeout(restoreTimers.get(button));
 
     addToCart(id, qty);
     button.textContent = 'Dodano';
-    setTimeout(() => {
-      button.textContent = originalLabel;
-    }, 1200);
+    restoreTimers.set(
+      button,
+      setTimeout(() => {
+        restoreTimers.delete(button);
+        button.textContent = originalLabels.get(button);
+      }, ADDED_FEEDBACK_MS)
+    );
   });
 };
 

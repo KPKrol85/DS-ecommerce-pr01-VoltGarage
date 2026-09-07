@@ -695,7 +695,9 @@
   justify-self: center;
   text-align: left;
 }
+.total-panel h2,
 .total-panel h3 {
+  font-size: 1.17em;
   display: inline-flex;
   align-items: center;
   gap: var(--space-03);

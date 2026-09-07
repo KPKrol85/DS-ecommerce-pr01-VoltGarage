@@ -478,7 +478,7 @@ main > section {
   border: 1px solid color-mix(in srgb, var(--color-accent) 12%, transparent);
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-accent) 6%, transparent) inset;
 }
-.hero-card h3 {
+.hero-card h2 {
   letter-spacing: var(--ls-03);
   font-size: var(--fs-06);
 }
@@ -514,7 +514,7 @@ main > section {
   padding: var(--section-py-lg) 0 var(--section-footer-bottom);
   text-align: left;
 }
-.footer-col h4 {
+.footer-col h2 {
   text-transform: uppercase;
   font-size: var(--fs-04);
 }

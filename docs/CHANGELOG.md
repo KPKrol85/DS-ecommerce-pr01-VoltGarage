@@ -24,6 +24,7 @@ All significant changes to this project are documented in this file.
 - Aligned the Service Worker update flow with explicit user-controlled activation, preventing automatic first-install reloads and unintended cross-tab refreshes
 - Made the 404 and offline fallback documents recoverable from nested URLs with root-absolute navigation and retry of the original failed request.
 - Removed misleading shared navigation entries for delivery and returns so link labels match the content of their destinations.
+- Repaired heading hierarchy across the shared footer, homepage hero card, and cart summary so rendered documents no longer skip heading levels.
 
 ### Security
 
@@ -53,3 +54,4 @@ All significant changes to this project are documented in this file.
 - Added regression coverage for first-install control, waiting updates, user-approved activation, and single-reload Service Worker behavior.
 - Added regression coverage for fallback link resolution, nested 404 recovery, and offline retry behavior.
 - Added regression coverage for shared navigation labels and destinations, including preserved access to checkout through the cart flow.
+- Added regression coverage for heading-outline integrity across all 15 rendered documents and verified the corrected hierarchy through the production build.

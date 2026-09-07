@@ -101,10 +101,10 @@
   - **Completion condition:** no shared navigation entry names a topic its destination does not contain.
   - **Source:** `daily-AUDIT.md` — P2-01
 
-- [ ] **PH4-02 — Repair the document heading outline** — **Priority:** Medium
-  - [ ] align the four footer column headings in `src/partials/footer.html` with the level the surrounding page outline actually reaches, instead of a fixed `<h4>`
-  - [ ] resolve the two in-page skips where an `<h3>` precedes any `<h2>`: the hero card in `index.html` and the summary panel in `pages/cart.html`
-  - [ ] re-scan heading levels across all 15 rendered documents, including `404.html`, `offline.html`, `thank-you.html`, and `pages/collections.html`, where the current jump is `h1` to `h4`
+- [x] **PH4-02 — Repair the document heading outline** — **Priority:** Medium
+  - [x] align the four footer column headings in `src/partials/footer.html` with the level the surrounding page outline actually reaches, instead of a fixed `<h4>`
+  - [x] resolve the two in-page skips where an `<h3>` precedes any `<h2>`: the hero card in `index.html` and the summary panel in `pages/cart.html`
+  - [x] re-scan heading levels across all 15 rendered documents, including `404.html`, `offline.html`, `thank-you.html`, and `pages/collections.html`, where the current jump is `h1` to `h4`
   - **Completion condition:** no rendered document skips a heading level between its own outline and the shared footer.
   - **Source:** `daily-AUDIT.md` — P2-02
 

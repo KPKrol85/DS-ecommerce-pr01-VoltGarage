@@ -28,6 +28,7 @@ All significant changes to this project are documented in this file.
 - Gave the shared theme toggle a persistent accessible name, removed redundant live-region behavior, and kept `aria-pressed` as the source of theme state.
 - Made add-to-cart confirmation feedback reliably restore each button’s original label after repeated rapid activation.
 - Promoted Detailing to a first-class catalog category and aligned its product, shop filter, collection destination, and homepage presentation.
+- Removed the duplicated homepage hero statistic and balanced the remaining three-item stats layout.
 
 ### Security
 
@@ -61,3 +62,4 @@ All significant changes to this project are documented in this file.
 - Added regression coverage for stable theme-toggle naming, pressed-state transitions, persistence, and system-theme behavior across the rendered site.
 - Added deterministic regression coverage for repeated add-to-cart activation, per-button timer isolation, cart updates, and accessible-name restoration.
 - Added regression coverage for category consistency across the catalog, shop filter, collection links, homepage pills, and filtered shop results.
+- Added regression coverage for unique homepage hero statistics and verified the three-item layout across responsive viewports and both themes.

@@ -132,8 +132,8 @@
   - **Completion condition:** every category presented to visitors exists in the catalog and in the shop filter, and no two collection cards resolve to the same filtered result.
   - **Source:** `daily-AUDIT.md` — P2-05
 
-- [ ] **PH5-02 — Remove the duplicated hero statistic** — **Priority:** Low
-  - [ ] replace the repeated figure and label in the first two `.stat` blocks of the `index.html` hero card with the intended second statistic, or reduce the grid to three items
+- [x] **PH5-02 — Remove the duplicated hero statistic** — **Priority:** Low
+  - [x] replace the repeated figure and label in the first two `.stat` blocks of the `index.html` hero card with the intended second statistic, or reduce the grid to three items
   - **Completion condition:** the homepage hero stats grid shows no duplicated figure.
   - **Source:** `daily-AUDIT.md` — P2-08
 

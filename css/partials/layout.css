@@ -494,10 +494,8 @@ main > section {
 .hero-card .stats {
   margin-top: var(--space-04);
 }
-.stat:nth-child(3) {
-  grid-column: auto;
-  justify-self: stretch;
-  max-width: none;
+.hero-card .stat:last-child {
+  grid-column: 1 / -1;
 }
 .hero-card .stat p {
   color: var(--color-hero-text);

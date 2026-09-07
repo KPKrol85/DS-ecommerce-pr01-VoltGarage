@@ -27,6 +27,7 @@ All significant changes to this project are documented in this file.
 - Repaired heading hierarchy across the shared footer, homepage hero card, and cart summary so rendered documents no longer skip heading levels.
 - Gave the shared theme toggle a persistent accessible name, removed redundant live-region behavior, and kept `aria-pressed` as the source of theme state.
 - Made add-to-cart confirmation feedback reliably restore each button’s original label after repeated rapid activation.
+- Promoted Detailing to a first-class catalog category and aligned its product, shop filter, collection destination, and homepage presentation.
 
 ### Security
 
@@ -59,3 +60,4 @@ All significant changes to this project are documented in this file.
 - Added regression coverage for heading-outline integrity across all 15 rendered documents and verified the corrected hierarchy through the production build.
 - Added regression coverage for stable theme-toggle naming, pressed-state transitions, persistence, and system-theme behavior across the rendered site.
 - Added deterministic regression coverage for repeated add-to-cart activation, per-button timer isolation, cart updates, and accessible-name restoration.
+- Added regression coverage for category consistency across the catalog, shop filter, collection links, homepage pills, and filtered shop results.

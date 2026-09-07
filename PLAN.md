@@ -125,10 +125,10 @@
 
 **Goal:** Public content matches the catalog and the filters it sends visitors to.
 
-- [ ] **PH5-01 — Resolve the Detailing category** — **Priority:** Low
-  - [ ] decide whether Detailing becomes a real category in `public/data/products.json` and in `#filter-category` in `pages/shop.html`, or is presented as part of Gadżety
-  - [ ] apply the decision to the Detailing card in `pages/collections.html`, which currently links to the same filtered result as the Gadżety card
-  - [ ] apply the same decision to the non-interactive Detailing pill in `index.html`
+- [x] **PH5-01 — Resolve the Detailing category** — **Priority:** Low
+  - [x] decide whether Detailing becomes a real category in `public/data/products.json` and in `#filter-category` in `pages/shop.html`, or is presented as part of Gadżety
+  - [x] apply the decision to the Detailing card in `pages/collections.html`, which currently links to the same filtered result as the Gadżety card
+  - [x] apply the same decision to the non-interactive Detailing pill in `index.html`
   - **Completion condition:** every category presented to visitors exists in the catalog and in the shop filter, and no two collection cards resolve to the same filtered result.
   - **Source:** `daily-AUDIT.md` — P2-05
 

@@ -141,11 +141,11 @@
 
 **Goal:** The published package and the documents describing it match the current repository inventory.
 
-- [ ] **PH6-01 — Remove unreferenced and duplicated published assets** — **Priority:** Medium
-  - [ ] remove the two accidentally committed shortcut directories under `public/assets/icons/shortcuts/` after confirming `public/site.webmanifest` uses only the three canonical files directly under `shortcuts/`
-  - [ ] remove the unreferenced hero sets `hero-01` through `hero-04` from both `public/assets/images/hero/` and `public/assets/images/_optimized/hero/`; only `hero-05` is referenced, from `index.html`
-  - [ ] remove the remaining unreferenced files — `public/assets/images/og/og-1200x1200.jpg`, `public/assets/icons/favicon/favicon-96x96.png`, the `_optimized/products/zewnetrze-02` pair whose name sits one character from the real `zewnetrzne-02` variants, and the six unused SVGs directly under `public/assets/images/` — or record in `docs/settings.md` why each is retained
-  - [ ] run `npm run build` afterwards so `scripts/validate-package.mjs` confirms the manifest icon, shortcut, and screenshot paths still resolve
+- [x] **PH6-01 — Remove unreferenced and duplicated published assets** — **Priority:** Medium
+  - [x] remove the two accidentally committed shortcut directories under `public/assets/icons/shortcuts/` after confirming `public/site.webmanifest` uses only the three canonical files directly under `shortcuts/`
+  - [x] remove the unreferenced hero sets `hero-01` through `hero-04` from both `public/assets/images/hero/` and `public/assets/images/_optimized/hero/`; only `hero-05` is referenced, from `index.html`
+  - [x] remove the remaining unreferenced files — `public/assets/images/og/og-1200x1200.jpg`, `public/assets/icons/favicon/favicon-96x96.png`, the `_optimized/products/zewnetrze-02` pair whose name sits one character from the real `zewnetrzne-02` variants, and the six unused SVGs directly under `public/assets/images/` — or record in `docs/settings.md` why each is retained
+  - [x] run `npm run build` afterwards so `scripts/validate-package.mjs` confirms the manifest icon, shortcut, and screenshot paths still resolve
   - **Completion condition:** every file copied from `public/` into `dist/` is either referenced by the project or documented as intentionally retained.
   - **Source:** `daily-AUDIT.md` — P2-09
 

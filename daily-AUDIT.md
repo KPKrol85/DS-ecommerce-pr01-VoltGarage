@@ -38,6 +38,7 @@ None detected.
 - **Current behavior:** The entry declares `assets/images/products/wnetrze-02.jpg`. A filesystem check of every `image` value in the catalog shows this is the only missing file; the `_optimized` AVIF and WebP variants for the same base name do exist. Grid and detail views hide the problem because their `<picture>` sources resolve, but `js/features/cart.js:85` renders a bare `<img>` built from the same field, and the `Product` and `ItemList` structured data take their image URLs from it.
 - **Impact:** A broken product image in the cart, an invalid image URL in structured data for that product, and no raster fallback wherever AVIF and WebP are unavailable.
 - **Recommended direction:** Correct the catalog entry to the extension that exists, and extend validation to assert that every asset path declared in product data resolves to a file.
+- **Status:** RESOLVED — the `interior-mat` entry now declares `wnetrze-02.png`, which exists, and `scripts/validate-product-assets.mjs` asserts that every declared raster and every derived `_optimized` variant resolves, wired into `npm run qa`; implemented, verified, and recorded in docs/CHANGELOG.md.
 
 ### [P1-02] Runtime ItemList structured data points at a product route that does not exist
 
@@ -46,6 +47,7 @@ None detected.
 - **Current behavior:** `toAbsolute` resolves relative hrefs against `window.location.origin`, which discards the current directory. On `/pages/shop.html`, `/pages/new-arrivals.html`, and `/pages/promotions.html`, `productLink()` returns `product.html?id=…`, which `toAbsolute` turns into `https://<origin>/product.html?id=…`. The deployed route is `/pages/product.html?id=…`. Breadcrumb and image URLs happen to survive because their `../` prefix collapses to the same root path.
 - **Impact:** Every item URL in the injected `ItemList` on the three listing pages resolves to a path that returns the 404 page. `scripts/validate-jsonld.js` asserts only schema types and a source regex, so it cannot detect this.
 - **Recommended direction:** Resolve runtime absolute URLs against the current document URL rather than the bare origin.
+- **Status:** RESOLVED — `toAbsolute` in `js/ui/structured-data.js` now resolves against `document.baseURI`, so runtime `ItemList` item URLs on the listing pages keep their `/pages/` directory; implemented, verified, and recorded in docs/CHANGELOG.md.
 
 ### [P1-03] Root-level fallback documents use document-relative links but are served at arbitrary URLs
 
@@ -54,6 +56,7 @@ None detected.
 - **Current behavior:** Both documents are rendered with root context, so every link in the shared header, footer, and their recovery CTAs is document-relative (`index.html`, `pages/shop.html`). The Netlify catch-all serves `404.html` at any unmatched path, and the worker returns `/offline.html` for uncached navigations while the browser keeps the originally requested URL. Their CSS and JS references are root-absolute after the build and are unaffected. No `<base>` element is present in any document.
 - **Impact:** For any miss below the root — for example `/pages/typo.html` — the entire navigation shell resolves to non-existent paths such as `/pages/pages/shop.html` and `/pages/index.html`. The pages whose purpose is recovery cannot recover.
 - **Recommended direction:** Give the two fallback documents root-absolute link targets, consistent with how their already-absolute asset references behave.
+- **Status:** RESOLVED — `scripts/html.mjs` renders `404.html` and `offline.html` with root-absolute `rootPrefix`/`pagesPrefix`, and both documents carry root-absolute links of their own, so neither emits a document-relative href; implemented, verified, and recorded in docs/CHANGELOG.md.
 
 ### [P1-04] Phone validation pattern rejects space-separated numbers
 
@@ -62,6 +65,7 @@ None detected.
 - **Current behavior:** The pattern is `^[0-9+][0-9\\s-]{6,19}$`. The doubled backslash makes the character class match a literal backslash and the letter `s` rather than whitespace. `js/main.js` sets `form.noValidate` and re-tests the same attribute with `new RegExp(field.pattern)`, so both validation layers agree. Evaluated directly: `533537091` and `533-537-091` pass; `533 537 091` and `+48 533 537 091` fail.
 - **Impact:** The required phone field rejects the exact format the site prints in its own footer and contact page, blocking submission of the Netlify contact form and the checkout form until the user removes the spaces. The rejection message gives no formatting guidance.
 - **Recommended direction:** Correct the character class so whitespace matches, and keep the two copies of the pattern derived from a single definition.
+- **Status:** RESOLVED — the pattern is now defined once in `src/partials/phone-field.html` as `^[0-9+][0-9\s\-]{6,19}$` and included by both forms, so the space-separated and `+48`-prefixed formats the site publishes pass in the attribute and the JavaScript layer alike; implemented, verified, and recorded in docs/CHANGELOG.md.
 
 ### [P1-05] Homepage newsletter form has no submission target and no handler
 
@@ -70,6 +74,7 @@ None detected.
 - **Current behavior:** The form declares no `action`, no `method`, and none of the `data-contact-form` / `data-checkout-form` hooks that `js/main.js` binds; its required email input has no `name` attribute. Submitting therefore performs a default GET to the current document with no field data.
 - **Impact:** The submit button reloads the homepage, discards the address, and shows neither confirmation nor error — a public control advertising a signup capability the project does not implement.
 - **Recommended direction:** Either route it through the same validated flow the contact form uses, or state its demonstration-only status the way the checkout scope is already stated in project documentation.
+- **Status:** RESOLVED — the form was replaced with a stated demonstration-scope note and a single link to the new-arrivals catalog, so no email entry or default GET submission remains; implemented, verified, and recorded in docs/CHANGELOG.md.
 
 ### [P1-06] Service worker skips waiting, contradicting the documented user-confirmed update flow
 
@@ -78,6 +83,7 @@ None detected.
 - **Current behavior:** `src/sw.js` calls `self.skipWaiting()` unconditionally inside `install` and `self.clients.claim()` inside `activate`. `js/ui/pwa-prompts.js` implements the opposite contract: an update toast whose refresh action posts `SKIP_WAITING` to `registration.waiting`, plus a `controllerchange` listener that calls `window.location.reload()` with no guard for the first-install transition from no controller.
 - **Impact:** The two designs are mutually exclusive in source. With `skipWaiting` in `install`, a worker cannot rest in `waiting`, so the documented user-confirmed refresh has nothing to act on, and the unguarded `controllerchange` handler is positioned to reload the page without user action — including on a first visit, when the controller changes from none to the newly claimed worker. Exact reload timing requires browser verification.
 - **Recommended direction:** Pick one update contract. Either drop `skipWaiting` from `install` so the prompt controls activation, or drop the prompt and guard the reload against the first-install controller change.
+- **Status:** RESOLVED — `src/sw.js` now calls `self.skipWaiting()` only from its `SKIP_WAITING` message handler, `js/ui/pwa-prompts.js` guards the `controllerchange` reload against the first-install transition and against activations it did not approve, and `README.md` and `docs/settings.md` describe that waiting-worker contract; implemented, verified, and recorded in docs/CHANGELOG.md.
 
 ## P2 — Minor refinements
 
@@ -88,6 +94,7 @@ None detected.
 - **Current behavior:** The "Dostawa" entry links to `checkout.html` and the "Zwroty" entry links to `cart.html`. Neither destination contains delivery or returns content.
 - **Impact:** Present on all 15 pages through the shared partials; a visitor looking for the returns policy is sent to their cart.
 - **Recommended direction:** Point the entries at content that answers them, or remove them until such pages exist.
+- **Status:** RESOLVED — the "Dostawa" and "Zwroty" entries were removed from `src/partials/header.html` and `src/partials/footer.html`, so no shared navigation entry names a topic its destination does not contain; implemented, verified, and recorded in docs/CHANGELOG.md.
 
 ### [P2-02] Footer column headings skip a heading level on every page
 
@@ -96,6 +103,7 @@ None detected.
 - **Current behavior:** The four footer columns use `<h4>` regardless of the surrounding document. A scripted heading scan across all 15 rendered documents shows a level skip on 14 of them — `h2` to `h4` on content pages and `h1` to `h4` on `404.html`, `offline.html`, `thank-you.html`, and `pages/collections.html`. Separate in-page skips exist where a hero or summary card uses `<h3>` before any `<h2>` (`index.html` hero card, `pages/cart.html` summary panel).
 - **Impact:** Screen-reader heading navigation reports a gap in the outline on nearly every page, from one shared source.
 - **Recommended direction:** Align the footer column headings with the level the page outline actually reaches, and resolve the two in-page `<h3>`-before-`<h2>` cases.
+- **Status:** RESOLVED — the four footer columns use `<h2>`, and the `index.html` hero card and `pages/cart.html` summary panel no longer place an `<h3>` before any `<h2>`; a heading scan over all 15 rendered documents reports no level skip; implemented, verified, and recorded in docs/CHANGELOG.md.
 
 ### [P2-03] Theme toggle announces the theme value instead of the control's purpose
 
@@ -104,6 +112,7 @@ None detected.
 - **Current behavior:** `reflectPreference` sets the button's `aria-label` to the current theme name, so the accessible name becomes "light" or "dark"; the initial markup uses "auto". Because `aria-label` overrides `title`, the descriptive `title` attribute never contributes to the accessible name. The element also carries `aria-live="polite"` on an interactive control.
 - **Impact:** On every page the toggle is announced as a bare state word plus its pressed state, with no indication of what activating it does.
 - **Recommended direction:** Keep a stable descriptive accessible name and let `aria-pressed` carry the state; reconsider the live region on the control itself.
+- **Status:** RESOLVED — the control carries a persistent `aria-label="Przełącz motyw"`, `reflectPreference` in `js/ui/theme.js` now writes only `aria-pressed`, and the `aria-live` attribute was removed from the button; implemented, verified, and recorded in docs/CHANGELOG.md.
 
 ### [P2-04] Add-to-cart button label sticks after repeated clicks
 
@@ -112,6 +121,7 @@ None detected.
 - **Current behavior:** Each click captures `button.textContent` as the label to restore and schedules a 1200 ms timeout. A second click inside that window captures the already-swapped confirmation text, so the later timeout restores the confirmation after the earlier one restores the original label.
 - **Impact:** The primary catalog action button is left permanently showing the confirmation label on every card the user clicks twice quickly, both visually and as its accessible name. The cart total itself stays correct.
 - **Recommended direction:** Capture the original label once per button, or reset the pending timeout on each click.
+- **Status:** RESOLVED — `initAddToCartButtons` records each button’s original label once and clears that button’s pending restore timer on every click, so a rapid second activation cannot capture the confirmation text; implemented, verified, and recorded in docs/CHANGELOG.md.
 
 ### [P2-05] Collections page advertises a category the catalog does not contain
 
@@ -120,6 +130,7 @@ None detected.
 - **Current behavior:** The "Detailing" card links to `shop.html?category=Gadżety`, the same target as the "Gadżety" card. The catalog defines five categories — Emblematy, Naklejki, Gadżety, Wnętrze, Zewnętrzne — and `#filter-category` in `pages/shop.html` lists exactly those five. The homepage also renders a non-interactive "Detailing" pill at `index.html:239`.
 - **Impact:** Two of six category cards lead to the same filtered result, and the promised category filter does not exist.
 - **Recommended direction:** Either introduce the category in the catalog and the shop filter, or present Detailing as part of Gadżety rather than as a separate destination.
+- **Status:** RESOLVED — Detailing is now a catalog category in `public/data/products.json` and an option in `#filter-category`, the collections card links to `shop.html?category=Detailing`, and the homepage pills match the same six-category set; implemented, verified, and recorded in docs/CHANGELOG.md.
 
 ### [P2-06] Checkout reports an accepted submission for an empty cart
 
@@ -128,6 +139,7 @@ None detected.
 - **Current behavior:** The checkout submit handler validates only field-level constraints. With no items stored, the summary renders `0 zł` across all three lines and a valid form submission still sets the success message and resets the fields.
 - **Impact:** The confirmation asserts acceptance in a state where there is nothing to accept. Project documentation records that checkout is simulated, but the on-page message does not.
 - **Recommended direction:** Guard submission on a non-empty cart, and word the confirmation so it does not claim more than the demonstration flow performs.
+- **Status:** RESOLVED — the checkout submit path refuses an otherwise valid submission while `hasCartItems()` is false and reports that state in the form status region, and the success message states that no order was sent or stored; implemented, verified, and recorded in docs/CHANGELOG.md.
 
 ### [P2-07] Offline page retry control returns to the offline page
 
@@ -136,6 +148,7 @@ None detected.
 - **Current behavior:** The primary action links to `offline.html`. Activating it navigates to the offline document again rather than re-attempting the navigation that failed; with the network restored, the worker's network-first path serves `/offline.html` successfully and the same page is shown.
 - **Impact:** The most prominent recovery control on the offline fallback never returns the visitor to real content. The secondary homepage link does work when its relative target resolves, which P1-03 covers separately.
 - **Recommended direction:** Make the retry action re-request the current location rather than link to the fallback document.
+- **Status:** RESOLVED — the retry control now pairs an empty `href` with `js/ui/offline-retry.js`, which reloads the current location instead of navigating to the fallback document; implemented, verified, and recorded in docs/CHANGELOG.md.
 
 ### [P2-08] Homepage hero card repeats the same statistic twice
 
@@ -144,6 +157,7 @@ None detected.
 - **Current behavior:** The first two `.stat` blocks are identical — the same figure over the same label — inside a four-item stats grid.
 - **Impact:** A visible content duplication in the primary above-the-fold panel of the site's most important page.
 - **Recommended direction:** Replace the duplicate with the intended second statistic or reduce the grid to three items.
+- **Status:** RESOLVED — the hero stats grid was reduced to three items with distinct figures and labels; implemented, verified, and recorded in docs/CHANGELOG.md.
 
 ### [P2-09] Unreferenced and duplicated assets are shipped with the production package
 
@@ -152,6 +166,7 @@ None detected.
 - **Current behavior:** A reference scan across all HTML, CSS, JS, JSON, manifest, and sitemap sources finds roughly 4.8 MB of asset files with no reference anywhere, on top of six duplicate shortcut icons in two directories whose names indicate accidental commits, one of which contains a space. `publicDir` copies all of it verbatim into `dist/`, and `scripts/vite-volt-garage.mjs` folds every `public/` file into the service worker build-ID digest.
 - **Impact:** Deployed payload and repository size carry unused files; touching any of them changes the deployment ID and invalidates every client cache; the `zewnetrze-02` pair sits one character away from the real `zewnetrzne-02` variants, which is exactly the kind of near-miss that produces a wrong reference later.
 - **Recommended direction:** Remove the unreferenced assets and the duplicate shortcut directories, or record in project documentation why they are retained.
+- **Status:** RESOLVED — the unreferenced hero sets, `og-1200x1200.jpg`, `favicon-96x96.png`, the mistyped `zewnetrze-02` variant pair, the six loose SVGs, and both stray shortcut directories are gone from `public/`; implemented, verified, and recorded in docs/CHANGELOG.md.
 
 ### [P2-10] Documentation still lists `humans.txt` as part of the deployment contract
 
@@ -160,6 +175,7 @@ None detected.
 - **Current behavior:** Four README passages and the settings document describe `humans.txt` as a tracked `public/` file and as part of what `dist/` contains. The file was removed from the repository and from the package requirement, and `scripts/validate-package.mjs` no longer requires it.
 - **Impact:** The deployment-contract sections state a fact about production output that is no longer true, in the documents a maintainer consults to reason about `public/` ownership.
 - **Recommended direction:** Remove the stale references so documentation matches the current `public/` inventory.
+- **Status:** RESOLVED — no `humans.txt` reference remains in `README.md`, `docs/settings.md`, or the public-file fixture in `scripts/tests/build-contract.test.mjs`; implemented, verified, and recorded in docs/CHANGELOG.md.
 
 ### [P2-11] Leftover development artifacts in the product rendering module
 
@@ -168,6 +184,7 @@ None detected.
 - **Current behavior:** Two `CHANGED: img -> picture` HTML comments sit inside the card templates and are emitted into the DOM of every rendered product card. `initShopProducts` is exported but imported nowhere — `js/main.js` routes `[data-products="shop"]` to `initFilters`, which performs the same work. The ESLint `no-unused-vars` rule does not flag unused exports.
 - **Impact:** Production markup carries stale editing notes, and a duplicate shop-rendering path remains that a future change could be applied to instead of the live one.
 - **Recommended direction:** Remove both markers and the unused export.
+- **Status:** RESOLVED — both `CHANGED: img -> picture` comments and the exported-but-unimported `initShopProducts` are gone from `js/features/products.js`, leaving one shop-rendering path; implemented, verified, and recorded in docs/CHANGELOG.md.
 
 ## Extra quality improvements
 

@@ -193,30 +193,35 @@ None detected.
 - **Evidence:** `scripts/validate-internal-links.js` checks only `href` attributes in rendered HTML; `scripts/validate-package.mjs` checks `src`, `srcset`, and CSS `url()` in built output; `scripts/validate-jsonld.js` checks schema types only. Product images and item URLs are produced at runtime from `public/data/products.json` and never appear in static markup.
 - **Potential value:** The same check would have caught both P1-01 and P1-02 before review, and would keep catching them as the catalog grows.
 - **Scope boundary:** An addition to the existing validator scripts using tooling already in the repository; it does not require new dependencies or a change to the QA workflow shape.
+- **Status:** RESOLVED — `scripts/validate-product-assets.mjs` asserts that every declared catalog raster and every derived `_optimized` variant resolves, and runs as part of `npm run qa`, while `scripts/tests/structured-data-urls.test.mjs` inspects the final `ItemList` payload written by the shop, new-arrivals, and promotions initializers and requires absolute `/pages/product.html?id=…` item URLs; implemented, verified, and recorded in docs/CHANGELOG.md.
 
 ### Harden cart state deserialization against malformed stored values
 
 - **Evidence:** `js/features/cart.js:13-20` recovers from `JSON.parse` failures but returns whatever parsed successfully; `getCart` consumers then call `cart.find` and `cart.reduce` on the result.
 - **Potential value:** A non-array or partially shaped value in the cart key would throw on every page that renders the cart badge, and the current recovery path does not cover that. A shape check would keep the badge and add-to-cart working across any future catalog or schema change.
 - **Scope boundary:** Local resilience for an edge case the project does not currently produce itself; not a defect in the present implementation.
+- **Status:** RESOLVED — `getCart` in `js/features/cart.js` returns an empty cart unless `Array.isArray(parsed)` holds, so a successfully parsed non-array never reaches `cart.find` or `cart.reduce`, and `scripts/tests/cart-storage-state.test.mjs` drives malformed stored values through the badge, `hasCartItems`, and add-to-cart recovery; implemented, verified, and recorded in docs/CHANGELOG.md.
 
 ### Provide a no-JavaScript dark-theme fallback in CSS
 
 - **Evidence:** Theme selection lives entirely in the inline script in each document head and in `js/ui/theme.js`; `css/partials/themes.css` defines palettes only under `:root` / `[data-theme='light']` and `[data-theme='dark']`, with no `prefers-color-scheme` block. Documents declare `<meta name="color-scheme" content="light dark">`.
 - **Potential value:** A visitor with JavaScript disabled and a dark system preference currently receives the light palette while the document advertises support for both. A `prefers-color-scheme` fallback would align the two without changing the JavaScript-driven model the project documents.
 - **Scope boundary:** Optional refinement to an intentional JS-first theming decision, not a correction to it.
+- **Status:** RESOLVED — `css/partials/themes.css` closes with a `@media (prefers-color-scheme: dark)` block scoped to `:root:not([data-theme])`, so a dark system preference applies without JavaScript while any explicit theme choice stays authoritative, and `scripts/tests/theme-css-fallback.test.mjs` holds that selector scope and full dark-token parity; implemented, verified, and recorded in docs/CHANGELOG.md.
 
 ### Reduce the shipped raster payload for product fallbacks
 
 - **Evidence:** `public/assets/images/products/` holds 12 source rasters totalling roughly 18.7 MB, several over 2 MB each; these are the `<img>` fallbacks referenced from `js/features/products.js`. The AVIF and WebP variants that modern browsers select are two orders of magnitude smaller.
 - **Potential value:** Smaller repository and deployed package, and a far smaller worst case for any client that falls back to the raster source. No runtime measurement was taken, so this is stated as payload size only.
 - **Scope boundary:** The existing `tools/image-optimizer/` workflow already owns variant generation; this concerns the retained source files, which are a deliberate part of the asset pipeline.
+- **Status:** RESOLVED — the nine product PNG fallbacks were losslessly re-encoded and now total 17,467,782 bytes, removing roughly 1.35 MiB from the package, while decoded pixels, every catalog `image` path and file format, and all 24 derived AVIF/WebP variants are unchanged; implemented, verified, and recorded in docs/CHANGELOG.md.
 
 ### Replace the inline-script allowance in the CSP with per-script hashes
 
 - **Evidence:** `public/_headers` sets `script-src 'self' 'unsafe-inline'`. The only inline scripts in the project are the theme preload block repeated in each document head and the static JSON-LD blocks in `index.html` — all build-time stable.
 - **Potential value:** Removes the broadest allowance in an otherwise tight policy while keeping the flash-free theme application the inline script exists for.
 - **Scope boundary:** The current allowance is a working, deliberate trade-off for a static host; no injection path from user-controlled input exists in the present implementation, since all rendered content originates in the local catalog file.
+- **Status:** RESOLVED — `public/_headers` now serves `script-src 'self' 'sha256-m/3FUg3Lcv10P/YC56yy2U6+bV9StrN+MZc2jiNO0oU='` with no inline allowance, authorizing exactly the one 512-byte theme preload shared by all 15 documents, and `scripts/csp.mjs` enforces that contract through package validation with `scripts/tests/csp-contract.test.mjs` covering hash drift and unsafe directives; implemented, verified, and recorded in docs/CHANGELOG.md.
 
 ## Verification performed
 
@@ -231,3 +236,15 @@ None detected.
 **Rating:** 7/10
 
 The build and packaging layer is stronger than typical for a static multi-page project: one renderer shared by dev, build, and validators; a content-derived service worker identity; automatic package validation covering routes, hashed bundles, public-file equality, and manifest paths; and tests that exercise failure modes rather than only the happy path. Module boundaries are clean, initialisation is defensive, and progressive-enhancement fallbacks are consistently present. The rating is held down by a cluster of concrete correctness defects that all sit in the blind spot of that otherwise good pipeline — a catalog image path, runtime structured-data URLs, fallback-page link resolution, and a form validation pattern — together with shared-shell accessibility and content issues that repeat across all 15 pages. All are contained and locally fixable; none indicate an architectural problem.
+
+## Post-remediation assessment
+
+**Assessment date:** 2026-09-08
+
+All 6 P1 findings and all 11 P2 findings recorded above are now resolved, and all five Extra quality improvements have been implemented and verified against the current repository rather than left as recommendations. The correctness cluster that held the original rating down is closed at source and is now covered where it previously was not: the catalog image contract, runtime structured-data URL resolution, fallback-document recovery from nested URLs, and the shared phone pattern each have a validator or a focused regression test that fails when the defect returns. Validation now reaches product data, runtime-generated `ItemList` URLs, and the shipped Content Security Policy, and package validation still runs automatically at the end of every Vite build, so route, hashed-bundle, public-file, and manifest integrity remain enforced as the catalog and the document set change.
+
+The service worker, its update prompt, and the documentation describe one waiting-worker contract, with activation under user control and no reload the visitor did not request. Cart deserialization tolerates malformed stored state instead of throwing on every page that renders the badge, and the theme layer keeps a system dark preference working without JavaScript while an explicit choice stays authoritative. Across all 15 documents the shared shell announces the theme control by its purpose, keeps a consistent heading outline, and no longer labels navigation entries with topics their destinations do not contain. Asset integrity improved on both sides of the package: unreferenced and duplicated published files are gone, and the nine product raster fallbacks are roughly 1.35 MiB lighter with identical decoded pixels and unchanged paths. Catalog presentation is consistent between the data file, the shop filter, the collections page, and the homepage, and `script-src` authorizes one exact inline hash in place of a blanket inline allowance.
+
+**Post-remediation rating:** 9/10
+
+The repository is materially stronger than at the time of the original audit: every finding above is resolved at source, each is held by validation or regression coverage, and the optional hardening items were completed rather than deferred. The withheld point does not represent a known unresolved P1 or P2 defect, and no architectural problem was identified in either pass. It reflects scope and process instead. This remains a static portfolio and demonstration storefront with deliberate boundaries — no commerce backend, accounts, payments, or order persistence — so the ceiling of what the codebase can demonstrate is set by that scope. A fresh post-build audit of the current tree and final production verification of the deployed Netlify site are separate steps that have not been performed here, and no browser-matrix, deployment, accessibility-conformance, or performance guarantee is claimed beyond what the checks actually run support.

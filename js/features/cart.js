@@ -13,7 +13,8 @@ const getCart = () => {
   const raw = safeStorage.get(CART_KEY);
   if (!raw) return [];
   try {
-    return JSON.parse(raw) || [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
   } catch (error) {
     logError('cart:parse', error);
     return [];

@@ -154,3 +154,32 @@
   --icon-fill: var(--color-ink);
   --icon-fill-hover: var(--color-accent);
 }
+
+/* No-JavaScript fallback: without the runtime no data-theme lands on <html>, so a dark system
+   preference would otherwise be served the light palette the bare :root rule above defines.
+   :not([data-theme]) keeps an explicit light or dark choice authoritative over this block.
+   These declarations mirror [data-theme='dark'] and are held in sync by
+   scripts/tests/theme-css-fallback.test.mjs. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --color-text: #f5f7fb;
+    --color-bg: #0c0f14;
+    --color-surface: #151a22;
+    --color-surface-alt: #1d2330;
+    --color-muted: #9aa7bb;
+    --color-primary: #ff6a3d;
+    --color-ink: var(--color-text);
+    --color-ink-muted: var(--color-muted);
+    --color-border: #2a3242;
+    --color-border-strong: color-mix(in srgb, var(--color-border) 65%, var(--color-ink));
+    --color-accent: var(--color-primary);
+    --color-danger: #f87171;
+    --color-card: #131821;
+    --color-hero: #0c0f14;
+    --color-hero-text: #fef2e9;
+    --color-hero-text-muted: rgba(255, 255, 255, 0.75);
+    --gradient-hero: radial-gradient(circle at 20% 20%, #ff6a3d 0%, #1d2330 52%, #0c0f14 100%);
+    --icon-fill: var(--color-ink);
+    --icon-fill-hover: var(--color-accent);
+  }
+}

@@ -39,6 +39,11 @@ export function voltGarage(root) {
         for (const [filename, output] of Object.entries(bundle).sort(([a], [b]) =>
           a.localeCompare(b)
         )) {
+          // HTML parsers convert CR/CRLF to LF before CSP checks. Emit canonical
+          // LF HTML so exact file-body hashes work for CRLF and LF checkouts.
+          if (output.type === 'asset' && filename.endsWith('.html')) {
+            output.source = String(output.source).replace(/\r\n?/g, '\n');
+          }
           digest
             .update(filename)
             .update('\0')

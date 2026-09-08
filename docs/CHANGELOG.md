@@ -38,6 +38,7 @@ All significant changes to this project are documented in this file.
 ### Security
 
 - Added static-hosting headers for Content Security Policy, frame denial, MIME sniffing prevention, referrer and permissions policies, and explicit HTML and asset caching rules.
+- Replaced the broad inline-script CSP allowance with an exact SHA-256 hash for the early theme preload while preserving same-origin scripts and structured data.
 
 ### Documentation
 
@@ -79,5 +80,6 @@ All significant changes to this project are documented in this file.
 - Added cart storage regression coverage for malformed persisted values, badge recovery, and add-to-cart normalization.
 - Added regression coverage for no-JavaScript theme fallback precedence and dark-palette token parity.
 - Verified pixel-level equivalence, product asset integrity, and byte-identical production copying for the optimized raster fallbacks.
+- Added production CSP contract coverage for inline-script hash drift, unsafe directives, inline execution sinks, and browser-level theme and structured-data behavior.
 
 

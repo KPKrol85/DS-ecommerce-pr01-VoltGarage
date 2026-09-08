@@ -99,7 +99,7 @@ test('package validation rejects missing bundles, public files, source URLs, and
     'data/products.json': '[]',
     'robots.txt': '',
     'sitemap.xml': '',
-    _headers: '',
+    _headers: "/*\n  Content-Security-Policy: script-src 'self'\n",
     _redirects: '',
   };
   const root = await fixture(t, {
@@ -120,6 +120,7 @@ test('package validation rejects missing bundles, public files, source URLs, and
   await validatePackage(root, dist);
   for (const content of [
     page + '{{unknown}}',
+    page + '<script>window.unapproved = true;</script>',
     page + '<img src="/missing.png">',
     page.replace('/build/main-abcdefgh.js', '/js/main.js'),
     page.replace('/build/main-abcdefgh.css', '/css/main.min.css'),

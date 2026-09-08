@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fg from 'fast-glob';
 import { discoverHtml, assertNoTemplateArtifacts } from './html.mjs';
+import { validateCsp } from './csp.mjs';
 
 const HASHED_BUNDLE = /^build\/.+-[\w-]{8,}\.(?:js|css)$/;
 const ORIGIN = 'https://volt-garage.invalid';
@@ -21,10 +22,12 @@ async function validatePackage(root, dist) {
     requireFile(file.endsWith('/') ? `${file}index.html` : file, source);
   };
   const pages = discoverHtml(root);
+  const documents = new Map();
   for (const file of pages) {
     requireFile(file, 'HTML entry');
     if (!files.has(file)) continue;
     const content = await fs.readFile(path.join(dist, file), 'utf8');
+    documents.set(file, content);
     try {
       assertNoTemplateArtifacts(content, file);
     } catch (error) {
@@ -47,6 +50,17 @@ async function validatePackage(root, dist) {
         errors.push(`${file}: missing content-hashed ${extension} bundle reference`);
       }
     }
+  }
+  for (const file of files) {
+    if (file.endsWith('.html') && !documents.has(file)) {
+      documents.set(file, await fs.readFile(path.join(dist, file), 'utf8'));
+    }
+  }
+  // Inspect final HTML and the actual shipped policy, not source approximations.
+  if (files.has('_headers')) {
+    errors.push(
+      ...(await validateCsp(await fs.readFile(path.join(dist, '_headers'), 'utf8'), documents))
+    );
   }
   const publicFiles = fg.sync('**/*', {
     cwd: path.join(root, 'public'),

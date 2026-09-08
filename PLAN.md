@@ -165,10 +165,11 @@
 
 ## Optional future improvements
 
-- [ ] **O-01 — Extend validation to runtime-generated item URLs**
+- [x] **O-01 — Extend validation to runtime-generated item URLs**
   - **Depends on:** `PH1-02`
   - **Value:** `scripts/validate-jsonld.js` asserts schema types and a source regex only, so it could not detect the `ItemList` URL defect; a check over runtime-generated URLs would keep catching it as pages are added.
   - **Scope boundary:** an addition to the existing validators using tooling already present in the repository; non-blocking, and not a change to the QA workflow shape.
+  - **Completed:** `scripts/tests/structured-data-urls.test.mjs` now exercises the shop, new-arrivals, and promotions initializers and inspects the JSON-LD written by `injectItemListJsonLd()`, asserting absolute `/pages/product.html?id=…` item URLs consistent with the product-link helper and rendered cards. Removing URL absolutization from either runtime mapping fails the new test. Verification: focused tests 6/6, `qa:build` 115/115, `validate:jsonld`, and `qa:js` passed; the existing QA workflow is unchanged.
 
 - [ ] **O-02 — Harden cart state deserialization against malformed stored values**
   - **Value:** `getCart` in `js/features/cart.js` recovers from `JSON.parse` failures but returns whatever parsed successfully; a non-array value would then throw in `cart.find` and `cart.reduce` on every page that renders the cart badge.

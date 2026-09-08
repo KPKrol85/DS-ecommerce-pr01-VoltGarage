@@ -56,7 +56,6 @@ const cardPicture = (product) => {
 
 const renderCard = (product) => `
   <article class="card" aria-label="${product.name}" data-reveal>
-    <!-- CHANGED: img -> picture -->
     ${cardPicture(product)}
     <span class="badge">${product.badge}</span>
     <h3 class="card-title">${product.name}</h3>
@@ -76,7 +75,6 @@ const renderSaleCard = (product) => {
   const oldPrice = product.oldPrice ?? product.price;
   return `
   <article class="card" aria-label="${product.name}" data-reveal>
-    <!-- CHANGED: img -> picture -->
     ${productPicture(product.image, product.name)}
     <span class="badge">Promocja</span>
     <h3 class="card-title">${product.name}</h3>
@@ -153,23 +151,6 @@ export const initFeaturedProducts = async () => {
   } catch (error) {
     logError('products:featured', error);
     renderState(container, 'error', 'Nie udało się załadować polecanych.');
-  }
-};
-
-export const initShopProducts = async () => {
-  const container = document.querySelector('[data-products="shop"]');
-  if (!container) return;
-  renderProductsLoading(container, 'Ładowanie produktów...');
-  try {
-    const products = await fetchProducts();
-    if (!products.length) {
-      renderState(container, 'empty', 'Brak produktów w sklepie.');
-      return;
-    }
-    renderGrid(container, products);
-  } catch (error) {
-    logError('products:shop', error);
-    renderState(container, 'error', 'Nie udało się załadować listy produktów.');
   }
 };
 

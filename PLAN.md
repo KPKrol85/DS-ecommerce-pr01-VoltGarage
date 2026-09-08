@@ -156,10 +156,10 @@
   - **Completion condition:** no tracked file describes `humans.txt` as part of the repository or the deployment package.
   - **Source:** `daily-AUDIT.md` — P2-10
 
-- [ ] **PH6-03 — Remove leftover development artifacts from the product module** — **Priority:** Low
-  - [ ] delete the two `CHANGED: img -> picture` comments in the card templates of `js/features/products.js`, which are emitted into the DOM of every rendered product card
-  - [ ] remove the exported but unimported `initShopProducts`, whose work `initFilters` already performs for `[data-products="shop"]`, so no duplicate shop-rendering path remains
-  - [ ] run `npm run qa:js` after the change
+- [x] **PH6-03 — Remove leftover development artifacts from the product module** — **Priority:** Low
+  - [x] delete the two `CHANGED: img -> picture` comments in the card templates of `js/features/products.js`, which are emitted into the DOM of every rendered product card
+  - [x] remove the exported but unimported `initShopProducts`, whose work `initFilters` already performs for `[data-products="shop"]`, so no duplicate shop-rendering path remains
+  - [x] run `npm run qa:js` after the change
   - **Completion condition:** production markup carries no editing notes, and only one shop-rendering path exists.
   - **Source:** `daily-AUDIT.md` — P2-11
 

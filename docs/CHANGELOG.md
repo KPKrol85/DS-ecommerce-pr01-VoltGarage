@@ -31,6 +31,7 @@ All significant changes to this project are documented in this file.
 - Removed the duplicated homepage hero statistic and balanced the remaining three-item stats layout.
 - Removed unreferenced and duplicated published assets, including obsolete hero sets, stray shortcut copies, orphan images, and mistyped product variants.
 - Removed stale `humans.txt` references from repository and deployment documentation to match the current public package.
+- Removed development-only product-card markup comments and the unused duplicate shop initializer.
 
 ### Security
 
@@ -67,3 +68,4 @@ All significant changes to this project are documented in this file.
 - Added regression coverage for unique homepage hero statistics and verified the three-item layout across responsive viewports and both themes.
 - Added published-asset inventory regression coverage and verified the reduced public package through production build and package validation.
 - Updated the build-contract fixture to match the current public-file inventory and verified all package-contract tests remain green.
+- Verified the simplified product rendering path with JavaScript QA and existing build-contract regression tests.

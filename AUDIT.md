@@ -133,6 +133,7 @@ None detected.
 - **Impact:** A single drag of the price slider triggers dozens of full grid rebuilds and accumulates one live `IntersectionObserver` per event for the lifetime of the page, alongside repeated JSON-LD rewriting. The inconsistency with the search input's debounce also makes the intended behaviour ambiguous for future maintainers.
 - **Recommended direction:** Route the price range through the same debounced path as the search input while keeping the immediate `priceOutput` update, and give the reveal module a way to release its previous observer before creating a new one.
 - **Verification criteria:** Dragging the price slider produces a bounded number of grid renders after input settles, and repeated filtering does not accumulate observers.
+- **Status:** RESOLVED — the shop price slider now reuses the existing 200 ms debounced filtering path while preserving immediate price-output updates, and the reveal module now disconnects its previous IntersectionObserver before replacement or early return so repeated renders keep at most one active observer; focused regression tests, the full QA suite, and browser runtime verification passed, and the change was recorded in `docs/CHANGELOG.md` on 2026-09-09.
 
 ### [P2-04] Postal-code pattern is never enforced while JavaScript is running
 

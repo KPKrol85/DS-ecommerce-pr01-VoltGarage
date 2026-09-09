@@ -1,4 +1,12 @@
+// One reveal observer stays live at a time. Re-rendering a grid calls initReveal again, so the
+// previous observer is released before every return path instead of being left attached to
+// elements the new render has already replaced.
+let activeObserver = null;
+
 export const initReveal = () => {
+  activeObserver?.disconnect();
+  activeObserver = null;
+
   const elements = document.querySelectorAll('[data-reveal]');
   if (!elements.length) return;
 
@@ -32,6 +40,7 @@ export const initReveal = () => {
     { rootMargin: '0px 0px -10% 0px', threshold: 0.12 }
   );
 
+  activeObserver = observer;
   elements.forEach((el) => observer.observe(el));
   requestAnimationFrame(revealInView);
 };

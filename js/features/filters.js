@@ -185,9 +185,11 @@ export const initFilters = async () => {
 
   if (priceRange && priceOutput) {
     priceOutput.textContent = priceRange.value;
+    // The visible value tracks every raw input, while filtering and rendering go through the
+    // same debounce as the search field so one drag cannot rebuild the grid per event.
     priceRange.addEventListener('input', () => {
       priceOutput.textContent = priceRange.value;
-      applyFilters();
+      applyFiltersDebounced();
     });
   }
 

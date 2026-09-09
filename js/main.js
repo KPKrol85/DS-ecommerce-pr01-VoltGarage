@@ -183,45 +183,58 @@ const initCopyrightYear = () => {
   });
 };
 
+const runInitializer = (source, initializer) => {
+  const reportError = (error) => emit(events.app.error, { source, error });
+  try {
+    Promise.resolve(initializer()).catch(reportError);
+  } catch (error) {
+    reportError(error);
+  }
+};
+
 const initApp = () => {
-  initGlobalErrorHandling();
   on(events.app.error, ({ source, error }) => {
     if (error) {
       console.error('[VOLT][app]', source, error);
     }
   });
 
+  runInitializer('initGlobalErrorHandling', initGlobalErrorHandling);
   emit(events.app.error, { source: 'init:ready', error: null });
 
   const has = (selector) => document.querySelector(selector);
 
-  if (document.body) initAccessibility();
-  if (has('[data-header]')) initHeader();
-  if (has('[data-theme-toggle]')) initTheme();
-  if (has('[data-reveal]')) initReveal();
-  if (has('[data-cart-count]')) initCart();
-  if (has('[data-products="featured"]')) initFeaturedProducts();
-  if (has('[data-products="shop"]')) initFilters();
-  if (has('[data-products="new"]')) initNewArrivalsProducts();
-  if (has('[data-products="related"]')) initRelatedProducts();
-  if (has('[data-products="sale"]')) initSaleProducts();
-  if (has('[data-product-details]')) initProductDetails();
-  if (has('[data-cart-items]')) initCartPage();
-  if (has('[data-checkout-summary]')) initCheckoutSummary();
-  if (has('[data-contact-form], [data-checkout-form]')) initForms();
-  if (has('[data-offline-retry]')) initOfflineRetry();
-  if (has('.breadcrumbs')) injectBreadcrumbJsonLd();
+  if (document.body) runInitializer('initAccessibility', initAccessibility);
+  if (has('[data-header]')) runInitializer('initHeader', initHeader);
+  if (has('[data-theme-toggle]')) runInitializer('initTheme', initTheme);
+  if (has('[data-reveal]')) runInitializer('initReveal', initReveal);
+  if (has('[data-cart-count]')) runInitializer('initCart', initCart);
+  if (has('[data-products="featured"]'))
+    runInitializer('initFeaturedProducts', initFeaturedProducts);
+  if (has('[data-products="shop"]')) runInitializer('initFilters', initFilters);
+  if (has('[data-products="new"]'))
+    runInitializer('initNewArrivalsProducts', initNewArrivalsProducts);
+  if (has('[data-products="related"]')) runInitializer('initRelatedProducts', initRelatedProducts);
+  if (has('[data-products="sale"]')) runInitializer('initSaleProducts', initSaleProducts);
+  if (has('[data-product-details]')) runInitializer('initProductDetails', initProductDetails);
+  if (has('[data-cart-items]')) runInitializer('initCartPage', initCartPage);
+  if (has('[data-checkout-summary]')) runInitializer('initCheckoutSummary', initCheckoutSummary);
+  if (has('[data-contact-form], [data-checkout-form]')) runInitializer('initForms', initForms);
+  if (has('[data-offline-retry]')) runInitializer('initOfflineRetry', initOfflineRetry);
+  if (has('.breadcrumbs')) runInitializer('injectBreadcrumbJsonLd', injectBreadcrumbJsonLd);
   // Przyczyna: przyciski są renderowane po async load produktów, więc selektor na starcie zwraca null.
   // Delegacja klików musi być podpięta zawsze, niezależnie od chwili renderu.
-  initAddToCartButtons();
-  initProjectModal();
+  runInitializer('initAddToCartButtons', initAddToCartButtons);
+  runInitializer('initProjectModal', initProjectModal);
   if (import.meta.env.PROD && 'serviceWorker' in navigator) {
-    const registrationPromise = navigator.serviceWorker
-      .register('/sw.js', { updateViaCache: 'none' })
-      .catch((error) => console.error('[VOLT][sw]', error));
-    initPwaPrompts(registrationPromise);
+    runInitializer('initPwaPrompts', () => {
+      const registrationPromise = navigator.serviceWorker
+        .register('/sw.js', { updateViaCache: 'none' })
+        .catch((error) => console.error('[VOLT][sw]', error));
+      return initPwaPrompts(registrationPromise);
+    });
   }
-  if (has('[data-current-year]')) initCopyrightYear();
+  if (has('[data-current-year]')) runInitializer('initCopyrightYear', initCopyrightYear);
 };
 
 if (document.readyState === 'loading') {

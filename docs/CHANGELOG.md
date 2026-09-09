@@ -59,6 +59,7 @@ All significant changes to this project are documented in this file.
 - Prevented the closed mobile navigation from remaining keyboard-focusable and exposed to the accessibility tree while preserving the existing open-state and desktop navigation behavior.
 - Made the demonstration checkout fail closed before JavaScript initialization so customer data cannot fall back to native URL or network submission.
 - Corrected the shop filter panel semantics so it uses its own accessible heading instead of borrowing the product-results heading or unrelated shipping notice.
+- Hardened cart deserialization against malformed array entries and isolated application initializers so one module failure no longer prevents later modules from starting.
 
 ### Testing
 
@@ -89,5 +90,6 @@ All significant changes to this project are documented in this file.
 - Added regression coverage for the fail-closed checkout contract and verified no-submission behavior with JavaScript unavailable, initialization interrupted, and the normal simulated flow active.
 - Added regression coverage for the contact privacy contract, required data categories, contextual privacy-policy access, and separation between real contact submission and simulated checkout behavior.
 - Added regression coverage for the shop filter landmark, native search-suggestion semantics, preserved results live-region behavior, and filter-control labeling.
+- Added regression coverage for malformed and mixed cart records plus synchronous and asynchronous bootstrap failure isolation, with the full QA suite remaining green.
 
 

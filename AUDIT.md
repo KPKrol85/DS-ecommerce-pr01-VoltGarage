@@ -122,6 +122,7 @@ None detected.
 - **Impact:** A single malformed persisted value or a future exception in an early module leaves the page visually intact but functionally degraded — checkout validation unbound, add-to-cart inert, the project modal absent — with no user-visible signal. It also puts the checkout form into the unscripted GET path described in [P1-02].
 - **Recommended direction:** Normalise cart entries at the deserialization boundary the module already owns, so only well-formed `{ id, qty }` records reach the array operations, and isolate initializer failures so one module cannot prevent the others from running.
 - **Verification criteria:** A `volt_cart` value of `[null]` or `["x"]` yields an empty cart and a `0` badge without throwing, and an induced exception in any one initializer leaves the remaining modules functional.
+- **Status:** RESOLVED — cart deserialization now admits only well-formed `{ id, qty }` records while preserving valid entries and read-only recovery behavior, and application initializers are isolated so synchronous exceptions or rejected promises are reported through the existing app error channel without preventing later modules from running; focused regressions, the full QA suite, and production build/package validation passed, and the change was recorded in `docs/CHANGELOG.md` on 2026-09-09.
 
 ### [P2-03] Price slider re-renders the grid on every input event and leaks an observer each time
 

@@ -14,7 +14,17 @@ const getCart = () => {
   if (!raw) return [];
   try {
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(
+      (item) =>
+        item !== null &&
+        typeof item === 'object' &&
+        !Array.isArray(item) &&
+        typeof item.id === 'string' &&
+        item.id.trim().length > 0 &&
+        Number.isInteger(item.qty) &&
+        item.qty > 0
+    );
   } catch (error) {
     logError('cart:parse', error);
     return [];

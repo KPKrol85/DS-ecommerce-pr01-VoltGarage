@@ -111,6 +111,7 @@ None detected.
 - **Impact:** The complementary landmark that holds search, category, price, and sorting controls is announced as "Produkty" and described by an unrelated shipping message, which misidentifies both regions of the page for assistive-technology users. The inert live region gives the appearance of announced suggestions that never occur.
 - **Recommended direction:** Give the filter panel its own heading or accessible name describing the filters, remove the description that points at unrelated shipping copy, and drop the `aria-live` attribute from the `datalist` since suggestion announcement is handled by the input's own autocomplete behaviour.
 - **Verification criteria:** The filter panel's accessible name describes filtering, the results heading is no longer borrowed as its label, and no live-region attribute remains on a non-rendered element.
+- **Status:** RESOLVED — the shop filter panel now uses its own accessible heading, no longer borrows the product-results heading or shipping notice, and the inert live-region attribute was removed from the native datalist while preserving the results counter live region and existing filter/search behavior; verified through focused regression tests, the full QA suite, and Chromium accessibility-tree inspection, and recorded in `docs/CHANGELOG.md` on 2026-09-09.
 
 ### [P2-02] One failing initializer silently disables every module after it
 

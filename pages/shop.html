@@ -98,12 +98,8 @@
       <section>
         <div class="container page-layout">
           <div class="notice" id="filter-summary">Darmowa wysyłka od 300 zł.</div>
-          <aside
-            class="filter-panel"
-            data-reveal
-            aria-labelledby="filter-heading"
-            aria-describedby="filter-summary"
-          >
+          <aside class="filter-panel" data-reveal aria-labelledby="filter-panel-heading">
+            <h2 id="filter-panel-heading" class="visually-hidden">Filtry produktów</h2>
             <div class="input-group search-field" data-search>
               <label for="filter-search">Szukaj produktu</label>
               <div class="search-input">
@@ -130,7 +126,6 @@
                 class="search-suggestions"
                 id="search-suggestions"
                 data-search-suggestions
-                aria-live="polite"
               ></datalist>
             </div>
             <div class="input-group">

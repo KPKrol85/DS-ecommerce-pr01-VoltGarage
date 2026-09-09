@@ -55,6 +55,7 @@ All significant changes to this project are documented in this file.
 ### Fixed
 
 - Hardened cart-state deserialization so malformed non-array localStorage values are treated as an empty cart instead of reaching array-only runtime operations.
+- Prevented the closed mobile navigation from remaining keyboard-focusable and exposed to the accessibility tree while preserving the existing open-state and desktop navigation behavior.
 
 ### Testing
 
@@ -81,5 +82,6 @@ All significant changes to this project are documented in this file.
 - Added regression coverage for no-JavaScript theme fallback precedence and dark-palette token parity.
 - Verified pixel-level equivalence, product asset integrity, and byte-identical production copying for the optimized raster fallbacks.
 - Added production CSP contract coverage for inline-script hash drift, unsafe directives, inline execution sinks, and browser-level theme and structured-data behavior.
+- Verified mobile navigation focus isolation and state restoration across closed, open, and desktop layouts in Chromium, with existing navigation tests and the full QA suite remaining green.
 
 

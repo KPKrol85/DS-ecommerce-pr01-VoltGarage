@@ -76,6 +76,7 @@ None detected.
 - **Impact:** On every page at mobile and tablet widths a keyboard user encounters roughly a dozen focus stops with no visible focus indicator and no perceivable context before reaching the theme toggle, cart link, and menu button. A screen-reader user is offered a navigation menu that is visually absent and cannot be operated by pointer.
 - **Recommended direction:** Make the closed state genuinely inert at the affected breakpoint — for example by adding a state that removes the panel from rendering and from the accessibility tree, applied in the same place that already controls `opacity` — and ensure the `min-width: 900px` block restores it. Keep the existing `is-open` class and `aria-expanded` contract unchanged.
 - **Verification criteria:** With the viewport below 900 px and the menu closed, tabbing from the brand link reaches the theme toggle directly, and no navigation link or dropdown toggle can receive focus or be reported by an accessibility tree inspection until the menu button is activated.
+- **Status:** RESOLVED — the closed mobile navigation is now hidden from keyboard focus and the accessibility tree below 900 px while preserving the existing open-state and desktop navigation behavior; verified in Chromium across mobile and desktop widths, with existing navigation tests and the full QA suite passing, and recorded in `docs/CHANGELOG.md` on 2026-09-09.
 
 ### [P1-02] Checkout form declares no submission contract and falls back to a GET that exposes customer data in the URL
 

@@ -34,6 +34,7 @@ All significant changes to this project are documented in this file.
 - Removed development-only product-card markup comments and the unused duplicate shop initializer.
 - Added a CSS-only dark-theme fallback for visitors without JavaScript while preserving explicit theme preferences.
 - Losslessly optimized product PNG fallbacks, reducing the production package by approximately 1.35 MiB while preserving decoded image pixels and existing asset paths.
+- Aligned the privacy policy with the real Netlify contact-form contract, including the required surname and telephone fields, while clearly separating contact submissions from the demonstration-only checkout.
 
 ### Security
 
@@ -85,5 +86,6 @@ All significant changes to this project are documented in this file.
 - Added production CSP contract coverage for inline-script hash drift, unsafe directives, inline execution sinks, and browser-level theme and structured-data behavior.
 - Verified mobile navigation focus isolation and state restoration across closed, open, and desktop layouts in Chromium, with existing navigation tests and the full QA suite remaining green.
 - Added regression coverage for the fail-closed checkout contract and verified no-submission behavior with JavaScript unavailable, initialization interrupted, and the normal simulated flow active.
+- Added regression coverage for the contact privacy contract, required data categories, contextual privacy-policy access, and separation between real contact submission and simulated checkout behavior.
 
 

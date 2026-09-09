@@ -56,10 +56,38 @@ const initForms = () => {
 
   const validators = {
     email: (field, value) => (value && !isEmail(value) ? 'Podaj poprawny adres e-mail.' : ''),
-    tel: (field, value) =>
-      value && field.pattern && !new RegExp(field.pattern).test(value)
-        ? 'Podaj poprawny numer telefonu, np. 533 537 091 lub +48 533 537 091.'
-        : '',
+  };
+
+  // A declared `pattern` is read back from the field's own ValidityState so the custom UI and
+  // the browser keep one interpretation of the expression, for every input type that carries
+  // one. Wording comes from the field's `title` guidance; a type keeps its own fuller sentence
+  // where the project already publishes one.
+  const patternMessages = {
+    tel: 'Podaj poprawny numer telefonu, np. 533 537 091 lub +48 533 537 091.',
+  };
+
+  const patternMessage = (field) => {
+    if (patternMessages[field.type]) return patternMessages[field.type];
+    const guidance = (field.title || '').trim();
+    return guidance
+      ? `Podaj wartość w poprawnym formacie. ${guidance}`
+      : 'Podaj wartość w poprawnym formacie.';
+  };
+
+  // These types keep the trimmed-value reading they had before declared patterns became
+  // generic: surrounding whitespace never decided a phone number. The constraint is still the
+  // browser's own, applied to the same declared expression through a detached copy of the
+  // field, so the visitor's value is never touched and the pattern keeps one interpretation.
+  const trimmedPatternTypes = new Set(['tel']);
+
+  const hasPatternMismatch = (field, value) => {
+    if (!field.pattern) return false;
+    if (value === field.value || !trimmedPatternTypes.has(field.type)) {
+      return Boolean(field.validity?.patternMismatch);
+    }
+    const probe = field.cloneNode(false);
+    probe.value = value;
+    return Boolean(probe.validity?.patternMismatch);
   };
 
   const validateField = (field) => {
@@ -73,6 +101,10 @@ const initForms = () => {
     if (!message) {
       const validator = validators[field.type];
       if (validator) message = validator(field, value);
+    }
+
+    if (!message && value && hasPatternMismatch(field, value)) {
+      message = patternMessage(field);
     }
 
     if (!message && field.minLength > 0 && value && value.length < field.minLength) {

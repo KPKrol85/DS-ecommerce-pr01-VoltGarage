@@ -61,6 +61,7 @@ All significant changes to this project are documented in this file.
 - Corrected the shop filter panel semantics so it uses its own accessible heading instead of borrowing the product-results heading or unrelated shipping notice.
 - Hardened cart deserialization against malformed array entries and isolated application initializers so one module failure no longer prevents later modules from starting.
 - Debounced shop price-slider filtering and made reveal initialization lifecycle-safe so repeated product renders no longer accumulate IntersectionObserver instances.
+- Aligned custom form validation with declared HTML patterns so checkout postal codes are validated consistently while preserving the established trimmed-value phone-validation contract.
 
 ### Testing
 
@@ -93,5 +94,6 @@ All significant changes to this project are documented in this file.
 - Added regression coverage for the shop filter landmark, native search-suggestion semantics, preserved results live-region behavior, and filter-control labeling.
 - Added regression coverage for malformed and mixed cart records plus synchronous and asynchronous bootstrap failure isolation, with the full QA suite remaining green.
 - Added regression coverage for settled price-slider rendering, immediate price-output updates, observer replacement and cleanup paths, reduced-motion behavior, and repeated product-grid rendering.
+- Added regression coverage for generic pattern validation, valid and invalid postal-code formats, preserved phone whitespace semantics, unchanged phone-format acceptance, and checkout validation behavior.
 
 

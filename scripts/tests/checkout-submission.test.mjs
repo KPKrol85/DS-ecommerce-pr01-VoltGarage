@@ -89,8 +89,20 @@ function field(name, value, type = 'text', required = true) {
     value,
     minLength: type === 'tel' ? 7 : -1,
     pattern: type === 'tel' ? String.raw`^[0-9+][0-9\s\-]{6,19}$` : '',
+    title: type === 'tel' ? 'Np. 533 537 091 lub +48 533 537 091.' : '',
     focused: false,
     error,
+    // The browser compiles `pattern` anchored and with the `v` flag and reports no mismatch
+    // for an empty value; mirror that here rather than in the code under test.
+    get validity() {
+      return {
+        patternMismatch:
+          Boolean(this.pattern) &&
+          this.value !== '' &&
+          !new RegExp(`^(?:${this.pattern})$`, 'v').test(this.value),
+      };
+    },
+    cloneNode: () => field(name, '', type, required),
     closest: () => ({ querySelector: () => error }),
     hasAttribute: (name) => attributes.has(name),
     getAttribute: (name) => attributes.get(name) ?? null,

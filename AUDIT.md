@@ -87,6 +87,7 @@ None detected.
 - **Impact:** The customer's name, e-mail address, telephone number, and full delivery address are written into the address bar, browser history, and any server access log or referrer that observes the request, for a flow that the project documents as producing no order at all. In the same state the "Złóż zamówienie" button is a control that performs no meaningful action and gives the visitor no feedback.
 - **Recommended direction:** Give the form an explicit submission contract that is safe without scripting — at minimum a non-GET method so field values never enter the URL — and make the demonstration-only outcome visible in the unscripted state rather than relying on the JavaScript handler to suppress submission.
 - **Verification criteria:** With scripting disabled, submitting the checkout form does not place any field value in the URL, and the visitor is told that the flow is a demonstration rather than being returned silently to a blank form.
+- **Status:** RESOLVED — the checkout now starts in a fail-closed state and becomes submittable only after its JavaScript simulation handler is installed, preventing customer data from falling back to native GET or unintended POST submission; verified through focused regression tests, the full QA and production build/package checks, and Chromium failure-state testing, and recorded in `docs/CHANGELOG.md` on 2026-09-09.
 
 ### [P1-03] Contact form collects personal data the project's own privacy policy does not cover, under a consent it never captures
 

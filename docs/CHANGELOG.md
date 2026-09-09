@@ -56,6 +56,7 @@ All significant changes to this project are documented in this file.
 
 - Hardened cart-state deserialization so malformed non-array localStorage values are treated as an empty cart instead of reaching array-only runtime operations.
 - Prevented the closed mobile navigation from remaining keyboard-focusable and exposed to the accessibility tree while preserving the existing open-state and desktop navigation behavior.
+- Made the demonstration checkout fail closed before JavaScript initialization so customer data cannot fall back to native URL or network submission.
 
 ### Testing
 
@@ -83,5 +84,6 @@ All significant changes to this project are documented in this file.
 - Verified pixel-level equivalence, product asset integrity, and byte-identical production copying for the optimized raster fallbacks.
 - Added production CSP contract coverage for inline-script hash drift, unsafe directives, inline execution sinks, and browser-level theme and structured-data behavior.
 - Verified mobile navigation focus isolation and state restoration across closed, open, and desktop layouts in Chromium, with existing navigation tests and the full QA suite remaining green.
+- Added regression coverage for the fail-closed checkout contract and verified no-submission behavior with JavaScript unavailable, initialization interrupted, and the normal simulated flow active.
 
 

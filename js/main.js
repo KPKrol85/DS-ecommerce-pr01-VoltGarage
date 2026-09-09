@@ -126,6 +126,7 @@ const initForms = () => {
     };
 
     form.addEventListener('submit', (event) => {
+      if (handlesSubmissionInJs) event.preventDefault();
       const fields = Array.from(form.querySelectorAll('input, textarea, select'));
       const results = fields.map((field) => validateField(field));
       const isValid = results.every(Boolean);
@@ -143,7 +144,6 @@ const initForms = () => {
         return;
       }
 
-      event.preventDefault();
       if (!hasCartItems()) {
         if (status) {
           status.textContent =
@@ -165,6 +165,12 @@ const initForms = () => {
       if (!['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) return;
       validateField(target);
     });
+
+    // Checkout stays disabled in HTML until its simulation handler is installed.
+    if (handlesSubmissionInJs) {
+      const submitButton = form.querySelector('button[type="submit"]');
+      if (submitButton) submitButton.disabled = false;
+    }
   });
 };
 

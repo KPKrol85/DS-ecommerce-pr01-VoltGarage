@@ -2,6 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import vm from 'node:vm';
+import { fileURLToPath } from 'node:url';
+import { renderHtml } from '../html.mjs';
 import { hasCartItems } from '../../js/features/cart.js';
 import { safeStorage } from '../../js/services/storage.js';
 
@@ -16,6 +18,49 @@ const SUCCESS_MESSAGE =
   'Symulacja checkoutu zakończyła się pomyślnie. Zamówienie nie zostało wysłane ani zapisane.';
 const INVALID_MESSAGE = 'Uzupełnij wymagane pola i popraw zaznaczone błędy.';
 const populatedCart = JSON.stringify([{ id: 'emblem-carbon', qty: 1 }]);
+
+async function formMarkup(page, hook) {
+  const filename = `pages/${page}.html`;
+  const source = await fs.readFile(new URL(`../../${filename}`, import.meta.url), 'utf8');
+  const rendered = await renderHtml(
+    fileURLToPath(new URL('../../', import.meta.url)),
+    filename,
+    source
+  );
+  return [source, rendered].map((html) => {
+    const form = html.match(new RegExp(`<form\\b[^>]*\\b${hook}[^>]*>[\\s\\S]*?</form>`))?.[0];
+    assert.ok(form, `${filename}: form exists in source and rendered HTML`);
+    return form;
+  });
+}
+
+test('source and rendered checkout have only a disabled submit control and a no-JS disclosure', async () => {
+  for (const form of await formMarkup('checkout', 'data-checkout-form')) {
+    const buttons = [...form.matchAll(/<button\b[^>]*>/g)].map((match) => match[0]);
+    assert.equal(buttons.length, 1);
+    assert.match(buttons[0], /\btype="submit"/);
+    assert.match(buttons[0], /\sdisabled(?:\s|>)/);
+    assert.doesNotMatch(form, /<input\b[^>]*\btype="(?:submit|image)"/);
+    assert.doesNotMatch(form, /\b(?:action|formaction|method|formmethod|data-netlify|netlify)\s*=/);
+    const disclosure = form.match(/<noscript>([\s\S]*?)<\/noscript>/)?.[1];
+    assert.ok(disclosure);
+    assert.match(disclosure, /demonstrac[\s\S]*wymaga JavaScript/);
+    assert.match(disclosure.replace(/\s+/g, ' '), /nie są wysyłane ani zapisywane/);
+  }
+});
+
+test('source and rendered contact retain the native Netlify POST contract', async () => {
+  for (const form of await formMarkup('contact', 'data-contact-form')) {
+    assert.match(form, /<form\b[^>]*\bname="contact"/);
+    assert.match(form, /<form\b[^>]*\bmethod="POST"/);
+    assert.match(form, /<form\b[^>]*\bdata-netlify="true"/);
+    assert.match(form, /<input\b[^>]*\bname="form-name"[^>]*\bvalue="contact"/);
+    const button = form.match(/<button\b[^>]*>/)?.[0];
+    assert.match(button, /\btype="submit"/);
+    assert.doesNotMatch(button, /\sdisabled(?:\s|>)/);
+    assert.doesNotMatch(form, /data-checkout-form/);
+  }
+});
 
 function cartStorage(t, initial = null) {
   let stored = initial;
@@ -57,7 +102,12 @@ function field(name, value, type = 'text', required = true) {
   };
 }
 
-function mountForm({ checkout = true, withStatus = true } = {}) {
+function mountForm({
+  checkout = true,
+  withStatus = true,
+  initialize = true,
+  failBinding = false,
+} = {}) {
   // Small DOM doubles cover validation, focus, status, cancellation, and reset.
   // Real rendered fields and browser submission are verified against Vite output.
   const fields = [
@@ -68,25 +118,55 @@ function mountForm({ checkout = true, withStatus = true } = {}) {
   ];
   const status = { textContent: '', setAttribute() {} };
   const form = new EventTarget();
+  let submitInstalled = false;
+  let disabled = checkout;
+  const button = {
+    type: 'submit',
+    get disabled() {
+      return disabled;
+    },
+    set disabled(value) {
+      assert.ok(checkout, 'contact controls must not be changed');
+      assert.ok(
+        submitInstalled,
+        'checkout may only be enabled after its submit handler is installed'
+      );
+      disabled = value;
+    },
+  };
+  const addEventListener = form.addEventListener.bind(form);
+  form.addEventListener = (type, listener) => {
+    if (type === 'submit' && failBinding) throw new Error('submit binding failed');
+    addEventListener(type, listener);
+    if (type === 'submit') submitInstalled = true;
+  };
   let resets = 0;
   let cartChecks = 0;
   Object.assign(form, {
     hasAttribute: (name) => name === 'data-checkout-form' && checkout,
-    querySelector: () => (withStatus ? status : null),
+    querySelector: (selector) => {
+      if (selector === '[data-form-status]') return withStatus ? status : null;
+      if (selector === 'button[type="submit"]') return button;
+      assert.fail(`unexpected form selector: ${selector}`);
+    },
     querySelectorAll: () => fields,
     reset: () => {
       resets++;
       fields.forEach((field) => (field.value = ''));
     },
   });
-  vm.runInNewContext(`${initializer}\ninitForms();`, {
-    document: { querySelectorAll: () => [form] },
-    hasCartItems: () => {
-      cartChecks++;
-      return hasCartItems();
-    },
-  });
+  const init = () =>
+    vm.runInNewContext(`${initializer}\ninitForms();`, {
+      document: { querySelectorAll: () => [form] },
+      hasCartItems: () => {
+        cartChecks++;
+        return hasCartItems();
+      },
+    });
+  if (initialize) init();
   return {
+    init,
+    button,
     fields,
     status,
     submit: () => {
@@ -102,6 +182,42 @@ function mountForm({ checkout = true, withStatus = true } = {}) {
     },
   };
 }
+
+test('checkout remains disabled until its submission handler is installed', () => {
+  const form = mountForm({ initialize: false });
+  assert.equal(form.button.disabled, true);
+  form.init();
+  assert.equal(form.button.disabled, false);
+  assert.equal(form.button.type, 'submit');
+});
+
+test('failed submit handler installation leaves checkout disabled', () => {
+  const form = mountForm({ initialize: false, failBinding: true });
+  assert.throws(form.init, /submit binding failed/);
+  assert.equal(form.button.disabled, true);
+});
+
+test('checkout cancels native submission even if validation throws', () => {
+  // Capture the actual listener so a thrown exception can be asserted synchronously.
+  let submit;
+  const fakeForm = {
+    noValidate: false,
+    hasAttribute: () => true,
+    querySelector: () => null,
+    querySelectorAll: () => {
+      throw new Error('validation failed');
+    },
+    addEventListener: (type, listener) => {
+      if (type === 'submit') submit = listener;
+    },
+  };
+  vm.runInNewContext(`${initializer}\ninitForms();`, {
+    document: { querySelectorAll: () => [fakeForm] },
+  });
+  const event = new Event('submit', { cancelable: true });
+  assert.throws(() => submit(event), /validation failed/);
+  assert.equal(event.defaultPrevented, true);
+});
 
 test('cart presence uses the canonical parser and reads current storage synchronously', (t) => {
   const storage = cartStorage(t);

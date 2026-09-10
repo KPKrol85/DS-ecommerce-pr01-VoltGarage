@@ -166,6 +166,7 @@ None detected.
 - **Impact:** A stale bookmark, an outdated external link, or a removed catalog entry returns HTTP 200 showing a different product, with no indication that the requested one does not exist. Crawlers following such a link receive a duplicate of the first product's metadata and structured data at an arbitrary URL.
 - **Recommended direction:** Distinguish a missing `id` — where defaulting to the first product is the intended catalog-entry behaviour — from an `id` that was supplied but matched nothing, and give the latter a not-found state that leaves the page's own canonical and metadata untouched.
 - **Verification criteria:** Loading `pages/product.html?id=` with a value absent from the catalog shows a not-found state and does not rewrite the canonical link, title, or description to an unrelated product.
+- - **Status:** RESOLVED — unknown non-empty product identifiers now render an explicit not-found state instead of silently substituting the first catalog product, while the established missing-id default route and valid-product rendering remain unchanged; unrelated canonical, title, description, and Product JSON-LD data are no longer written for unknown ids, with focused regressions, the full QA suite, production build validation, and Chromium runtime verification passing, and the change recorded in `docs/CHANGELOG.md` on 2026-09-10.
 
 ### [P2-07] Cart and product-detail regions omit the no-JavaScript fallback used by every other dynamic region
 

@@ -237,8 +237,20 @@ export const initProductDetails = async () => {
   try {
     const products = await fetchProducts();
     const params = new URLSearchParams(window.location.search);
-    const currentId = params.get('id') || products[0].id;
-    const product = products.find((item) => item.id === currentId) || products[0];
+    // Three route states share this document. A missing or blank `id` is the published generic
+    // route and keeps its first-catalog-entry behaviour; an id that matches a catalog entry
+    // renders that entry; an id that matches nothing gets its own not-found state, because
+    // substituting an unrelated product would publish that product's canonical, metadata, and
+    // structured data at a URL that does not describe it.
+    const requestedId = params.get('id')?.trim() ?? '';
+    const matched = requestedId ? products.find((item) => item.id === requestedId) : null;
+
+    if (requestedId && !matched) {
+      renderState(container, 'empty', 'Nie znaleziono produktu o podanym identyfikatorze.');
+      return;
+    }
+
+    const product = requestedId ? matched : products[0];
 
     const canonical = document.querySelector('link[rel="canonical"]');
     const canonicalUrl = `${window.location.origin}${window.location.pathname}?id=${product.id}`;

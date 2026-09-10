@@ -155,6 +155,7 @@ None detected.
 - **Impact:** The project ships and maintains a branded confirmation page that no visitor can reach, and the one real form flow ends on an unstyled third-party page instead. The document is also carried through every formatting and build-contract check as though it were a live route.
 - **Recommended direction:** Either point the contact form's success destination at `thank-you.html` so the flow terminates on the project's own page, or remove the document if the platform default is the intended outcome.
 - **Verification criteria:** Either a completed contact submission reaches `thank-you.html`, or the document no longer exists in the repository.
+- **Status:** RESOLVED — the real Netlify contact form now declares `/thank-you.html` as its project-owned success destination while preserving the existing native POST and validation contract; the success page remains `noindex,follow`, excluded from the sitemap and ordinary navigation, and its stale real-order wording was removed to preserve the documented demonstration-only checkout boundary, with focused regressions, the full QA suite, production build validation, and Chromium runtime verification passing, and the change recorded in `docs/CHANGELOG.md` on 2026-09-10.
 
 ### [P2-06] Unknown product id silently renders the first product under a rewritten canonical
 

@@ -35,6 +35,7 @@ All significant changes to this project are documented in this file.
 - Added a CSS-only dark-theme fallback for visitors without JavaScript while preserving explicit theme preferences.
 - Losslessly optimized product PNG fallbacks, reducing the production package by approximately 1.35 MiB while preserving decoded image pixels and existing asset paths.
 - Aligned the privacy policy with the real Netlify contact-form contract, including the required surname and telephone fields, while clearly separating contact submissions from the demonstration-only checkout.
+- Connected the real Netlify contact form to the existing branded thank-you page while preserving the native POST flow, non-indexed success route, and demonstration-only checkout boundary.
 
 ### Security
 
@@ -95,5 +96,6 @@ All significant changes to this project are documented in this file.
 - Added regression coverage for malformed and mixed cart records plus synchronous and asynchronous bootstrap failure isolation, with the full QA suite remaining green.
 - Added regression coverage for settled price-slider rendering, immediate price-output updates, observer replacement and cleanup paths, reduced-motion behavior, and repeated product-grid rendering.
 - Added regression coverage for generic pattern validation, valid and invalid postal-code formats, preserved phone whitespace semantics, unchanged phone-format acceptance, and checkout validation behavior.
+- Added regression coverage for the contact success destination, preserved Netlify POST contract, thank-you route ownership, sitemap exclusion, noindex metadata, checkout separation, and success-page content integrity.
 
 

@@ -1,11 +1,13 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import {
+  RASTER_ROOT,
+  hasOptimizedVariants,
+  productImageVariants,
+} from '../js/core/product-images.js';
 
 const CATALOG = 'data/products.json';
-const OPTIMIZED_PRODUCTS = 'assets/images/_optimized/products';
-// js/features/products.js renders one AVIF and one WebP <source> per product picture.
-const VARIANTS = ['avif', 'webp'];
 
 // Catalog asset paths are public URL paths stored without a leading slash: the runtime only
 // prefixes them with the document depth, so anything else breaks before it reaches the network.
@@ -17,16 +19,6 @@ const isPublicAssetPath = (value) =>
   !value.includes('\\') &&
   !/^[a-z][a-z\d+.-]*:/i.test(value) &&
   !value.split('/').includes('..');
-
-// imageBase is interpolated into a fixed optimized directory, so it must be a bare file base.
-const isFileBaseName = (value) =>
-  typeof value === 'string' &&
-  value.length > 0 &&
-  value.trim() === value &&
-  !value.includes('/') &&
-  !value.includes('\\') &&
-  value !== '.' &&
-  value !== '..';
 
 async function validateProductAssets(root) {
   const publicDir = path.join(root, 'public');
@@ -78,26 +70,28 @@ async function validateProductAssets(root) {
       errors.push(
         `${label}: "image" must be a public asset path without a leading slash, received ${JSON.stringify(product.image)}`
       );
-    } else if (await exists(product.image)) {
+      continue;
+    }
+    if (await exists(product.image)) {
       rasters += 1;
     } else {
       errors.push(`${label}: missing raster image public/${product.image} (declared by "image")`);
     }
 
-    if (product.imageBase === undefined) continue;
-    if (!isFileBaseName(product.imageBase)) {
+    // Every product renders one AVIF and one WebP <source> derived from "image", so the same
+    // derivation decides what is checked here — no catalog entry can opt out of variant coverage.
+    if (!hasOptimizedVariants(product.image)) {
       errors.push(
-        `${label}: "imageBase" must be a bare file base name, received ${JSON.stringify(product.imageBase)}`
+        `${label}: "image" must be a .jpg, .jpeg or .png under ${RASTER_ROOT} for its optimized variants to be derivable, received ${JSON.stringify(product.image)}`
       );
       continue;
     }
-    for (const variant of VARIANTS) {
-      const assetPath = `${OPTIMIZED_PRODUCTS}/${product.imageBase}.${variant}`;
+    for (const [format, assetPath] of Object.entries(productImageVariants(product.image))) {
       if (await exists(assetPath)) {
         variants += 1;
       } else {
         errors.push(
-          `${label}: missing ${variant} variant public/${assetPath} (derived from "imageBase": ${JSON.stringify(product.imageBase)})`
+          `${label}: missing ${format} variant public/${assetPath} (derived from "image": ${JSON.stringify(product.image)})`
         );
       }
     }

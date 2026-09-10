@@ -188,6 +188,7 @@ None detected.
 - **Impact:** Two code paths must be kept in agreement for one output, and whether a product's optimized variants are validated depends on an optional field rather than on how the product is actually rendered. Deleting or renaming one of the three unvalidated variants would leave `npm run qa` green while the corresponding `<source>` silently stops resolving.
 - **Recommended direction:** Derive the optimized paths from a single place and key the asset validator to the same derivation used at render time, so validation coverage follows the rendered markup rather than an optional catalog field.
 - **Verification criteria:** Product cards and product details resolve their optimized variants through one code path, and `npm run qa:product-assets` reports validated variants for all 12 catalog entries.
+- - **Status:** RESOLVED — product cards, product details, and asset validation now derive optimized image variants from the single authoritative `image` catalog path, removing redundant `imageBase` metadata without changing any published raster, AVIF, or WebP URL; product-asset QA now validates all 12 raster images and all 24 optimized variants, including the three products previously skipped, with focused regressions, the full QA suite, production build validation, and optimizer dry-run verification passing, and the change recorded in `docs/CHANGELOG.md` on 2026-09-10.
 
 ### [P2-09] Raster product fallbacks ship at source resolution and dominate the deployed package
 

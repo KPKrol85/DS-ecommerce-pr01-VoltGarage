@@ -36,6 +36,7 @@ All significant changes to this project are documented in this file.
 - Losslessly optimized product PNG fallbacks, reducing the production package by approximately 1.35 MiB while preserving decoded image pixels and existing asset paths.
 - Aligned the privacy policy with the real Netlify contact-form contract, including the required surname and telephone fields, while clearly separating contact submissions from the demonstration-only checkout.
 - Connected the real Netlify contact form to the existing branded thank-you page while preserving the native POST flow, non-indexed success route, and demonstration-only checkout boundary.
+- Consolidated product image rendering around the catalog `image` path, removing redundant `imageBase` metadata while preserving all existing raster, AVIF, and WebP URLs.
 
 ### Security
 
@@ -101,5 +102,6 @@ All significant changes to this project are documented in this file.
 - Added regression coverage for the contact success destination, preserved Netlify POST contract, thank-you route ownership, sitemap exclusion, noindex metadata, checkout separation, and success-page content integrity.
 - Added regression coverage for missing, empty, valid, and unknown product identifiers, including preserved default-route behavior, product-specific metadata, not-found rendering, and structured-data isolation.
 - Added regression coverage for static dynamic-region fallbacks, fail-closed cart-summary visibility, verified empty and populated cart totals, product-load failure handling, and preserved product-detail and checkout behavior.
+- Extended product-asset validation to derive and verify optimized variants for all 12 catalog products, covering 12 raster images and all 24 AVIF/WebP variants including products previously skipped by the optional `imageBase` contract.
 
 

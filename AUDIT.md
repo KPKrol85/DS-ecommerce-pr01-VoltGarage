@@ -144,6 +144,7 @@ None detected.
 - **Impact:** Any value passes the postal-code field in the normal scripted flow, so the checkout demonstration accepts data it visibly declares invalid, and the field's `title` guidance never appears.
 - **Recommended direction:** Have the shared field validator honour a declared `pattern` for every input type rather than only for `tel`, so a declared constraint and its enforcement cannot drift apart again.
 - **Verification criteria:** Submitting the checkout form with `zip` set to a non-matching value produces a field error in the scripted flow, and adding a `pattern` to any future field is enforced without further code changes.
+- **Status:** RESOLVED — the custom form-validation flow now enforces declared HTML patterns through browser constraint semantics, so invalid postal codes are rejected while generic future patterned fields are covered automatically; the previously established phone contract remains intact through trimmed-value constraint evaluation using the same declared phone pattern, with focused regressions, the full QA suite, production build validation, and Chromium runtime verification passing, and the change recorded in `docs/CHANGELOG.md` on 2026-09-09.
 
 ### [P2-05] `thank-you.html` is maintained but unreachable from any route
 

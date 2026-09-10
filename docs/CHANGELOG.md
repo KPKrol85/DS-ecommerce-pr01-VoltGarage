@@ -64,6 +64,7 @@ All significant changes to this project are documented in this file.
 - Debounced shop price-slider filtering and made reveal initialization lifecycle-safe so repeated product renders no longer accumulate IntersectionObserver instances.
 - Aligned custom form validation with declared HTML patterns so checkout postal codes are validated consistently while preserving the established trimmed-value phone-validation contract.
 - Prevented unknown product identifiers from silently rendering the first catalog item, preserving the existing default product route while keeping unrelated canonical metadata and Product structured data out of the not-found state.
+- Aligned the cart and primary product-detail regions with the existing progressive-enhancement fallback contract, preventing unverified cart totals and checkout actions from appearing before successful JavaScript initialization.
 
 ### Testing
 
@@ -99,5 +100,6 @@ All significant changes to this project are documented in this file.
 - Added regression coverage for generic pattern validation, valid and invalid postal-code formats, preserved phone whitespace semantics, unchanged phone-format acceptance, and checkout validation behavior.
 - Added regression coverage for the contact success destination, preserved Netlify POST contract, thank-you route ownership, sitemap exclusion, noindex metadata, checkout separation, and success-page content integrity.
 - Added regression coverage for missing, empty, valid, and unknown product identifiers, including preserved default-route behavior, product-specific metadata, not-found rendering, and structured-data isolation.
+- Added regression coverage for static dynamic-region fallbacks, fail-closed cart-summary visibility, verified empty and populated cart totals, product-load failure handling, and preserved product-detail and checkout behavior.
 
 

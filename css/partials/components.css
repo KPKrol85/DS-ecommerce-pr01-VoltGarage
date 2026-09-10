@@ -708,6 +708,11 @@
 .total-panel strong {
   color: var(--color-accent);
 }
+/* The panel sets its own display, so the cart summary needs this to stay out of the document
+   while the runtime has not yet verified the totals it prints. */
+.total-panel[hidden] {
+  display: none !important;
+}
 
 /* Form */
 

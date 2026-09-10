@@ -97,8 +97,13 @@
 
       <section>
         <div class="container page-layout">
-          <div class="table-like" data-cart-items></div>
-          <aside class="total-panel" aria-live="polite" data-cart-summary data-reveal>
+          <div class="table-like" data-cart-items>
+            <p class="state-block state-block--empty products-fallback">
+              Zawartość koszyka ładuje się dynamicznie. Włącz JavaScript, aby zobaczyć wybrane
+              produkty i podsumowanie zamówienia.
+            </p>
+          </div>
+          <aside class="total-panel" aria-live="polite" data-cart-summary data-reveal hidden>
             <h2>
               Podsumowanie
               <span class="total-panel__icon" aria-hidden="true">

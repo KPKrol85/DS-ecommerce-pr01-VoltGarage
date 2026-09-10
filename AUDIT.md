@@ -177,6 +177,7 @@ None detected.
 - **Impact:** Without scripting the cart page does not look degraded, it looks like a correctly rendered empty cart, and it still offers a checkout call to action. This contradicts the honest baseline the other five regions establish.
 - **Recommended direction:** Extend the existing fallback pattern to both remaining dynamic containers, and make the cart's static zero totals conditional on the same enhancement signal so an unscripted visitor is not shown a confident but meaningless summary.
 - **Verification criteria:** With scripting disabled, both the cart items area and the product-detail area explain that content loads dynamically, and the cart page no longer presents zero totals as a real cart state.
+- - **Status:** RESOLVED — the cart and primary product-detail regions now ship explicit JavaScript-required fallback states consistent with the rest of the dynamic storefront, while the cart summary remains hidden until product data and the current cart state are successfully loaded and calculated; legitimate empty and populated carts reveal verified totals normally, product-load failures remain fail closed, and existing checkout and product-detail contracts are preserved, with focused regressions, the full QA suite, production build validation, and Chromium no-JavaScript/runtime verification passing, and the change recorded in `docs/CHANGELOG.md` on 2026-09-10.
 
 ### [P2-08] Redundant `imageBase` field creates a second picture-rendering path and narrows asset validation
 

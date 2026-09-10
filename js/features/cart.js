@@ -148,6 +148,11 @@ const updateSummary = (summary, totals) => {
   if (totalEl) totalEl.textContent = `${totals.total.toFixed(0)} zł`;
 };
 
+const revealSummary = (summary) => {
+  if (!summary) return;
+  summary.hidden = false;
+};
+
 export const initCartPage = async () => {
   const container = document.querySelector('[data-cart-items]');
   if (!container) return;
@@ -160,6 +165,8 @@ export const initCartPage = async () => {
   } catch (error) {
     logError('cart:load-products', error);
     renderState(container, 'error', 'Nie udało się wczytać produktów koszyka.');
+    // Nothing has been calculated, so the summary stays hidden rather than standing next to
+    // the error with figures no catalog backed.
     return;
   }
 
@@ -167,14 +174,16 @@ export const initCartPage = async () => {
     const cart = getCart();
     if (!cart.length) {
       renderState(container, 'empty', 'Koszyk jest pusty. Dodaj produkty ze sklepu.');
-      const summary = document.querySelector('[data-cart-summary]');
-      updateSummary(summary, calculateTotals(cart, products));
-      return;
+    } else {
+      container.innerHTML = buildCartItems(cart, products);
     }
 
-    container.innerHTML = buildCartItems(cart, products);
+    // The summary ships hidden so an unscripted visit is never shown 0 zł next to a checkout
+    // call to action. It is only unhidden here, once the catalog has loaded and the figures it
+    // prints have been calculated from the cart that was just read and rendered.
     const summary = document.querySelector('[data-cart-summary]');
     updateSummary(summary, calculateTotals(cart, products));
+    revealSummary(summary);
     initReveal();
   };
 

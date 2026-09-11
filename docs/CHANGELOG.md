@@ -74,6 +74,7 @@ All significant changes to this project are documented in this file.
 - Aligned custom form validation with declared HTML patterns so checkout postal codes are validated consistently while preserving the established trimmed-value phone-validation contract.
 - Prevented unknown product identifiers from silently rendering the first catalog item, preserving the existing default product route while keeping unrelated canonical metadata and Product structured data out of the not-found state.
 - Aligned the cart and primary product-detail regions with the existing progressive-enhancement fallback contract, preventing unverified cart totals and checkout actions from appearing before successful JavaScript initialization.
+- Repaired self-hosted font delivery by replacing incomplete subset assets with verified upstream Manrope static weights and the Space Grotesk variable font, restoring complete Latin and Polish glyph coverage without browser fallback.
 
 ### Testing
 
@@ -114,5 +115,6 @@ All significant changes to this project are documented in this file.
 - Added source-versus-published product image regression coverage and verified 12 raster fallbacks, all 24 optimized variants, master exclusion from the production package, optimizer regeneration, and responsive raster rendering.
 - Strengthened homepage statistics regression coverage so displayed figures are derived from the canonical product catalog and QA rejects count drift or reintroduction of unsupported rating data.
 - Extended CSP regression coverage to reject inline style attributes, embedded style blocks, unsafe style directives, and known runtime inline-style sinks.
+- Added regression coverage for the bundled font contract, including expected font artifacts, weight mappings, preload references, retired font paths, and artifact integrity.
 
 

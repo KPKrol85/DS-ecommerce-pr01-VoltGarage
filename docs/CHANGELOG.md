@@ -60,6 +60,7 @@ All significant changes to this project are documented in this file.
 - Added content-hashed production CSS/JS in `dist/build/` and consolidated static resources under `public/` with stable public URLs; removed tracked `.min` artifacts, legacy build/preview scripts, and obsolete direct build dependencies.
 - Added a production pipeline that bundles and minifies CSS and JavaScript, expands shared HTML partials, rewrites production asset references, packages `dist/`, and rejects unresolved template or source-asset references.
 - Limited Service Worker font precaching to bundled WOFF2 assets so accompanying font license files are distributed without changing the existing runtime precache contract.
+- Raised the JavaScript linting baseline to `eslint:recommended`, expanding static analysis coverage while preserving the existing ESLint 8 configuration and adding one narrowly scoped exception for the intentional CSP control-character regex.
 
 ### Fixed
 

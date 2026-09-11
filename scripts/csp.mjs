@@ -36,6 +36,8 @@ function executionUrl(value) {
       const code = Number.parseInt(hex || dec, hex ? 16 : 10);
       return code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : '\uFFFD';
     })
+    // Control characters are exactly what conceals the scheme, so stripping them is the intent.
+    // eslint-disable-next-line no-control-regex
     .replace(/[\u0000-\u0020]/g, '');
 }
 

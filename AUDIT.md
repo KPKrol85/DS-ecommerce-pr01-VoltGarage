@@ -248,6 +248,7 @@ None detected.
 - **Current evidence:** `public/assets/fonts/` ships six WOFF2 files across two typeface families declared in `css/partials/themes.css:1-42`. `LICENSE` explicitly places third-party fonts outside its scope and states that rights remain with their respective owners, but the repository contains no notice, license file, or attribution recording what those terms are for these specific files.
 - **Potential value:** The LICENSE already establishes that separate terms govern these assets; recording which ones would close the loop for anyone evaluating or reusing the repository under its stated proprietary license, and would make the obligation explicit before any redistribution question arises.
 - **Scope boundary:** Optional. This audit did not determine the applicable font licenses from repository evidence and makes no claim about them.
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `docs/CHANGELOG.md`.
 
 ### Automate the existing quality workflows
 

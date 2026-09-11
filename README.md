@@ -135,13 +135,15 @@ npm run qa:smoke:enforce
 
 Są to skonfigurowane workflow jakości; repozytorium nie deklaruje pokrycia testami ani formalnej zgodności na podstawie samych skryptów. Dokładne komendy i ustawienia smoke opisuje [dokumentacja konfiguracji](docs/settings.md).
 
+GitHub Actions uruchamia workflow `Quality` ([.github/workflows/quality.yml](.github/workflows/quality.yml)) automatycznie przy push do `main` oraz dla pull requestów kierowanych do `main`; można go też uruchomić ręcznie przez `workflow_dispatch`. Zadanie działa na Node.js 22 i wykonuje instalację z lockfile (`npm ci`), `npm run qa` i `npm run build`. Ta weryfikacja obejmuje wyłącznie jakość źródeł i budowanie pakietu: nie uruchamia sprawdzania formatowania ani testów smoke Lighthouse i nie wykonuje wdrożenia.
+
 ### Wdrożenie
 
 Kontrakt budowania w Netlify: polecenie `npm run build`, katalog publikacji `dist`, Node.js zgodny z `^20.19.0 || >=22.12.0`. `dist/` zawiera wszystkie strony, hashowane bundle, wygenerowany `sw.js` i kopie zasobów z `public/`, w tym `site.webmanifest`, `robots.txt`, `sitemap.xml`, `_headers` i `_redirects`.
 
 Publiczna wersja demonstracyjna jest hostowana w Netlify. Źródłowy `public/_headers` definiuje politykę CSP, podstawowe nagłówki ochronne i cache, a `public/_redirects` kieruje nieznalezione ścieżki do `404.html`. Roczne cache `immutable` dotyczy wyłącznie `/build/*`; HTML, `/assets/*`, `/data/*`, manifest i Service Worker wymagają rewalidacji.
 
-Vite preview służy do lokalnej inspekcji pakietu i nie stosuje reguł Netlify z `_headers` ani `_redirects`. Dokumentacja opisuje konfigurację wdrożenia; nie potwierdza wdrożenia migracji ani działania nagłówków, przekierowań czy formularzy w Netlify. Repozytorium nie zawiera polecenia wdrożeniowego ani workflow CI/CD.
+Vite preview służy do lokalnej inspekcji pakietu i nie stosuje reguł Netlify z `_headers` ani `_redirects`. Dokumentacja opisuje konfigurację wdrożenia; nie potwierdza wdrożenia migracji ani działania nagłówków, przekierowań czy formularzy w Netlify. Repozytorium nie zawiera polecenia wdrożeniowego: wdrożenie pozostaje ręczne i poza GitHub Actions, gdzie workflow `Quality` prowadzi wyłącznie weryfikację jakości (CI).
 
 ### Dostępność
 
@@ -340,13 +342,15 @@ npm run qa:smoke:enforce
 
 These are configured quality workflows; their presence alone does not establish test coverage or formal compliance. Exact commands and smoke settings are documented in [project settings](docs/settings.md).
 
+GitHub Actions runs the `Quality` workflow ([.github/workflows/quality.yml](.github/workflows/quality.yml)) automatically on pushes to `main` and on pull requests targeting `main`; it can also be started manually through `workflow_dispatch`. The job runs on Node.js 22 and performs a locked install (`npm ci`), `npm run qa`, and `npm run build`. This verification covers source quality and the package build only: it does not run the formatting check or the Lighthouse smoke tests, and it does not deploy.
+
 ### Deployment
 
 The Netlify build contract is `npm run build`, publish directory `dist`, and Node.js compatible with `^20.19.0 || >=22.12.0`. `dist/` contains every page, hashed bundles, the generated `sw.js`, and copies of resources from `public/`, including `site.webmanifest`, `robots.txt`, `sitemap.xml`, `_headers`, and `_redirects`.
 
 The public demo is hosted on Netlify. Source `public/_headers` defines a CSP, baseline protective headers, and caching, while `public/_redirects` sends unresolved paths to `404.html`. One-year `immutable` caching applies only to `/build/*`; HTML, `/assets/*`, `/data/*`, the manifest, and the Service Worker must revalidate.
 
-Vite preview supports local package inspection and does not apply Netlify rules from `_headers` or `_redirects`. This documents deployment configuration; it does not confirm deployment of the migration or Netlify header, redirect, or form behavior. The repository does not contain a deployment command or CI/CD workflow.
+Vite preview supports local package inspection and does not apply Netlify rules from `_headers` or `_redirects`. This documents deployment configuration; it does not confirm deployment of the migration or Netlify header, redirect, or form behavior. The repository does not contain a deployment command: deployment stays manual and outside GitHub Actions, where the `Quality` workflow performs quality verification (CI) only.
 
 ### Accessibility
 

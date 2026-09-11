@@ -256,6 +256,7 @@ None detected.
 - **Current evidence:** The repository contains 18 test files, five custom validators, four linting and formatting configurations, and a Lighthouse smoke workflow. `README.md` and `docs/settings.md` both state accurately that there is no CI/CD workflow and no deployment command.
 - **Potential value:** The verification assets already exist and are unusually thorough; nothing currently runs them except a maintainer choosing to. Automating `npm run qa` alone would convert an existing investment into a standing guarantee, and several findings in this audit sit in the gap between what is written and what is habitually run.
 - **Scope boundary:** Optional and out of the project's documented scope today. The absence is disclosed honestly rather than implied to exist.
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `docs/CHANGELOG.md`.
 
 ## 8. Current readiness conclusion
 

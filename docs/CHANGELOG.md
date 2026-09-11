@@ -61,6 +61,7 @@ All significant changes to this project are documented in this file.
 - Added a production pipeline that bundles and minifies CSS and JavaScript, expands shared HTML partials, rewrites production asset references, packages `dist/`, and rejects unresolved template or source-asset references.
 - Limited Service Worker font precaching to bundled WOFF2 assets so accompanying font license files are distributed without changing the existing runtime precache contract.
 - Raised the JavaScript linting baseline to `eslint:recommended`, expanding static analysis coverage while preserving the existing ESLint 8 configuration and adding one narrowly scoped exception for the intentional CSP control-character regex.
+- Added a GitHub Actions quality workflow that runs locked dependency installation, the canonical QA suite, and the production build on pushes to `main`, pull requests targeting `main`, and manual dispatch, while keeping deployment outside CI.
 
 ### Fixed
 

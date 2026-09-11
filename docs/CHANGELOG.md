@@ -52,12 +52,14 @@ All significant changes to this project are documented in this file.
 - Added the KP_CODE Proprietary Project License and aligned the root package license metadata with the project license file.
 - Updated the PWA documentation in README and project settings to describe the waiting-worker update contract and user-triggered activation flow.
 - Synchronized QA documentation with `package.json`, including the `qa:product-assets` command and product-image asset validation coverage in both Polish and English README sections.
+- Added third-party notices and local SIL Open Font License 1.1 texts for the bundled Manrope and Space Grotesk font families, with aligned Polish and English README references.
 
 ### Build and Tooling
 
 - Replaced the custom build and preview pipeline with Vite 8.2.2 for the Vanilla MPA, preserving all 15 HTML routes and shared templates across development and production; updated the Node requirement to `^20.19.0 || >=22.12.0`.
 - Added content-hashed production CSS/JS in `dist/build/` and consolidated static resources under `public/` with stable public URLs; removed tracked `.min` artifacts, legacy build/preview scripts, and obsolete direct build dependencies.
 - Added a production pipeline that bundles and minifies CSS and JavaScript, expands shared HTML partials, rewrites production asset references, packages `dist/`, and rejects unresolved template or source-asset references.
+- Limited Service Worker font precaching to bundled WOFF2 assets so accompanying font license files are distributed without changing the existing runtime precache contract.
 
 ### Fixed
 

@@ -240,6 +240,7 @@ None detected.
 - **Current evidence:** `.eslintrc.cjs` sets no `extends` and enables only `no-undef` and `no-unused-vars`. `npm run qa:js` lints application modules, the worker source, all build scripts, the image tool, and the Vite config against those two rules alone.
 - **Potential value:** For a project where the linter is the primary static safety net over roughly 1,800 lines of hand-written application and tooling JavaScript, extending `eslint:recommended` would add checks such as duplicate object keys, unreachable code, and empty blocks at no configuration cost.
 - **Scope boundary:** Optional. The current configuration is deliberate and the codebase shows no evidence of the defects those rules catch.
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `docs/CHANGELOG.md`.
 
 ### Record the license terms of the bundled third-party fonts
 

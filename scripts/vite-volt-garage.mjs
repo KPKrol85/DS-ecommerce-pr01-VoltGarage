@@ -65,9 +65,13 @@ export function voltGarage(root) {
             .filter((file) => file.startsWith('build/'))
             .sort()
             .map((file) => `/${file}`),
+          // Only font binaries are runtime assets. License text shipped beside them is
+          // distributed with the package but never precached.
           ...publicFiles
             .filter(
-              (file) => file.startsWith('assets/fonts/') || file.startsWith('assets/images/logo/')
+              (file) =>
+                (file.startsWith('assets/fonts/') && file.endsWith('.woff2')) ||
+                file.startsWith('assets/images/logo/')
             )
             .map((file) => `/${file}`),
         ];

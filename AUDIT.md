@@ -76,7 +76,8 @@ None detected.
 - **Impact:** On every page at mobile and tablet widths a keyboard user encounters roughly a dozen focus stops with no visible focus indicator and no perceivable context before reaching the theme toggle, cart link, and menu button. A screen-reader user is offered a navigation menu that is visually absent and cannot be operated by pointer.
 - **Recommended direction:** Make the closed state genuinely inert at the affected breakpoint — for example by adding a state that removes the panel from rendering and from the accessibility tree, applied in the same place that already controls `opacity` — and ensure the `min-width: 900px` block restores it. Keep the existing `is-open` class and `aria-expanded` contract unchanged.
 - **Verification criteria:** With the viewport below 900 px and the menu closed, tabbing from the brand link reaches the theme toggle directly, and no navigation link or dropdown toggle can receive focus or be reported by an accessibility tree inspection until the menu button is activated.
-- **Status:** RESOLVED — the closed mobile navigation is now hidden from keyboard focus and the accessibility tree below 900 px while preserving the existing open-state and desktop navigation behavior; verified in Chromium across mobile and desktop widths, with existing navigation tests and the full QA suite passing, and recorded in `docs/CHANGELOG.md` on 2026-09-09.
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `docs/CHANGELOG.md`.
+
 
 ### [P1-02] Checkout form declares no submission contract and falls back to a GET that exposes customer data in the URL
 
@@ -87,7 +88,7 @@ None detected.
 - **Impact:** The customer's name, e-mail address, telephone number, and full delivery address are written into the address bar, browser history, and any server access log or referrer that observes the request, for a flow that the project documents as producing no order at all. In the same state the "Złóż zamówienie" button is a control that performs no meaningful action and gives the visitor no feedback.
 - **Recommended direction:** Give the form an explicit submission contract that is safe without scripting — at minimum a non-GET method so field values never enter the URL — and make the demonstration-only outcome visible in the unscripted state rather than relying on the JavaScript handler to suppress submission.
 - **Verification criteria:** With scripting disabled, submitting the checkout form does not place any field value in the URL, and the visitor is told that the flow is a demonstration rather than being returned silently to a blank form.
-- **Status:** RESOLVED — the checkout now starts in a fail-closed state and becomes submittable only after its JavaScript simulation handler is installed, preventing customer data from falling back to native GET or unintended POST submission; verified through focused regression tests, the full QA and production build/package checks, and Chromium failure-state testing, and recorded in `docs/CHANGELOG.md` on 2026-09-09.
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `docs/CHANGELOG.md`.
 
 ### [P1-03] Contact form collects personal data the project's own privacy policy does not cover, under a consent it never captures
 
@@ -98,7 +99,7 @@ None detected.
 - **Impact:** The two published documents that describe what the site does with personal data disagree with the form that actually collects it. A visitor reading the policy would not expect a telephone number to be mandatory, and a maintainer reconciling the two has no single source of truth. This is a trust and accuracy defect in public-facing material, not an assessment of legal conformance.
 - **Recommended direction:** Reconcile the two sides in whichever direction fits the project's intent: either narrow the form to the fields the policy describes, or extend the policy's enumerated categories and add a consent affordance plus a policy link adjacent to the submit control. Align the "testowy" wording in section `pp-2` with the fact that the contact form reaches a real processor.
 - **Verification criteria:** Every field the contact form marks as required appears in the privacy policy's list of processed data, the stated legal basis matches what the form actually obtains, and the policy is reachable from the form itself without leaving the page.
-- **Status:** RESOLVED — the privacy policy now reflects the actual data categories collected by the real Netlify contact form, distinguishes that submission path from the demonstration-only checkout, and is linked contextually from the form; the existing Netlify POST, required surname and phone fields, shared phone-field contract, and form validation were preserved, with focused tests, the full QA suite, and production build/package validation passing, and the change recorded in `docs/CHANGELOG.md` on 2026-09-09.
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `docs/CHANGELOG.md`.
 
 ## 6. P2 — Minor refinements
 
@@ -111,7 +112,7 @@ None detected.
 - **Impact:** The complementary landmark that holds search, category, price, and sorting controls is announced as "Produkty" and described by an unrelated shipping message, which misidentifies both regions of the page for assistive-technology users. The inert live region gives the appearance of announced suggestions that never occur.
 - **Recommended direction:** Give the filter panel its own heading or accessible name describing the filters, remove the description that points at unrelated shipping copy, and drop the `aria-live` attribute from the `datalist` since suggestion announcement is handled by the input's own autocomplete behaviour.
 - **Verification criteria:** The filter panel's accessible name describes filtering, the results heading is no longer borrowed as its label, and no live-region attribute remains on a non-rendered element.
-- **Status:** RESOLVED — the shop filter panel now uses its own accessible heading, no longer borrows the product-results heading or shipping notice, and the inert live-region attribute was removed from the native datalist while preserving the results counter live region and existing filter/search behavior; verified through focused regression tests, the full QA suite, and Chromium accessibility-tree inspection, and recorded in `docs/CHANGELOG.md` on 2026-09-09.
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `docs/CHANGELOG.md`.
 
 ### [P2-02] One failing initializer silently disables every module after it
 
@@ -122,7 +123,7 @@ None detected.
 - **Impact:** A single malformed persisted value or a future exception in an early module leaves the page visually intact but functionally degraded — checkout validation unbound, add-to-cart inert, the project modal absent — with no user-visible signal. It also puts the checkout form into the unscripted GET path described in [P1-02].
 - **Recommended direction:** Normalise cart entries at the deserialization boundary the module already owns, so only well-formed `{ id, qty }` records reach the array operations, and isolate initializer failures so one module cannot prevent the others from running.
 - **Verification criteria:** A `volt_cart` value of `[null]` or `["x"]` yields an empty cart and a `0` badge without throwing, and an induced exception in any one initializer leaves the remaining modules functional.
-- **Status:** RESOLVED — cart deserialization now admits only well-formed `{ id, qty }` records while preserving valid entries and read-only recovery behavior, and application initializers are isolated so synchronous exceptions or rejected promises are reported through the existing app error channel without preventing later modules from running; focused regressions, the full QA suite, and production build/package validation passed, and the change was recorded in `docs/CHANGELOG.md` on 2026-09-09.
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `docs/CHANGELOG.md`.
 
 ### [P2-03] Price slider re-renders the grid on every input event and leaks an observer each time
 
@@ -133,7 +134,7 @@ None detected.
 - **Impact:** A single drag of the price slider triggers dozens of full grid rebuilds and accumulates one live `IntersectionObserver` per event for the lifetime of the page, alongside repeated JSON-LD rewriting. The inconsistency with the search input's debounce also makes the intended behaviour ambiguous for future maintainers.
 - **Recommended direction:** Route the price range through the same debounced path as the search input while keeping the immediate `priceOutput` update, and give the reveal module a way to release its previous observer before creating a new one.
 - **Verification criteria:** Dragging the price slider produces a bounded number of grid renders after input settles, and repeated filtering does not accumulate observers.
-- **Status:** RESOLVED — the shop price slider now reuses the existing 200 ms debounced filtering path while preserving immediate price-output updates, and the reveal module now disconnects its previous IntersectionObserver before replacement or early return so repeated renders keep at most one active observer; focused regression tests, the full QA suite, and browser runtime verification passed, and the change was recorded in `docs/CHANGELOG.md` on 2026-09-09.
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `docs/CHANGELOG.md`.
 
 ### [P2-04] Postal-code pattern is never enforced while JavaScript is running
 
@@ -144,7 +145,7 @@ None detected.
 - **Impact:** Any value passes the postal-code field in the normal scripted flow, so the checkout demonstration accepts data it visibly declares invalid, and the field's `title` guidance never appears.
 - **Recommended direction:** Have the shared field validator honour a declared `pattern` for every input type rather than only for `tel`, so a declared constraint and its enforcement cannot drift apart again.
 - **Verification criteria:** Submitting the checkout form with `zip` set to a non-matching value produces a field error in the scripted flow, and adding a `pattern` to any future field is enforced without further code changes.
-- **Status:** RESOLVED — the custom form-validation flow now enforces declared HTML patterns through browser constraint semantics, so invalid postal codes are rejected while generic future patterned fields are covered automatically; the previously established phone contract remains intact through trimmed-value constraint evaluation using the same declared phone pattern, with focused regressions, the full QA suite, production build validation, and Chromium runtime verification passing, and the change recorded in `docs/CHANGELOG.md` on 2026-09-09.
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `docs/CHANGELOG.md`.
 
 ### [P2-05] `thank-you.html` is maintained but unreachable from any route
 
@@ -155,7 +156,7 @@ None detected.
 - **Impact:** The project ships and maintains a branded confirmation page that no visitor can reach, and the one real form flow ends on an unstyled third-party page instead. The document is also carried through every formatting and build-contract check as though it were a live route.
 - **Recommended direction:** Either point the contact form's success destination at `thank-you.html` so the flow terminates on the project's own page, or remove the document if the platform default is the intended outcome.
 - **Verification criteria:** Either a completed contact submission reaches `thank-you.html`, or the document no longer exists in the repository.
-- **Status:** RESOLVED — the real Netlify contact form now declares `/thank-you.html` as its project-owned success destination while preserving the existing native POST and validation contract; the success page remains `noindex,follow`, excluded from the sitemap and ordinary navigation, and its stale real-order wording was removed to preserve the documented demonstration-only checkout boundary, with focused regressions, the full QA suite, production build validation, and Chromium runtime verification passing, and the change recorded in `docs/CHANGELOG.md` on 2026-09-10.
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `docs/CHANGELOG.md`.
 
 ### [P2-06] Unknown product id silently renders the first product under a rewritten canonical
 
@@ -166,7 +167,7 @@ None detected.
 - **Impact:** A stale bookmark, an outdated external link, or a removed catalog entry returns HTTP 200 showing a different product, with no indication that the requested one does not exist. Crawlers following such a link receive a duplicate of the first product's metadata and structured data at an arbitrary URL.
 - **Recommended direction:** Distinguish a missing `id` — where defaulting to the first product is the intended catalog-entry behaviour — from an `id` that was supplied but matched nothing, and give the latter a not-found state that leaves the page's own canonical and metadata untouched.
 - **Verification criteria:** Loading `pages/product.html?id=` with a value absent from the catalog shows a not-found state and does not rewrite the canonical link, title, or description to an unrelated product.
-- - **Status:** RESOLVED — unknown non-empty product identifiers now render an explicit not-found state instead of silently substituting the first catalog product, while the established missing-id default route and valid-product rendering remain unchanged; unrelated canonical, title, description, and Product JSON-LD data are no longer written for unknown ids, with focused regressions, the full QA suite, production build validation, and Chromium runtime verification passing, and the change recorded in `docs/CHANGELOG.md` on 2026-09-10.
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `docs/CHANGELOG.md`.
 
 ### [P2-07] Cart and product-detail regions omit the no-JavaScript fallback used by every other dynamic region
 
@@ -177,7 +178,7 @@ None detected.
 - **Impact:** Without scripting the cart page does not look degraded, it looks like a correctly rendered empty cart, and it still offers a checkout call to action. This contradicts the honest baseline the other five regions establish.
 - **Recommended direction:** Extend the existing fallback pattern to both remaining dynamic containers, and make the cart's static zero totals conditional on the same enhancement signal so an unscripted visitor is not shown a confident but meaningless summary.
 - **Verification criteria:** With scripting disabled, both the cart items area and the product-detail area explain that content loads dynamically, and the cart page no longer presents zero totals as a real cart state.
-- - **Status:** RESOLVED — the cart and primary product-detail regions now ship explicit JavaScript-required fallback states consistent with the rest of the dynamic storefront, while the cart summary remains hidden until product data and the current cart state are successfully loaded and calculated; legitimate empty and populated carts reveal verified totals normally, product-load failures remain fail closed, and existing checkout and product-detail contracts are preserved, with focused regressions, the full QA suite, production build validation, and Chromium no-JavaScript/runtime verification passing, and the change recorded in `docs/CHANGELOG.md` on 2026-09-10.
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `docs/CHANGELOG.md`.
 
 ### [P2-08] Redundant `imageBase` field creates a second picture-rendering path and narrows asset validation
 
@@ -188,7 +189,7 @@ None detected.
 - **Impact:** Two code paths must be kept in agreement for one output, and whether a product's optimized variants are validated depends on an optional field rather than on how the product is actually rendered. Deleting or renaming one of the three unvalidated variants would leave `npm run qa` green while the corresponding `<source>` silently stops resolving.
 - **Recommended direction:** Derive the optimized paths from a single place and key the asset validator to the same derivation used at render time, so validation coverage follows the rendered markup rather than an optional catalog field.
 - **Verification criteria:** Product cards and product details resolve their optimized variants through one code path, and `npm run qa:product-assets` reports validated variants for all 12 catalog entries.
-- **Status:** RESOLVED — product cards, product details, and asset validation now derive optimized image variants from the single authoritative `image` catalog path, removing redundant `imageBase` metadata without changing any published raster, AVIF, or WebP URL; product-asset QA now validates all 12 raster images and all 24 optimized variants, including the three products previously skipped, with focused regressions, the full QA suite, production build validation, and optimizer dry-run verification passing, and the change recorded in `docs/CHANGELOG.md` on 2026-09-10.
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `docs/CHANGELOG.md`.
 
 ### [P2-09] Raster product fallbacks ship at source resolution and dominate the deployed package
 
@@ -199,7 +200,7 @@ None detected.
 - **Impact:** Roughly seventeen megabytes of the shipped static package exists solely as a fallback for clients supporting neither AVIF nor WebP, and any client that does take that path downloads up to 2.36 MB for a card slot under 400 pixels wide. The same weight is carried by the repository, by every clone, and by every deployment upload.
 - **Recommended direction:** Resize the raster fallbacks to the band the cards and product media actually render at, keeping them as genuine fallbacks, rather than optimizing losslessly at source resolution. Retain the originals outside the published tree if they are needed for regeneration.
 - **Verification criteria:** The largest published product fallback is proportionate to its rendered size, `public/assets/images/products/` is no longer several times the size of the rest of `public/`, and `npm run qa:product-assets` and package validation still pass.
-- **Status:** RESOLVED — full-resolution product masters are now retained outside the published tree while proportionate raster fallbacks remain at the existing public URLs, reducing the production package by approximately 8.34 MiB. Details are recorded in `docs/CHANGELOG.md`.
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `docs/CHANGELOG.md`.
 
 ### [P2-10] Homepage statistics assert figures the implementation does not support
 
@@ -210,7 +211,7 @@ None detected.
 - **Impact:** The homepage states a customer rating that no part of the system could produce and a product count that its own catalog contradicts, which is the kind of claim a portfolio reviewer is most likely to test. The unused `rating` field leaves fabricated per-product ratings sitting in the canonical data source, where a future view could surface them without anyone noticing they are invented.
 - **Recommended direction:** Replace the unsupported figures with statements the implementation can stand behind, or mark them explicitly as illustrative in the same way the terms page does, and remove the `rating` field from the catalog unless a view is going to use it.
 - **Verification criteria:** No homepage figure asserts a rating or a catalog quantity that the implementation cannot produce, and the catalog carries no unused fabricated review data.
-- **Status:** RESOLVED — homepage statistics now reflect the canonical catalog, and unused fabricated product rating data has been removed. Regression coverage verifies the figures against catalog data.
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `docs/CHANGELOG.md`.
 
 ### [P2-11] `docs/settings.md` documents a `qa` chain that no longer matches `package.json`
 
@@ -221,7 +222,7 @@ None detected.
 - **Impact:** The one document that declares itself authoritative for commands understates what the aggregate check covers and omits a standalone validator entirely, so a maintainer verifying catalog asset integrity has no documented command to reach for and may believe the coverage does not exist.
 - **Recommended direction:** Update the `qa` command string, add the missing `qa:product-assets` row, and extend the README's description of what `qa` checks.
 - **Verification criteria:** Every script in `package.json` has a matching row in `docs/settings.md` whose command string is identical to the defined script.
-- **Status:** RESOLVED — QA documentation now matches the current `package.json` script set and documents `qa:product-assets` consistently in settings and README.
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `docs/CHANGELOG.md`.
 
 ## 7. Extra quality improvements
 
@@ -231,7 +232,7 @@ None detected.
 - **Current evidence:** `public/_headers` retains `style-src 'self' 'unsafe-inline'`. No HTML document in the repository contains a `style=` attribute, and the only inline style written at runtime is `header.style.boxShadow` in `js/ui/header.js:65` and `js/ui/header.js:68`. The same handler already toggles a `shrink` class on the same element, and `css/partials/layout.css:147` already styles `.site-header.shrink`.
 - **Potential value:** The project went to considerable effort to authorize its single inline script by exact hash rather than by `'unsafe-inline'`; moving two box-shadow assignments into the class that is already being toggled would let `style-src` reach the same standard, and `scripts/csp.mjs` is already structured to hold the result.
 - **Scope boundary:** Optional hardening. `'unsafe-inline'` in `style-src` is not a current defect and the present policy is already stronger than typical for a static site.
-- **Status:** RESOLVED — header styling now uses the existing class-based CSS state and the production CSP enforces `style-src 'self'` with regression coverage against inline-style reintroduction.
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `docs/CHANGELOG.md`.
 
 ### Raise the ESLint rule floor
 

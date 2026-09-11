@@ -1,6 +1,12 @@
-import { safeStorage } from '../services/storage.js';
+import { safeSessionStorage, safeStorage } from '../services/storage.js';
 
+// Written only once the application is installed, so a later visit never re-offers what the
+// browser can no longer install. Declining with "Nie teraz" is deliberately weaker: it expires
+// with the tab through the session key below.
 const INSTALL_DISMISSED_KEY = 'vg_install_cta_dismissed';
+const INSTALL_SESSION_DISMISSED_KEY = 'vg_install_cta_session_dismissed';
+const AUTO_COLLAPSE_DELAY = 30000;
+const INSTALL_MARK = '/assets/images/logo/logo.svg';
 
 const createElement = (tag, className, attrs = {}) => {
   const el = document.createElement(tag);
@@ -40,80 +46,174 @@ const hideToast = () => {
   if (toast) toast.hidden = true;
 };
 
-const renderInstallCta = (onInstall, onDismiss) => {
-  let cta = document.querySelector('[data-install-cta]');
-  let installBtn;
-  let closeBtn;
+const createMark = () =>
+  createElement('img', 'install-cta__mark', {
+    src: INSTALL_MARK,
+    alt: '',
+    'aria-hidden': 'true',
+    width: '32',
+    height: '29',
+    decoding: 'async',
+  });
 
-  if (!cta) {
-    cta = createElement('div', 'install-cta', {
-      'data-install-cta': 'true',
-      role: 'status',
-      'aria-live': 'polite',
-    });
-    const text = createElement('p', 'install-cta__text');
-    text.textContent = 'Zainstaluj aplikację VOLT GARAGE na swoim urządzeniu.';
-    const actions = createElement('div', 'install-cta__actions');
+const createInstallCta = ({ onInstall, onDismiss, onExpand }) => {
+  const cta = createElement('div', 'install-cta', { 'data-install-cta': 'true' });
 
-    installBtn = createElement('button', 'btn btn-accent btn-sm');
-    installBtn.type = 'button';
-    installBtn.setAttribute('data-install-action', 'install');
-    installBtn.textContent = 'Zainstaluj';
+  // The card announces itself politely when it appears. It stays an offer rather than a dialog:
+  // no focus trap, no backdrop, nothing the visitor has to answer before continuing.
+  const card = createElement('div', 'install-cta__card', {
+    'data-install-card': 'true',
+    role: 'status',
+    'aria-live': 'polite',
+  });
+  const text = createElement('p', 'install-cta__text');
+  text.textContent = 'Zainstaluj aplikację VOLT GARAGE na swoim urządzeniu.';
+  const actions = createElement('div', 'install-cta__actions');
 
-    closeBtn = createElement('button', 'btn btn-outline btn-sm');
-    closeBtn.type = 'button';
-    closeBtn.setAttribute('data-install-action', 'dismiss');
-    closeBtn.textContent = 'Nie teraz';
+  const installBtn = createElement('button', 'btn btn-accent btn-sm', {
+    type: 'button',
+    'data-install-action': 'install',
+  });
+  installBtn.textContent = 'Zainstaluj';
+  installBtn.addEventListener('click', onInstall);
 
-    actions.append(installBtn, closeBtn);
-    cta.append(text, actions);
-    document.body.appendChild(cta);
-  } else {
-    installBtn = cta.querySelector('[data-install-action="install"]');
-    closeBtn = cta.querySelector('[data-install-action="dismiss"]');
-  }
+  const dismissBtn = createElement('button', 'btn btn-outline btn-sm', {
+    type: 'button',
+    'data-install-action': 'dismiss',
+  });
+  dismissBtn.textContent = 'Nie teraz';
+  dismissBtn.addEventListener('click', onDismiss);
 
-  installBtn.onclick = onInstall;
-  closeBtn.onclick = onDismiss;
+  actions.append(installBtn, dismissBtn);
+  card.append(createMark(), text, actions);
 
-  cta.hidden = false;
+  const chip = createElement('button', 'install-cta__chip', {
+    type: 'button',
+    'data-install-action': 'expand',
+    'aria-label': 'Zainstaluj aplikację VOLT GARAGE',
+  });
+  const chipLabel = createElement('span', 'install-cta__chip-label');
+  chipLabel.textContent = 'VOLT APP';
+  chip.append(createMark(), chipLabel);
+  chip.addEventListener('click', onExpand);
+
+  cta.append(card, chip);
+  document.body.appendChild(cta);
+  return cta;
 };
 
-const hideInstallCta = () => {
-  const cta = document.querySelector('[data-install-cta]');
-  if (cta) cta.hidden = true;
+// hidden | expanded | collapsed. Visibility rides the hidden attribute, so a state that is off
+// screen is also out of the accessibility tree and out of the tab order.
+const setInstallState = (cta, state) => {
+  cta.setAttribute('data-install-state', state);
+  cta.hidden = state === 'hidden';
+  cta.querySelector('[data-install-card]').hidden = state !== 'expanded';
+  cta.querySelector('[data-install-action="expand"]').hidden = state !== 'collapsed';
 };
 
-export const initPwaPrompts = (registrationPromise) => {
+const initInstallPrompt = () => {
   let deferredPrompt = null;
-  let refreshing = false;
+  let cta = null;
+  let collapseTimer = null;
+  let collapsePending = false;
+
+  const isSuppressed = () =>
+    safeStorage.get(INSTALL_DISMISSED_KEY) === '1' ||
+    safeSessionStorage.get(INSTALL_SESSION_DISMISSED_KEY) === '1';
+
+  const clearCollapseTimer = () => {
+    if (collapseTimer !== null) clearTimeout(collapseTimer);
+    collapseTimer = null;
+    collapsePending = false;
+  };
+
+  // Collapsing is not a rejection: the deferred event survives and the chip keeps the offer
+  // reachable for the rest of the visit.
+  const collapse = () => {
+    if (cta) setInstallState(cta, 'collapsed');
+  };
+
+  const autoCollapse = () => {
+    collapseTimer = null;
+    // Never pull a focused control out from under the keyboard. The focusout listener finishes
+    // the collapse once focus leaves the component.
+    if (cta && cta.contains(document.activeElement)) {
+      collapsePending = true;
+      return;
+    }
+    collapse();
+  };
+
+  const expand = () => {
+    // Reopening is deliberate, so the inactivity timer that already elapsed is not re-armed.
+    clearCollapseTimer();
+    setInstallState(cta, 'expanded');
+    // The chip the visitor just activated is now hidden; move focus onto the primary action
+    // instead of dropping it on the document.
+    cta.querySelector('[data-install-action="install"]').focus();
+  };
+
+  const hide = () => {
+    clearCollapseTimer();
+    if (cta) setInstallState(cta, 'hidden');
+  };
+
+  const install = async () => {
+    hide();
+    const prompt = deferredPrompt;
+    if (!prompt) return;
+    // The deferred event is single use; releasing it before prompting rules out a second call.
+    deferredPrompt = null;
+    prompt.prompt();
+    const { outcome } = await prompt.userChoice;
+    if (outcome === 'accepted') safeStorage.set(INSTALL_DISMISSED_KEY, '1');
+  };
+
+  const dismiss = () => {
+    // Session scoped on purpose: the offer returns on a later visit, not during this one. With
+    // storage blocked the write is a no-op and a re-fired event restores only the chip.
+    safeSessionStorage.set(INSTALL_SESSION_DISMISSED_KEY, '1');
+    deferredPrompt = null;
+    hide();
+  };
+
+  const ensureCta = () => {
+    if (cta) return cta;
+    cta = createInstallCta({ onInstall: install, onDismiss: dismiss, onExpand: expand });
+    cta.addEventListener('focusout', (event) => {
+      if (!collapsePending) return;
+      if (event.relatedTarget && cta.contains(event.relatedTarget)) return;
+      collapsePending = false;
+      collapse();
+    });
+    return cta;
+  };
 
   window.addEventListener('beforeinstallprompt', (event) => {
     event.preventDefault();
-    if (safeStorage.get(INSTALL_DISMISSED_KEY) === '1') return;
+    if (isSuppressed()) return;
     deferredPrompt = event;
-    renderInstallCta(
-      async () => {
-        hideInstallCta();
-        if (!deferredPrompt) return;
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-          safeStorage.set(INSTALL_DISMISSED_KEY, '1');
-        }
-        deferredPrompt = null;
-      },
-      () => {
-        safeStorage.set(INSTALL_DISMISSED_KEY, '1');
-        hideInstallCta();
-      }
-    );
+    if (!cta) {
+      setInstallState(ensureCta(), 'expanded');
+      collapseTimer = setTimeout(autoCollapse, AUTO_COLLAPSE_DELAY);
+      return;
+    }
+    // A re-fired event must not overrule the state the visitor is already looking at, and must
+    // not re-open the card that the install flow just closed.
+    if (cta.getAttribute('data-install-state') === 'hidden') collapse();
   });
 
   window.addEventListener('appinstalled', () => {
     safeStorage.set(INSTALL_DISMISSED_KEY, '1');
-    hideInstallCta();
+    deferredPrompt = null;
+    hide();
   });
+};
+
+export const initPwaPrompts = (registrationPromise) => {
+  let refreshing = false;
+
+  initInstallPrompt();
 
   if ('onLine' in navigator) {
     const updateOnlineStatus = () => {

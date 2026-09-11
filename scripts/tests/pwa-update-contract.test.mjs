@@ -73,6 +73,7 @@ function mountPrompts({ controller = null, waiting = null, installing = null } =
         querySelector: (selector) => body.querySelector(selector),
       },
       safeStorage: { get: () => null, set() {} },
+      safeSessionStorage: { get: () => null, set() {} },
       registrationPromise,
     }
   );

@@ -166,6 +166,8 @@ Te mechanizmy opisują warstwę metadanych; nie stanowią deklaracji wyników po
 
 `public/site.webmanifest`, dostępny pod `/site.webmanifest`, definiuje tryb `standalone`, ikony, skróty oraz zrzuty ekranu. `js/main.js` rejestruje `/sw.js` wyłącznie w buildzie produkcyjnym, z `updateViaCache: 'none'`. Moduł `js/ui/pwa-prompts.js` obsługuje zdarzenia instalacji, zmianę stanu online/offline i komunikat o dostępnej aktualizacji.
 
+Zaproszenie do instalacji pojawia się jako kompaktowa karta przy dolnej krawędzi (na desktopie po prawej stronie, na wąskich ekranach jako karta u dołu z marginesami bezpiecznego obszaru). Po około 30 sekundach bez decyzji karta zwija się do małego przycisku „VOLT APP”, który pozostaje widoczny i po kliknięciu lub aktywacji z klawiatury ponownie ją otwiera. Automatyczne zwinięcie nie jest odmową: odroczone zdarzenie instalacji pozostaje dostępne. Jeśli w momencie upływu czasu fokus znajduje się wewnątrz karty, zwinięcie czeka na opuszczenie komponentu. Wybranie „Nie teraz” ukrywa zaproszenie do końca bieżącej sesji przeglądarki; „Zainstaluj” uruchamia natywne okno instalacji przeglądarki.
+
 Pierwsza instalacja i przejęcie kontroli nad stroną nie wymuszają przeładowania ani komunikatu o aktualizacji. Gdy otwarta strona jest już kontrolowana, nowy worker czeka, a aplikacja pokazuje powiadomienie o dostępnej wersji. Dopiero wybranie „Odśwież” uruchamia aktywację oczekującego workera; po przejęciu kontroli karta, w której wybrano tę akcję, przeładowuje się raz, aby użyć nowej wersji. Bez tej akcji strona nie przeładowuje się automatycznie.
 
 Kanoniczny worker znajduje się w `src/sw.js`. Integracja Vite generuje `dist/sw.js`, wstrzykując identyfikator wdrożenia obliczony z zawartości wyników budowania, plików `public/` i źródła workera oraz listę precache. Zwykła zmiana zawartości nie wymaga ręcznego numerowania wydania; `CACHE_SCHEMA` opisuje zmiany kontraktu cache.
@@ -187,7 +189,8 @@ Repozytorium nie przechowuje w README aktualnych wyników Lighthouse ani Core We
 ### Dane i trwałość stanu
 
 - Katalog produktów pochodzi wyłącznie z `public/data/products.json`; aplikacja nie pobiera go z zewnętrznego API.
-- Koszyk (`volt_cart`), motyw (`vg_theme`), akceptacja modalu projektu i odrzucenie komunikatu instalacji są zapisywane lokalnie w przeglądarce.
+- Koszyk (`volt_cart`), motyw (`vg_theme`), akceptacja modalu projektu i zakończona instalacja aplikacji (`vg_install_cta_dismissed`) są zapisywane lokalnie w przeglądarce.
+- Wybranie „Nie teraz” w zaproszeniu do instalacji zapisuje `vg_install_cta_session_dismissed` w `sessionStorage`, więc obowiązuje tylko do zamknięcia karty. Przy zablokowanym magazynie zapis jest pomijany bez błędu.
 - Formularz kontaktowy ma konfigurację Netlify Forms i po poprawnej walidacji korzysta z natywnego żądania `POST`.
 - Formularz checkoutu wyświetla lokalny komunikat powodzenia i resetuje pola. Nie zapisuje ani nie wysyła zamówienia i nie obsługuje płatności.
 

@@ -39,6 +39,7 @@ All significant changes to this project are documented in this file.
 - Consolidated product image rendering around the catalog `image` path, removing redundant `imageBase` metadata while preserving all existing raster, AVIF, and WebP URLs.
 - Separated full-resolution product masters from published raster fallbacks and resized the deployed fallbacks to measured runtime needs, reducing the production package by approximately 8.34 MiB while preserving existing product image URLs and AVIF/WebP assets.
 - Replaced unsupported homepage hero statistics with catalog-backed product, category, and new-arrival counts, and removed unused fabricated `rating` data from all product records.
+- Refined the PWA install prompt into a compact two-state interface that automatically collapses after 30 seconds while remaining available through a small `VOLT APP` chip, with explicit dismissal limited to the current browser session.
 
 ### Security
 
@@ -53,6 +54,7 @@ All significant changes to this project are documented in this file.
 - Updated the PWA documentation in README and project settings to describe the waiting-worker update contract and user-triggered activation flow.
 - Synchronized QA documentation with `package.json`, including the `qa:product-assets` command and product-image asset validation coverage in both Polish and English README sections.
 - Added third-party notices and local SIL Open Font License 1.1 texts for the bundled Manrope and Space Grotesk font families, with aligned Polish and English README references.
+- Updated the README to document the timed PWA install-prompt collapse, session-scoped dismissal, collapsed install chip, and current storage contract.
 
 ### Build and Tooling
 
@@ -75,6 +77,7 @@ All significant changes to this project are documented in this file.
 - Prevented unknown product identifiers from silently rendering the first catalog item, preserving the existing default product route while keeping unrelated canonical metadata and Product structured data out of the not-found state.
 - Aligned the cart and primary product-detail regions with the existing progressive-enhancement fallback contract, preventing unverified cart totals and checkout actions from appearing before successful JavaScript initialization.
 - Repaired self-hosted font delivery by replacing incomplete subset assets with verified upstream Manrope static weights and the Space Grotesk variable font, restoring complete Latin and Polish glyph coverage without browser fallback.
+- Corrected hidden toast rendering and collapsed install-prompt pointer handling so inactive UI no longer remains visually present or blocks underlying page interactions.
 
 ### Testing
 
@@ -116,5 +119,6 @@ All significant changes to this project are documented in this file.
 - Strengthened homepage statistics regression coverage so displayed figures are derived from the canonical product catalog and QA rejects count drift or reintroduction of unsupported rating data.
 - Extended CSP regression coverage to reject inline style attributes, embedded style blocks, unsafe style directives, and known runtime inline-style sinks.
 - Added regression coverage for the bundled font contract, including expected font artifacts, weight mappings, preload references, retired font paths, and artifact integrity.
+- Added regression coverage for PWA install-prompt expansion, timed collapse, chip reopening, session dismissal, native installation, timer cleanup, focus-safe collapse, and separation from Service Worker update notifications.
 
 

@@ -621,29 +621,123 @@
   display: flex;
   gap: var(--space-02);
 }
+/* The display above outranks the user-agent rule for the hidden attribute, so without this the
+   toast stays painted after hideToast() marks it hidden - and the install offer below, which
+   steps aside only for a toast that is still shown, would clear a notification nobody can see. */
+.toast[hidden] {
+  display: none !important;
+}
 
 /* Install CTA */
 
+/* The wrapper is only ever as wide as the state it shows, so it parks against the bottom-right
+   edge without covering the product grid behind it. */
 .install-cta {
+  --install-cta-inline: var(--space-05);
+  --install-cta-block: var(--space-05);
+  --install-cta-toast-clearance: 0px;
+
   position: fixed;
-  inset: auto var(--space-04) calc(var(--space-04) + 68px) var(--space-04);
+  right: var(--install-cta-inline);
+  bottom: calc(var(--install-cta-block) + var(--install-cta-toast-clearance));
   z-index: 850;
+  display: flex;
+  justify-content: flex-end;
+  /* On narrow screens the wrapper spans the bottom band, so only the visible state itself may
+     take pointer input; the empty remainder must never swallow taps meant for the page. */
+  pointer-events: none;
+}
+.install-cta__card,
+.install-cta__chip {
+  pointer-events: auto;
+}
+.install-cta[hidden],
+.install-cta__card[hidden],
+.install-cta__chip[hidden] {
+  display: none !important;
+}
+.install-cta__card {
   display: grid;
-  gap: var(--space-02);
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: var(--space-02) var(--space-03);
+  width: min(320px, calc(100vw - var(--install-cta-inline) * 2));
   padding: var(--space-03);
-  max-width: min(520px, calc(100vw - var(--space-06)));
   border-radius: var(--radius-md);
   background: color-mix(in srgb, var(--color-surface-alt) 95%, var(--color-bg));
   border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
+}
+.install-cta__mark {
+  width: 28px;
+  height: auto;
+}
+.install-cta__text {
+  margin: 0;
+  font-size: var(--fs-03);
+  line-height: var(--lh-02);
+  color: var(--color-ink);
 }
 .install-cta__actions {
-  display: inline-flex;
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
   gap: var(--space-02);
   flex-wrap: wrap;
 }
-.install-cta[hidden] {
-  display: none !important;
+.install-cta__actions .btn {
+  height: 32px;
+  padding: var(--space-02) var(--space-04);
+}
+.install-cta__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-02);
+  height: 34px;
+  padding: 0 var(--space-03);
+  border-radius: var(--radius-pill);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 45%, var(--color-border));
+  background: color-mix(in srgb, var(--color-surface-alt) 95%, var(--color-bg));
+  color: var(--color-ink);
+  font-size: var(--fs-02);
+  font-weight: var(--fw-02);
+  letter-spacing: var(--ls-04);
+  text-transform: uppercase;
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+.install-cta__chip:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--color-accent) 70%, var(--color-border));
+  box-shadow: var(--shadow-md);
+}
+.install-cta__chip:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+.install-cta__chip .install-cta__mark {
+  width: 18px;
+}
+
+/* Below this width the toast shares the bottom band, so the offer steps above it. */
+@media (max-width: 1023px) {
+  body:has(.toast:not([hidden])) .install-cta {
+    --install-cta-toast-clearance: 96px;
+  }
+}
+@media (max-width: 719px) {
+  .install-cta {
+    --install-cta-inline: var(--space-04);
+    --install-cta-block: calc(var(--space-04) + env(safe-area-inset-bottom, 0px));
+
+    left: var(--install-cta-inline);
+  }
+  .install-cta__card {
+    width: 100%;
+  }
 }
 
 /* Cart item */
@@ -1051,6 +1145,21 @@
 
 /* Animations */
 
+/* A single short rise when a state appears; no fill mode, so the chip keeps its own hover lift
+   and nothing loops for attention afterwards. */
+@keyframes install-cta-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .install-cta__card,
+  .install-cta__chip {
+    animation: install-cta-in 220ms var(--ease-out-5);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .btn:hover,
   .btn-outline:hover,
@@ -1058,7 +1167,8 @@
   [data-checkout-form] .btn-accent:hover,
   .card:hover picture img,
   .category-pill:hover,
-  .cart-link:active {
+  .cart-link:active,
+  .install-cta__chip:hover {
     transform: none;
   }
 }

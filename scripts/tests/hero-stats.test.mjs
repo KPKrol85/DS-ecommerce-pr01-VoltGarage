@@ -3,10 +3,14 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { renderHtml } from '../html.mjs';
+import { isNewProduct } from '../../js/features/products.js';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const source = await fs.readFile(new URL('../../index.html', import.meta.url), 'utf8');
 const html = await renderHtml(root, 'index.html', source);
+const catalog = JSON.parse(
+  await fs.readFile(new URL('../../public/data/products.json', import.meta.url), 'utf8')
+);
 // A .stat block wraps no nested element boxes, so it ends at its own first closing div.
 const STAT_BLOCK = /<div class="stat">([\s\S]*?)<\/div>/g;
 const textContent = (markup) =>
@@ -23,12 +27,22 @@ const statistics = [...heroSection.matchAll(STAT_BLOCK)].map(([, block]) => ({
   label: textContent(block.match(/<p\b[^>]*>([\s\S]*?)<\/p>/i)?.[1] ?? ''),
 }));
 
-test('the hero card carries exactly the three supported statistics, in order', () => {
+test('the hero card matches the three catalog-derived statistics, in order', () => {
+  assert.equal(statistics.length, 3);
   assert.deepEqual(statistics, [
-    { figure: '42', label: 'Nowe produkty' },
-    { figure: '4.9/5', label: 'Ocena klientów' },
-    { figure: '48h', label: 'Wysyłka ekspresowa' },
+    { figure: String(catalog.length), label: 'Produktów w katalogu' },
+    {
+      figure: String(new Set(catalog.map((product) => product.category)).size),
+      label: 'Kategorii',
+    },
+    { figure: String(catalog.filter(isNewProduct).length), label: 'Nowości' },
   ]);
+});
+
+test('canonical products contain no obsolete rating field', () => {
+  for (const product of catalog) {
+    assert.equal(Object.hasOwn(product, 'rating'), false, `${product.id} must not contain rating`);
+  }
 });
 
 test('no hero statistic repeats another figure or label', () => {

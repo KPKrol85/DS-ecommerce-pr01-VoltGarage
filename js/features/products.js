@@ -14,7 +14,7 @@ import {
 
 const getPrefix = () => (window.location.pathname.includes('/pages/') ? '../' : '');
 const formatPrice = (value) => `${value.toFixed(0)} zł`;
-const isNewProduct = (product) => product.badge?.toLowerCase().includes('nowo');
+export const isNewProduct = (product) => product.badge?.toLowerCase().includes('nowo');
 
 const productLink = (id) => {
   const prefix = getPrefix();

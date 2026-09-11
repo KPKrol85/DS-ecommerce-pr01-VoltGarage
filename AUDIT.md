@@ -210,6 +210,7 @@ None detected.
 - **Impact:** The homepage states a customer rating that no part of the system could produce and a product count that its own catalog contradicts, which is the kind of claim a portfolio reviewer is most likely to test. The unused `rating` field leaves fabricated per-product ratings sitting in the canonical data source, where a future view could surface them without anyone noticing they are invented.
 - **Recommended direction:** Replace the unsupported figures with statements the implementation can stand behind, or mark them explicitly as illustrative in the same way the terms page does, and remove the `rating` field from the catalog unless a view is going to use it.
 - **Verification criteria:** No homepage figure asserts a rating or a catalog quantity that the implementation cannot produce, and the catalog carries no unused fabricated review data.
+- **Status:** RESOLVED — homepage statistics now reflect the canonical catalog, and unused fabricated product rating data has been removed. Regression coverage verifies the figures against catalog data.
 
 ### [P2-11] `docs/settings.md` documents a `qa` chain that no longer matches `package.json`
 

@@ -119,6 +119,7 @@ main > section {
   backdrop-filter: blur(16px);
   background: color-mix(in srgb, var(--color-surface) 85%, transparent);
   border-bottom: 1px solid var(--color-border);
+  box-shadow: none;
   transition: box-shadow var(--transition-base);
 }
 .site-header::before {
@@ -143,6 +144,9 @@ main > section {
   transition: padding var(--transition-base);
   position: relative;
   z-index: 1;
+}
+.site-header.shrink {
+  box-shadow: var(--shadow-sm);
 }
 .site-header.shrink .header-inner {
   padding: var(--space-02) 0;

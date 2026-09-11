@@ -231,6 +231,7 @@ None detected.
 - **Current evidence:** `public/_headers` retains `style-src 'self' 'unsafe-inline'`. No HTML document in the repository contains a `style=` attribute, and the only inline style written at runtime is `header.style.boxShadow` in `js/ui/header.js:65` and `js/ui/header.js:68`. The same handler already toggles a `shrink` class on the same element, and `css/partials/layout.css:147` already styles `.site-header.shrink`.
 - **Potential value:** The project went to considerable effort to authorize its single inline script by exact hash rather than by `'unsafe-inline'`; moving two box-shadow assignments into the class that is already being toggled would let `style-src` reach the same standard, and `scripts/csp.mjs` is already structured to hold the result.
 - **Scope boundary:** Optional hardening. `'unsafe-inline'` in `style-src` is not a current defect and the present policy is already stronger than typical for a static site.
+- **Status:** RESOLVED — header styling now uses the existing class-based CSS state and the production CSP enforces `style-src 'self'` with regression coverage against inline-style reintroduction.
 
 ### Raise the ESLint rule floor
 

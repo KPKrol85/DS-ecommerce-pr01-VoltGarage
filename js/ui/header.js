@@ -59,14 +59,10 @@ export const initHeader = () => {
 
   if (!header) return;
 
+  // The shrink class is the whole scroll state: CSS owns the header shadow and padding, so
+  // the policy needs no inline style allowance.
   const updateHeader = () => {
-    if (window.scrollY > 12) {
-      header.classList.add('shrink');
-      header.style.boxShadow = 'var(--shadow-sm)';
-    } else {
-      header.classList.remove('shrink');
-      header.style.boxShadow = 'none';
-    }
+    header.classList.toggle('shrink', window.scrollY > 12);
   };
 
   updateHeader();

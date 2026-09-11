@@ -99,7 +99,7 @@ test('package validation rejects missing bundles, public files, source URLs, and
     'data/products.json': '[]',
     'robots.txt': '',
     'sitemap.xml': '',
-    _headers: "/*\n  Content-Security-Policy: script-src 'self'\n",
+    _headers: "/*\n  Content-Security-Policy: script-src 'self'; style-src 'self'\n",
     _redirects: '',
   };
   const root = await fixture(t, {

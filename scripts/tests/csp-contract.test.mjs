@@ -3,7 +3,13 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { hashInlineScript, inspectInlineExecution, validateCsp } from '../csp.mjs';
+import fg from 'fast-glob';
+import {
+  findInlineStyleSinks,
+  hashInlineScript,
+  inspectInlineSources,
+  validateCsp,
+} from '../csp.mjs';
 import { discoverHtml, renderHtml } from '../html.mjs';
 import { voltGarage } from '../vite-volt-garage.mjs';
 
@@ -11,7 +17,7 @@ const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 const BODY = '\n  window.example = true;\n';
 const HASH = hashInlineScript(BODY);
 const PAGE = `<script>${BODY}</script>`;
-const HEADERS = `/*\n  Content-Security-Policy: default-src 'self'; script-src 'self' ${HASH}; style-src 'self' 'unsafe-inline'\n`;
+const HEADERS = `/*\n  Content-Security-Policy: default-src 'self'; script-src 'self' ${HASH}; style-src 'self'\n`;
 const check = (headers = HEADERS, page = PAGE) =>
   validateCsp(headers, new Map([['index.html', page]]));
 
@@ -33,7 +39,7 @@ test('all rendered entries pass CSP after production emission, including theme p
   const bodies = new Set();
   const dataTypes = [];
   for (const [file, content] of documents) {
-    const { scripts } = await inspectInlineExecution(content, file);
+    const { scripts } = await inspectInlineSources(content, file);
     for (const script of scripts) {
       assert.ok(!script.body.includes('\r'), file);
       if (script.data) dataTypes.push(JSON.parse(script.body)['@type']);
@@ -43,6 +49,41 @@ test('all rendered entries pass CSP after production emission, including theme p
   }
   assert.equal(bodies.size, 1, 'the currently intentional executable body is shared');
   assert.deepEqual(dataTypes.sort(), ['OnlineStore', 'WebSite']);
+});
+
+// The shipped policy is what the browser enforces, so assert its text, not only that it validates.
+test('the shipped policy authorizes styles only as same-origin files', async () => {
+  const headers = await fs.readFile(path.join(ROOT, 'public/_headers'), 'utf8');
+  const directive = headers.match(/;\s*style-src([^;\r\n]*)/);
+  assert.ok(directive, 'the global policy declares style-src');
+  assert.deepEqual(directive[1].trim().split(/\s+/), ["'self'"]);
+});
+
+// The header shadow now lives in .site-header.shrink; no module may write an inline style again.
+test('no runtime module writes an inline style, and the detector still catches one that does', async () => {
+  const found = [];
+  for (const file of fg.sync(['js/**/*.js', 'src/sw.js'], { cwd: ROOT })) {
+    found.push(...findInlineStyleSinks(await fs.readFile(path.join(ROOT, file), 'utf8'), file));
+  }
+  assert.deepEqual(found, []);
+  for (const sink of [
+    "header.style.boxShadow = 'var(--shadow-sm)';",
+    "header.style.setProperty('box-shadow', 'none');",
+    "header.style.cssText = 'box-shadow: none';",
+    'header.style = "box-shadow: none";',
+    "header.setAttribute('style', 'box-shadow: none');",
+    "document.body.appendChild(document.createElement('style'));",
+  ]) {
+    assert.equal(findInlineStyleSinks(sink, 'example.js').length, 1, sink);
+  }
+  // Reading a value, comparing one, or naming a request destination is not an inline style write.
+  assert.deepEqual(
+    findInlineStyleSinks(
+      "if (el.style.width === width) return ['style'].includes(request.destination);",
+      'example.js'
+    ),
+    []
+  );
 });
 
 for (const [name, headers, expected] of [
@@ -81,6 +122,42 @@ for (const [name, headers, expected] of [
     HEADERS.replace('; style-src', "; script-src-attr 'unsafe-inline'; style-src"),
     /overrides/,
   ],
+  ['missing style-src', HEADERS.replace("; style-src 'self'", ''), /missing CSP style-src/],
+  [
+    'style-src without self',
+    HEADERS.replace("; style-src 'self'", '; style-src'),
+    /style-src must retain 'self'/,
+  ],
+  [
+    'style unsafe-inline restored',
+    HEADERS.replace("style-src 'self'", "style-src 'self' 'unsafe-inline'"),
+    /style-src permits only 'self', found 'unsafe-inline'/,
+  ],
+  [
+    'style wildcard',
+    HEADERS.replace("style-src 'self'", "style-src 'self' *"),
+    /style-src permits only 'self', found \*/,
+  ],
+  [
+    'remote style origin',
+    HEADERS.replace("style-src 'self'", "style-src 'self' https://fonts.googleapis.com"),
+    /style-src permits only 'self', found https:\/\/fonts\.googleapis\.com/,
+  ],
+  [
+    'style hash allowance',
+    HEADERS.replace("style-src 'self'", `style-src 'self' ${hashInlineScript('a{color:red}')}`),
+    /style-src permits only 'self', found 'sha256-/,
+  ],
+  [
+    'style-src-elem override',
+    HEADERS.replace('; style-src', "; style-src-elem 'unsafe-inline'; style-src"),
+    /overrides the style-src contract/,
+  ],
+  [
+    'style-src-attr override',
+    HEADERS.replace('; style-src', "; style-src-attr 'unsafe-inline'; style-src"),
+    /overrides the style-src contract/,
+  ],
 ]) {
   test(`CSP rejects ${name}`, async () => {
     assert.match((await check(headers)).join('\n'), expected);
@@ -116,6 +193,23 @@ for (const [name, page, expected] of [
     'srcdoc',
     PAGE + '<iframe srcdoc="&lt;script>alert(1)&lt;/script>"></iframe>',
     /attribute srcdoc/,
+  ],
+  ['inline style attribute', PAGE + '<p style="color:red">x</p>', /inline style attribute/],
+  [
+    'unquoted mixed-case style attribute',
+    PAGE + '<p StYlE=color:red>x</p>',
+    /inline style attribute/,
+  ],
+  ['inline style element', PAGE + '<style>body{color:red}</style>', /inline <style> element/],
+  [
+    'foreign style attribute',
+    PAGE + '<svg><rect style="fill:red"></rect></svg>',
+    /inline style attribute/,
+  ],
+  [
+    'foreign style element',
+    PAGE + '<svg><style>rect{fill:red}</style></svg>',
+    /inline <style> element/,
   ],
 ]) {
   test(`CSP rejects ${name}`, async () => {

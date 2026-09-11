@@ -44,6 +44,7 @@ All significant changes to this project are documented in this file.
 
 - Added static-hosting headers for Content Security Policy, frame denial, MIME sniffing prevention, referrer and permissions policies, and explicit HTML and asset caching rules.
 - Replaced the broad inline-script CSP allowance with an exact SHA-256 hash for the early theme preload while preserving same-origin scripts and structured data.
+- Removed the remaining inline-style CSP allowance by moving the header shadow into the existing class-based state and enforcing `style-src 'self'`.
 
 ### Documentation
 
@@ -108,5 +109,6 @@ All significant changes to this project are documented in this file.
 - Extended product-asset validation to derive and verify optimized variants for all 12 catalog products, covering 12 raster images and all 24 AVIF/WebP variants including products previously skipped by the optional `imageBase` contract.
 - Added source-versus-published product image regression coverage and verified 12 raster fallbacks, all 24 optimized variants, master exclusion from the production package, optimizer regeneration, and responsive raster rendering.
 - Strengthened homepage statistics regression coverage so displayed figures are derived from the canonical product catalog and QA rejects count drift or reintroduction of unsupported rating data.
+- Extended CSP regression coverage to reject inline style attributes, embedded style blocks, unsafe style directives, and known runtime inline-style sinks.
 
 

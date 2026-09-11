@@ -1,7 +1,9 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 import fg from 'fast-glob';
+import { PRODUCT_MASTER_ROOT } from '../tools/image-optimizer/product-sources.mjs';
 import { discoverHtml, assertNoTemplateArtifacts } from './html.mjs';
 import { validateCsp } from './csp.mjs';
 
@@ -130,6 +132,30 @@ async function validatePackage(root, dist) {
   }
   if (files.has('sw.js') && /__VOLT_/.test(await fs.readFile(path.join(dist, 'sw.js'), 'utf8'))) {
     errors.push('sw.js: unresolved build token');
+  }
+  // Masters must stay out of deployment, even if accidentally copied under another name.
+  const masterHashes = new Map();
+  for (const file of fg.sync('**/*', {
+    cwd: path.join(root, PRODUCT_MASTER_ROOT),
+    onlyFiles: true,
+  })) {
+    const data = await fs.readFile(path.join(root, PRODUCT_MASTER_ROOT, file));
+    if (!masterHashes.has(data.length)) masterHashes.set(data.length, new Set());
+    masterHashes.get(data.length).add(createHash('sha256').update(data).digest('hex'));
+  }
+  for (const file of files) {
+    const size = (await fs.stat(path.join(dist, file))).size;
+    if (
+      file.startsWith(`${PRODUCT_MASTER_ROOT}/`) ||
+      (masterHashes.has(size) &&
+        masterHashes.get(size).has(
+          createHash('sha256')
+            .update(await fs.readFile(path.join(dist, file)))
+            .digest('hex')
+        ))
+    ) {
+      errors.push(`${file}: full-resolution product master must not be published`);
+    }
   }
   if (errors.length)
     throw new Error(`Production package validation failed:\n- ${errors.join('\n- ')}`);

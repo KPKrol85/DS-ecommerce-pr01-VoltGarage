@@ -104,6 +104,7 @@ test('package validation rejects missing bundles, public files, source URLs, and
   };
   const root = await fixture(t, {
     'index.html': 'source',
+    'src/assets/images/products/example.png': 'retained full-resolution product master',
     'output/index.html': page,
     'output/build/main-abcdefgh.css': '',
     'output/build/main-abcdefgh.js': '',
@@ -118,6 +119,13 @@ test('package validation rejects missing bundles, public files, source URLs, and
   });
   const dist = path.join(root, 'output');
   await validatePackage(root, dist);
+  for (const leaked of ['src/assets/images/products/example.png', 'assets/renamed-master.png']) {
+    const destination = path.join(dist, leaked);
+    await fs.mkdir(path.dirname(destination), { recursive: true });
+    await fs.copyFile(path.join(root, 'src/assets/images/products/example.png'), destination);
+    await assert.rejects(validatePackage(root, dist), /product master must not be published/);
+    await fs.unlink(destination);
+  }
   for (const content of [
     page + '{{unknown}}',
     page + '<script>window.unapproved = true;</script>',

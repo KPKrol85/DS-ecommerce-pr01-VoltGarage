@@ -4,6 +4,7 @@ import fg from 'fast-glob';
 import minimist from 'minimist';
 import chalk from 'chalk';
 import sharp from 'sharp';
+import { PRODUCT_MASTER_ROOT, resolveImageSource } from './product-sources.mjs';
 
 const DEFAULTS = {
   qualityJpg: 80,
@@ -89,13 +90,15 @@ const formatBytes = (bytes) => {
 const replaceExt = (filePath, ext) => `${filePath.slice(0, -path.extname(filePath).length)}.${ext}`;
 
 const projectRoot = process.cwd();
-const inputRoot = path.resolve(projectRoot, 'public/assets/images');
 const outputRoot =
   config.mode === 'output'
     ? path.resolve(projectRoot, config.out)
     : path.resolve(projectRoot, 'public/assets/images/_optimized');
 
-const defaultGlob = 'public/assets/images/**/*.{jpg,jpeg,png,JPG,JPEG,PNG}';
+const defaultGlob = [
+  'public/assets/images/**/*.{jpg,jpeg,png,JPG,JPEG,PNG}',
+  `${PRODUCT_MASTER_ROOT}/**/*.{jpg,jpeg,png,JPG,JPEG,PNG}`,
+];
 const globPattern = config.glob || defaultGlob;
 
 const isOptimizedPath = (absPath) => absPath.split(path.sep).includes('_optimized');
@@ -111,16 +114,7 @@ const isSupportedSource = (absPath) => {
   return ext === '.jpg' || ext === '.jpeg' || ext === '.png';
 };
 
-const resolveRelativePath = (absPath) => {
-  const relFromRoot = path.relative(inputRoot, absPath);
-  if (relFromRoot.startsWith('..') || path.isAbsolute(relFromRoot)) {
-    return path.basename(absPath);
-  }
-  return relFromRoot;
-};
-
-const resolveOutputPaths = (absPath) => {
-  const relPath = resolveRelativePath(absPath);
+const resolveOutputPaths = (relPath) => {
   const outputBase = path.join(outputRoot, relPath);
   return {
     webpPath: replaceExt(outputBase, 'webp'),
@@ -147,6 +141,7 @@ const run = async () => {
   let generatedAvif = 0;
   let skipped = 0;
   let warnedOutsideRoot = false;
+  const inputs = new Set();
 
   const files = await fg(globPattern, {
     onlyFiles: true,
@@ -166,25 +161,22 @@ const run = async () => {
   files.sort();
 
   for (const filePath of files) {
-    const absPath = path.resolve(projectRoot, filePath);
-    if (isOptimizedPath(absPath)) {
+    if (isOptimizedPath(filePath)) {
       continue;
     }
-    if (!isSupportedSource(absPath)) {
+    if (!isSupportedSource(filePath)) {
       continue;
     }
 
-    const relFromRoot = path.relative(inputRoot, absPath);
-    const relPath =
-      relFromRoot.startsWith('..') || path.isAbsolute(relFromRoot)
-        ? path.basename(absPath)
-        : relFromRoot;
+    const {
+      inputPath: absPath,
+      relativePath: relPath,
+      outsideRoot,
+    } = resolveImageSource(projectRoot, filePath);
+    if (inputs.has(absPath)) continue;
+    inputs.add(absPath);
 
-    if (
-      !warnedOutsideRoot &&
-      relPath === path.basename(absPath) &&
-      absPath !== path.join(inputRoot, relPath)
-    ) {
+    if (!warnedOutsideRoot && outsideRoot) {
       warnedOutsideRoot = true;
       warnings += 1;
       console.log(
@@ -197,7 +189,7 @@ const run = async () => {
     try {
       sourcesFound += 1;
       const inputStat = await fs.stat(absPath);
-      const { webpPath, avifPath } = resolveOutputPaths(absPath);
+      const { webpPath, avifPath } = resolveOutputPaths(relPath);
       const webpUpToDate = await isUpToDate(webpPath, inputStat);
       const avifUpToDate = await isUpToDate(avifPath, inputStat);
 
@@ -283,6 +275,7 @@ const run = async () => {
   console.log(`Warnings: ${warnings}`);
   console.log(`Errors: ${errors}`);
   console.log(`Duration: ${durationSec}s`);
+  if (errors) process.exitCode = 1;
 };
 
 run().catch((err) => {

@@ -196,7 +196,7 @@ Projekt nie implementuje bazy danych, uwierzytelniania, kont użytkowników ani 
 - Zmiany wspólnego headera lub footera należy wprowadzać w `src/partials/`; Vite rozwija je w dev i podczas budowania.
 - Zmiany katalogu produktów należy wprowadzać w `public/data/products.json`; widoki produktów i dane strukturalne są budowane z tego źródła w runtime.
 - Build i walidatory odkrywają dokumenty przez `*.html` i `pages/**/*.html`. Po zmianie tras trzeba nadal zaktualizować linki, `public/sitemap.xml`, skróty w `public/site.webmanifest` oraz zakres smoke, jeśli dotyczy.
-- Obrazy źródłowe znajdują się w `public/assets/images/`, a warianty WebP/AVIF w `public/assets/images/_optimized/`. [Dokumentacja narzędzia](tools/image-optimizer/README.md) opisuje generowanie wariantów; build kopiuje gotowe zasoby i nie uruchamia optymalizatora.
+- Pełnowymiarowe źródła zdjęć produktów znajdują się w niepublikowanym `src/assets/images/products/`. Służą do generowania pomniejszonych fallbacków JPG/PNG pod dotychczasowymi URL-ami w `public/assets/images/products/` oraz wariantów WebP/AVIF w `public/assets/images/_optimized/products/`. Pozostałe źródła obrazów pozostają w `public/assets/images/`. [Dokumentacja narzędzia](tools/image-optimizer/README.md) opisuje oba polecenia generowania; build kopiuje gotowe zasoby z `public/` i nie uruchamia optymalizatora.
 - `dist/` jest generowanym wynikiem. Kanonicznymi źródłami pozostają HTML, `src/partials/`, `src/sw.js`, `css/main.css`, `css/partials/`, `js/main.js` wraz z importowanymi modułami oraz zasoby w `public/`.
 
 ### Licencja
@@ -399,7 +399,7 @@ The project does not implement a database, authentication, user accounts, or cro
 - Shared header or footer changes belong in `src/partials/`; Vite expands them in dev and during the build.
 - Catalog changes belong in `public/data/products.json`; product views and structured data are built from this source at runtime.
 - The build and validators discover documents through `*.html` and `pages/**/*.html`. Route changes still require updates to links, `public/sitemap.xml`, shortcuts in `public/site.webmanifest`, and the smoke scope where relevant.
-- Source images live in `public/assets/images/`, with WebP/AVIF variants in `public/assets/images/_optimized/`. The [tool documentation](tools/image-optimizer/README.md) describes variant generation; the build copies prepared resources and does not run the optimizer.
+- Full-resolution product masters live in the unpublished `src/assets/images/products/`. They generate reduced JPG/PNG fallbacks at the existing URLs in `public/assets/images/products/` and WebP/AVIF variants in `public/assets/images/_optimized/products/`. Other image sources remain in `public/assets/images/`. The [tool documentation](tools/image-optimizer/README.md) describes both generation commands; the build copies prepared resources from `public/` and does not run the optimizer.
 - `dist/` is generated output. The canonical sources remain the HTML documents, `src/partials/`, `src/sw.js`, `css/main.css`, `css/partials/`, `js/main.js` with its imported modules, and resources in `public/`.
 
 ### License

@@ -37,7 +37,7 @@ Projekt prezentuje interfejs katalogu, koszyka i checkoutu, ale nie jest aktywny
 - Node.js `^20.19.0 || >=22.12.0` oraz npm,
 - Vite 8.2.2 jako system development/build/preview,
 - Prettier, ESLint, Stylelint i html-validate,
-- własne walidatory linków wewnętrznych, JSON-LD i pakietu produkcyjnego oraz testy kontraktu budowania,
+- własne walidatory linków wewnętrznych, JSON-LD, zasobów obrazów produktów i pakietu produkcyjnego oraz testy kontraktu budowania,
 - Lighthouse do testów smoke,
 - sharp, fast-glob i minimist w narzędziu optymalizacji obrazów.
 
@@ -126,7 +126,7 @@ npm run qa:smoke
 npm run qa:smoke:enforce
 ```
 
-- `npm run qa` sprawdza źródłowy HTML, JSON-LD, linki wewnętrzne, JavaScript, CSS oraz kontrakt budowania przez `qa:build`.
+- `npm run qa` sprawdza źródłowy HTML, JSON-LD, linki wewnętrzne, zasoby obrazów produktów (rastry oraz warianty AVIF/WebP), JavaScript, CSS oraz kontrakt budowania przez `qa:build`.
 - `npm run format:check` weryfikuje formatowanie bez zapisu zmian.
 - `npm run qa:build` uruchamia testy Node dla renderera HTML i kontraktu pakietu; można je wykonać również osobno.
 - `npm run qa:package` sprawdza istniejący `dist/`, w tym trasy, odwołania do zasobów, hashowane bundle, manifesty i kopie plików publicznych. Ta sama walidacja jest automatyczną częścią `build`.
@@ -240,7 +240,7 @@ The project presents catalog, cart, and checkout interfaces, but it is not an ac
 - Node.js `^20.19.0 || >=22.12.0` and npm,
 - Vite 8.2.2 as the development/build/preview system,
 - Prettier, ESLint, Stylelint, and html-validate,
-- custom internal-link, JSON-LD, and production-package validators, plus build-contract tests,
+- custom internal-link, JSON-LD, product-image-asset, and production-package validators, plus build-contract tests,
 - Lighthouse for smoke checks,
 - sharp, fast-glob, and minimist in the image optimization tool.
 
@@ -329,7 +329,7 @@ npm run qa:smoke
 npm run qa:smoke:enforce
 ```
 
-- `npm run qa` checks source HTML, JSON-LD, internal links, JavaScript, CSS, and the build contract through `qa:build`.
+- `npm run qa` checks source HTML, JSON-LD, internal links, product image assets (rasters and AVIF/WebP variants), JavaScript, CSS, and the build contract through `qa:build`.
 - `npm run format:check` verifies formatting without writing changes.
 - `npm run qa:build` runs Node tests for the HTML renderer and package contract; it can also be run separately.
 - `npm run qa:package` checks the existing `dist/`, including routes, asset references, hashed bundles, manifests, and public-file copies. The same validation runs automatically as part of `build`.

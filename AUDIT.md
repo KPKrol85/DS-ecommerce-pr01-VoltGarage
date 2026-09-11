@@ -221,6 +221,7 @@ None detected.
 - **Impact:** The one document that declares itself authoritative for commands understates what the aggregate check covers and omits a standalone validator entirely, so a maintainer verifying catalog asset integrity has no documented command to reach for and may believe the coverage does not exist.
 - **Recommended direction:** Update the `qa` command string, add the missing `qa:product-assets` row, and extend the README's description of what `qa` checks.
 - **Verification criteria:** Every script in `package.json` has a matching row in `docs/settings.md` whose command string is identical to the defined script.
+- **Status:** RESOLVED — QA documentation now matches the current `package.json` script set and documents `qa:product-assets` consistently in settings and README.
 
 ## 7. Extra quality improvements
 

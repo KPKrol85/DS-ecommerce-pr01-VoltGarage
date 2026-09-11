@@ -50,6 +50,7 @@ All significant changes to this project are documented in this file.
 - Reworked the Polish-first and English-second project README to document the verified architecture, workflows, source ownership, and deployment contract while clarifying the demonstrational checkout and absence of real orders or payments.
 - Added the KP_CODE Proprietary Project License and aligned the root package license metadata with the project license file.
 - Updated the PWA documentation in README and project settings to describe the waiting-worker update contract and user-triggered activation flow.
+- Synchronized QA documentation with `package.json`, including the `qa:product-assets` command and product-image asset validation coverage in both Polish and English README sections.
 
 ### Build and Tooling
 

@@ -60,6 +60,7 @@ All significant changes to this project are documented in this file.
 - Synchronized QA documentation with `package.json`, including the `qa:product-assets` command and product-image asset validation coverage in both Polish and English README sections.
 - Added third-party notices and local SIL Open Font License 1.1 texts for the bundled Manrope and Space Grotesk font families, with aligned Polish and English README references.
 - Updated the README to document the timed PWA install-prompt collapse, session-scoped dismissal, collapsed install chip, and current storage contract.
+- Updated the Terms of Service, Privacy Policy, and Cookies Policy to the current KP_Code legal templates and aligned their disclosures with VoltGarage's actual demo, storage, PWA, Netlify Forms, and external-service behavior.
 
 ### Build and Tooling
 

@@ -95,290 +95,315 @@
         <div class="legal-container">
           <h1 id="legal-top" class="legal-title">Polityka cookies</h1>
           <p class="legal-lead">
-            Niniejsza Polityka cookies określa zasady wykorzystywania plików cookies oraz podobnych
-            technologii w ramach serwisu internetowego <strong>Volt Garage</strong>, opracowanego
-            przez KP_Code Digital Studio. Dokument ma charakter informacyjny i wyjaśnia sposób
-            działania mechanizmów technicznych związanych z funkcjonowaniem Serwisu.
+            Niniejsza Polityka cookies opisuje rzeczywiste mechanizmy zapisywania informacji w
+            przeglądarce podczas korzystania z demonstracyjnego projektu Volt Garage, opracowanego
+            przez
+            <a href="https://www.kp-code.pl" target="_blank" rel="noopener noreferrer"
+              >KP_Code Digital Studio</a
+            >. Projekt nie używa własnych plików cookies HTTP, ale korzysta z pamięci przeglądarki i
+            Cache Storage na potrzeby interfejsu, koszyka oraz funkcji PWA.
           </p>
-
           <nav class="doc-toc" aria-label="Spis treści">
             <ol>
               <li><a href="#cookies-1">Postanowienia ogólne</a></li>
               <li><a href="#cookies-2">Czym są pliki cookies i podobne technologie</a></li>
-              <li><a href="#cookies-3">Rodzaje plików cookies</a></li>
-              <li><a href="#cookies-4">Cele wykorzystywania plików cookies</a></li>
-              <li><a href="#cookies-5">Podstawy prawne stosowania plików cookies</a></li>
-              <li><a href="#cookies-6">Zarządzanie ustawieniami cookies</a></li>
-              <li><a href="#cookies-7">Pliki cookies podmiotów trzecich</a></li>
+              <li><a href="#cookies-3">Rodzaje wykorzystywanych technologii</a></li>
+              <li>
+                <a href="#cookies-4">Cele wykorzystywania technologii przechowywania danych</a>
+              </li>
+              <li>
+                <a href="#cookies-5"
+                  >Podstawy prawne stosowania plików cookies i podobnych technologii</a
+                >
+              </li>
+              <li>
+                <a href="#cookies-6">Zarządzanie ustawieniami cookies i podobnych technologii</a>
+              </li>
+              <li><a href="#cookies-7">Technologie i usługi podmiotów trzecich</a></li>
               <li><a href="#cookies-8">Zmiany Polityki cookies</a></li>
               <li><a href="#cookies-9">Kontakt</a></li>
             </ol>
           </nav>
-
           <article class="doc-content legal-doc legal-content">
-            <!-- Wprowadzenie -->
             <p class="legal-note">
-              <small>
-                Dokument wyjaśnia mechanizmy techniczne związane z zapisywaniem oraz odczytywaniem
-                informacji na urządzeniu końcowym Użytkownika podczas korzystania z Serwisu Volt
-                Garage.
-              </small>
+              <small
+                >Dokument opisuje mechanizmy cookies i pamięci przeglądarki faktycznie obecne w
+                aktualnej wersji Volt Garage.</small
+              >
             </p>
-
-            <!-- 1 Postanowienia ogólne -->
             <section class="legal-section" aria-labelledby="cookies-1">
               <h2 id="cookies-1">1. Postanowienia ogólne</h2>
+
               <p>
-                Niniejsza Polityka cookies określa zasady wykorzystywania plików cookies oraz
-                podobnych technologii w ramach Serwisu „Volt Garage”, opracowanego przez KP_Code
-                Digital Studio.
+                Polityka cookies określa zasady zapisywania i odczytywania informacji na urządzeniu
+                końcowym podczas korzystania z demonstracyjnego Serwisu Volt Garage. Operatorem jest
+                Kamil Król działający pod marką
+                <a href="https://www.kp-code.pl" target="_blank" rel="noopener noreferrer"
+                  >KP_Code Digital Studio</a
+                >.
               </p>
               <p>
-                Dokument ma charakter informacyjny i wyjaśnia mechanizmy związane z zapisywaniem
-                oraz odczytywaniem informacji na urządzeniu końcowym Użytkownika podczas korzystania
-                z Serwisu.
+                Volt Garage jest fikcyjną marką i projektem portfolio. Serwis nie prowadzi
+                sprzedaży, nie przyjmuje wiążących zamówień, nie obsługuje płatności ani kont
+                użytkowników.
               </p>
               <p>
-                Serwis ma charakter prezentacyjny i nie prowadzi rzeczywistej działalności
-                motoryzacyjnej ani sprzedaży. Opisane mechanizmy mogą być stosowane w projektach
-                komercyjnych realizowanych przez Operatora.
+                Dokument opisuje wyłącznie technologie znalezione w aktualnej implementacji. Nazwa
+                „Polityka cookies” nie oznacza, że Serwis zapisuje klasyczne pliki cookies.
               </p>
               <p>
-                W zakresie nieuregulowanym niniejszą Polityką cookies zastosowanie mają
-                postanowienia dokumentów:
-                <a href="privacy-policy.html">Polityka prywatności</a> oraz
-                <a href="terms.html">Regulamin</a>.
+                Szczegóły przetwarzania danych opisuje
+                <a href="privacy-policy.html">Polityka prywatności</a>, a zasady korzystania z
+                Serwisu określa <a href="terms.html">Regulamin</a>.
               </p>
-              <a class="legal-backtotop" href="#legal-top" aria-label="Powrót na górę strony">
-                <span aria-hidden="true">↑</span>
-                <span class="visually-hidden">Powrót na górę</span>
-              </a>
+              <a class="legal-backtotop" href="#legal-top" aria-label="Powrót na górę strony"
+                ><span aria-hidden="true">↑</span
+                ><span class="visually-hidden">Powrót na górę</span></a
+              >
             </section>
 
-            <!-- 2 Czym są pliki cookies i podobne technologie -->
             <section class="legal-section" aria-labelledby="cookies-2">
               <h2 id="cookies-2">2. Czym są pliki cookies i podobne technologie</h2>
+
               <p>
-                Pliki cookies (tzw. „ciasteczka”) to niewielkie informacje tekstowe zapisywane na
-                urządzeniu końcowym Użytkownika podczas korzystania z Serwisu. Umożliwiają one
-                prawidłowe funkcjonowanie strony oraz dostosowanie jej działania do wybranych
-                ustawień i preferencji.
+                Plik cookie jest niewielką informacją tekstową zapisywaną przez przeglądarkę dla
+                określonej witryny i przesyłaną przy kolejnych żądaniach zgodnie z zasadami
+                przeglądarki. W kodzie Volt Garage nie znaleziono zapisu ani odczytu
+                <code>document.cookie</code>, nagłówków <code>Set-Cookie</code> ani własnego
+                mechanizmu cookie HTTP.
               </p>
               <p>
-                Cookies mogą być odczytywane przez Serwis przy kolejnych wizytach Użytkownika, co
-                pozwala na zachowanie spójności działania interfejsu oraz zapewnienie bezpieczeństwa
-                i stabilności technicznej.
+                <code>localStorage</code> i <code>sessionStorage</code> są odrębną pamięcią Web
+                Storage. Nie są plikami cookies i nie są automatycznie dołączane do żądań HTTP.
+                Cache Storage przechowuje odpowiedzi sieciowe dla Service Workera; również nie jest
+                plikiem cookie.
               </p>
               <p>
-                Oprócz plików cookies Serwis może wykorzystywać również inne technologie o podobnym
-                charakterze, w szczególności mechanizmy przechowywania danych w przeglądarce (np.
-                <code>localStorage</code>, <code>sessionStorage</code>) lub inne rozwiązania
-                umożliwiające zapisywanie informacji na urządzeniu końcowym.
+                Osadzona mapa Google na stronie kontaktowej jest ładowana jako iframe. Google może
+                stosować własne technologie przechowywania zgodnie ze swoimi zasadami; nie są to
+                mechanizmy ustawiane przez kod Volt Garage.
               </p>
-              <a class="legal-backtotop" href="#legal-top" aria-label="Powrót na górę strony">
-                <span aria-hidden="true">↑</span>
-                <span class="visually-hidden">Powrót na górę</span>
-              </a>
+              <a class="legal-backtotop" href="#legal-top" aria-label="Powrót na górę strony"
+                ><span aria-hidden="true">↑</span
+                ><span class="visually-hidden">Powrót na górę</span></a
+              >
             </section>
 
-            <!-- 3 Rodzaje plików cookies -->
             <section class="legal-section" aria-labelledby="cookies-3">
-              <h2 id="cookies-3">3. Rodzaje plików cookies</h2>
+              <h2 id="cookies-3">3. Rodzaje wykorzystywanych technologii</h2>
+
+              <h3>Pamięć lokalna przeglądarki</h3>
+              <p>Serwis korzysta z <code>localStorage</code> dla następujących stanów:</p>
+              <ul>
+                <li>
+                  <code>volt_cart</code> – identyfikatory produktów i ich ilości w lokalnym koszyku;
+                </li>
+                <li><code>vg_theme</code> – wybrany jasny lub ciemny motyw;</li>
+                <li>
+                  <code>vg_project_terms_accepted</code> – potwierdzenie informacji o
+                  demonstracyjnym charakterze Projektu;
+                </li>
+                <li>
+                  <code>vg_install_cta_dismissed</code> – zapamiętanie stanu propozycji instalacji
+                  PWA.
+                </li>
+              </ul>
+              <h3>Pamięć sesyjna przeglądarki</h3>
               <p>
-                W ramach Serwisu mogą być stosowane różne rodzaje plików cookies, w zależności od
-                ich funkcji oraz czasu przechowywania na urządzeniu końcowym Użytkownika.
+                <code>sessionStorage</code> przechowuje
+                <code>vg_install_cta_session_dismissed</code>, czyli odłożenie propozycji instalacji
+                PWA na czas sesji karty. Szczegóły wygaśnięcia zależą od zachowania przeglądarki
+                przy przywracaniu sesji.
               </p>
-              <ul>
-                <li>
-                  <strong>Cookies niezbędne (techniczne)</strong> – umożliwiają prawidłowe
-                  funkcjonowanie Serwisu oraz korzystanie z jego podstawowych funkcjonalności. Ich
-                  stosowanie nie wymaga zgody Użytkownika.
-                </li>
-                <li>
-                  <strong>Cookies funkcjonalne</strong> – pozwalają na zapamiętanie wybranych
-                  ustawień Użytkownika (np. preferencji interfejsu) w celu zapewnienia bardziej
-                  spersonalizowanego działania Serwisu.
-                </li>
-                <li>
-                  <strong>Cookies analityczne</strong> – służą do zbierania informacji
-                  statystycznych dotyczących sposobu korzystania z Serwisu, co umożliwia jego
-                  optymalizację i rozwój.
-                </li>
-              </ul>
-              <p>Ze względu na czas przechowywania pliki cookies mogą mieć charakter:</p>
-              <ul>
-                <li>
-                  <strong>sesyjny</strong> – przechowywane na urządzeniu Użytkownika do momentu
-                  zakończenia sesji przeglądarki.
-                </li>
-                <li>
-                  <strong>trwały</strong> – przechowywane przez określony czas lub do momentu ich
-                  usunięcia przez Użytkownika.
-                </li>
-              </ul>
-              <a class="legal-backtotop" href="#legal-top" aria-label="Powrót na górę strony">
-                <span aria-hidden="true">↑</span>
-                <span class="visually-hidden">Powrót na górę</span>
-              </a>
+              <h3>Cache Storage i Service Worker</h3>
+              <p>
+                Produkcyjny Service Worker korzysta z Cache Storage do przechowywania wybranych
+                stron, skryptów, stylów, obrazów, fontów, manifestu i danych katalogu. Cache służy
+                rewalidacji zasobów oraz ograniczonemu działaniu offline. Wersjonowane cache są
+                czyszczone przy aktywacji nowszej wersji, gdy nie należą już do bieżącego kontraktu
+                aplikacji.
+              </p>
+              <h3>Brak własnych cookies HTTP</h3>
+              <p>
+                W aktualnym kodzie nie ma własnych cookies pierwszej strony, cookies analitycznych,
+                reklamowych ani marketingowych. Nie znaleziono narzędzia profilowania ani banera lub
+                centrum zarządzania zgodami.
+              </p>
+              <a class="legal-backtotop" href="#legal-top" aria-label="Powrót na górę strony"
+                ><span aria-hidden="true">↑</span
+                ><span class="visually-hidden">Powrót na górę</span></a
+              >
             </section>
 
-            <!-- 4 Cele wykorzystywania plików cookies -->
             <section class="legal-section" aria-labelledby="cookies-4">
-              <h2 id="cookies-4">4. Cele wykorzystywania plików cookies</h2>
-              <p>Pliki cookies mogą być wykorzystywane w Serwisie w następujących celach:</p>
+              <h2 id="cookies-4">4. Cele wykorzystywania technologii przechowywania danych</h2>
+
+              <p>Rzeczywiste mechanizmy są używane w celu:</p>
               <ul>
+                <li>zachowania koszyka demonstracyjnego w tej samej przeglądarce;</li>
+                <li>zachowania wybranego motywu interfejsu;</li>
                 <li>
-                  zapewnienia prawidłowego funkcjonowania Serwisu oraz jego podstawowych mechanizmów
-                  technicznych,
+                  zapamiętania potwierdzenia informacji o demonstracyjnym charakterze Projektu;
                 </li>
-                <li>utrzymania bezpieczeństwa oraz stabilności działania strony,</li>
+                <li>ograniczenia ponownego wyświetlania propozycji instalacji PWA;</li>
                 <li>
-                  zapamiętania wybranych ustawień i preferencji Użytkownika (np. ustawień
-                  interfejsu),
-                </li>
-                <li>
-                  prowadzenia analiz statystycznych dotyczących sposobu korzystania z Serwisu w celu
-                  jego optymalizacji i rozwoju,
-                </li>
-                <li>
-                  realizacji obowiązków wynikających z przepisów prawa, jeżeli zastosowanie
-                  określonych technologii jest wymagane.
+                  dostarczenia wcześniej pobranych zasobów i ograniczonego działania offline przez
+                  Service Workera.
                 </li>
               </ul>
               <p>
-                Zakres stosowanych plików cookies może różnić się w zależności od aktualnych
-                funkcjonalności wdrożonych w ramach Serwisu.
+                Checkout nie zapisuje danych wpisywanych w formularzu, a koszyk nie jest wysyłany do
+                systemu zamówień. Serwis nie prowadzi analityki, reklam, marketingowego śledzenia,
+                profilowania ani newslettera. Dane przechowywane lokalnie nie są przez te mechanizmy
+                przekazywane Operatorowi.
               </p>
-              <a class="legal-backtotop" href="#legal-top" aria-label="Powrót na górę strony">
-                <span aria-hidden="true">↑</span>
-                <span class="visually-hidden">Powrót na górę</span>
-              </a>
+              <a class="legal-backtotop" href="#legal-top" aria-label="Powrót na górę strony"
+                ><span aria-hidden="true">↑</span
+                ><span class="visually-hidden">Powrót na górę</span></a
+              >
             </section>
 
-            <!-- 5 Podstawy prawne stosowania plików cookies -->
             <section class="legal-section" aria-labelledby="cookies-5">
-              <h2 id="cookies-5">5. Podstawy prawne stosowania plików cookies</h2>
+              <h2 id="cookies-5">
+                5. Podstawy prawne stosowania plików cookies i podobnych technologii
+              </h2>
+
               <p>
-                Stosowanie plików cookies odbywa się zgodnie z obowiązującymi przepisami prawa, w
-                szczególności z Rozporządzeniem Parlamentu Europejskiego i Rady (UE) 2016/679 (RODO)
-                oraz właściwymi przepisami dotyczącymi ochrony prywatności w łączności
-                elektronicznej.
+                Volt Garage nie uruchamia opcjonalnych narzędzi analitycznych, reklamowych ani
+                marketingowych, więc w aktualnej wersji nie zbiera zgody na takie technologie i nie
+                prowadzi rejestru zgód cookie.
               </p>
               <p>
-                W przypadku plików cookies niezbędnych do prawidłowego funkcjonowania Serwisu
-                podstawą prawną jest prawnie uzasadniony interes Administratora polegający na
-                zapewnieniu bezpieczeństwa i poprawnego działania strony.
+                Pamięć używana do funkcji wyraźnie żądanych przez Użytkownika, takich jak koszyk,
+                motyw, potwierdzenie informacji o Projekcie lub działanie PWA, służy dostarczeniu
+                tych funkcji. Jej stosowanie należy oceniać zgodnie z właściwymi przepisami o
+                prywatności w łączności elektronicznej i ochronie danych; ten dokument nie deklaruje
+                podstawy prawnej dla nieistniejących cookies.
               </p>
               <p>
-                W przypadku plików cookies innych niż niezbędne (np. analitycznych lub
-                funkcjonalnych) podstawą prawną jest zgoda Użytkownika wyrażona przed ich zapisaniem
-                na urządzeniu końcowym.
+                Ewentualne przetwarzanie prowadzone niezależnie przez Google Maps lub dostawcę
+                hostingu i formularzy podlega zasadom tych podmiotów oraz opisowi w
+                <a href="privacy-policy.html">Polityce prywatności</a>. Potwierdzenie informacji o
+                Projekcie nie jest zgodą na analitykę, reklamę ani marketing.
               </p>
-              <p>
-                Użytkownik ma prawo w dowolnym momencie wycofać zgodę na stosowanie plików cookies
-                bez wpływu na zgodność z prawem przetwarzania dokonanego przed jej cofnięciem.
-              </p>
-              <a class="legal-backtotop" href="#legal-top" aria-label="Powrót na górę strony">
-                <span aria-hidden="true">↑</span>
-                <span class="visually-hidden">Powrót na górę</span>
-              </a>
+              <a class="legal-backtotop" href="#legal-top" aria-label="Powrót na górę strony"
+                ><span aria-hidden="true">↑</span
+                ><span class="visually-hidden">Powrót na górę</span></a
+              >
             </section>
 
-            <!-- 6 Zarządzanie ustawieniami cookies -->
             <section class="legal-section" aria-labelledby="cookies-6">
-              <h2 id="cookies-6">6. Zarządzanie ustawieniami cookies</h2>
-              <p>
-                Użytkownik może w każdej chwili zmienić ustawienia dotyczące plików cookies za
-                pośrednictwem ustawień swojej przeglądarki internetowej lub – jeżeli zostało to
-                wdrożone – poprzez odpowiedni mechanizm zarządzania zgodą dostępny w Serwisie.
-              </p>
-              <p>Użytkownik może w szczególności:</p>
-              <ul>
-                <li>ograniczyć zapisywanie plików cookies,</li>
-                <li>zablokować określone kategorie plików cookies,</li>
-                <li>usunąć zapisane wcześniej pliki cookies z urządzenia końcowego.</li>
-              </ul>
-              <p>
-                Ograniczenie stosowania plików cookies może wpłynąć na niektóre funkcjonalności
-                Serwisu lub jego prawidłowe działanie.
-              </p>
-              <a class="legal-backtotop" href="#legal-top" aria-label="Powrót na górę strony">
-                <span aria-hidden="true">↑</span>
-                <span class="visually-hidden">Powrót na górę</span>
-              </a>
-            </section>
+              <h2 id="cookies-6">6. Zarządzanie ustawieniami cookies i podobnych technologii</h2>
 
-            <!-- 7 Pliki cookies podmiotów trzecich -->
-            <section class="legal-section" aria-labelledby="cookies-7">
-              <h2 id="cookies-7">7. Pliki cookies podmiotów trzecich</h2>
               <p>
-                Serwis może wykorzystywać rozwiązania techniczne dostarczane przez podmioty trzecie,
-                które mogą zapisywać pliki cookies na urządzeniu końcowym Użytkownika lub uzyskiwać
-                do nich dostęp.
+                Serwis nie udostępnia banera, przełącznika kategorii ani centrum zarządzania
+                zgodami, ponieważ aktualna implementacja nie korzysta z własnych opcjonalnych
+                cookies, analityki ani marketingowego śledzenia.
               </p>
-              <p>Dotyczyć to może w szczególności:</p>
+              <p>Użytkownik może zarządzać danymi w ustawieniach przeglądarki:</p>
               <ul>
-                <li>dostawców usług hostingowych oraz infrastruktury IT,</li>
-                <li>dostawców narzędzi analitycznych lub statystycznych,</li>
                 <li>
-                  dostawców usług wspierających funkcjonalność interfejsu (np. mapy, osadzone
-                  treści, czcionki zewnętrzne).
+                  ustawienia cookies pozwalają blokować lub usuwać cookies podmiotów zewnętrznych,
+                  jeżeli takie zostaną zapisane przez ich usługę;
+                </li>
+                <li>
+                  wyczyszczenie danych witryny usuwa wpisy <code>localStorage</code> i
+                  <code>sessionStorage</code>, co może usunąć koszyk, motyw, potwierdzenie Projektu
+                  i stan propozycji PWA;
+                </li>
+                <li>
+                  wyczyszczenie danych witryny lub pamięci podręcznej może usunąć zasoby Cache
+                  Storage i ograniczyć działanie offline;
+                </li>
+                <li>
+                  usunięcie pozycji z koszyka usuwa stan koszyka przez funkcję interfejsu, ale nie
+                  pozostałe ustawienia witryny.
                 </li>
               </ul>
               <p>
-                Zasady przetwarzania danych przez podmioty trzecie określane są w ich odrębnych
-                politykach prywatności oraz regulaminach. Operator nie ponosi odpowiedzialności za
-                treść ani praktyki stosowane przez te podmioty.
+                Ograniczenie pamięci przeglądarki albo Service Workera może ograniczyć działanie
+                koszyka, motywu, instalacji PWA i trybu offline. Zablokowanie zasobów Google Maps
+                może uniemożliwić wyświetlenie osadzonej mapy.
               </p>
-              <a class="legal-backtotop" href="#legal-top" aria-label="Powrót na górę strony">
-                <span aria-hidden="true">↑</span>
-                <span class="visually-hidden">Powrót na górę</span>
-              </a>
+              <a class="legal-backtotop" href="#legal-top" aria-label="Powrót na górę strony"
+                ><span aria-hidden="true">↑</span
+                ><span class="visually-hidden">Powrót na górę</span></a
+              >
             </section>
 
-            <!-- 8 Zmiany Polityki cookies -->
+            <section class="legal-section" aria-labelledby="cookies-7">
+              <h2 id="cookies-7">7. Technologie i usługi podmiotów trzecich</h2>
+
+              <p>
+                Na stronie kontaktowej mapa Google Maps jest osadzona bezpośrednio w elemencie
+                <code>iframe</code> i ładuje się jako usługa Google. Przy jej ładowaniu Google może
+                przetwarzać dane połączenia i stosować własne technologie przechowywania według
+                swoich zasad. Kod Volt Garage nie zna nazw ani okresów ewentualnych identyfikatorów
+                Google i nie deklaruje ich jako własnych cookies.
+              </p>
+              <p>
+                Netlify zapewnia hosting publicznych plików oraz obsługę formularza kontaktowego.
+                Kod Volt Garage nie ustawia cookies Netlify. Netlify może jednak przetwarzać dane
+                techniczne żądań i dane formularza w swojej infrastrukturze zgodnie z warunkami
+                usługi; szczegóły i retencja nie są konfigurowane w tej stronie.
+              </p>
+              <p>
+                Linki do KP_Code, Facebooka, X, GitHuba i Instagrama są zwykłymi odnośnikami. Samo
+                wyświetlenie linku nie uruchamia skryptu tych serwisów ani nie przekazuje im danych
+                przez Volt Garage. Po przejściu na zewnętrzną stronę obowiązują jej własne zasady.
+                Fonty są dostarczane lokalnie z zasobów Projektu.
+              </p>
+              <p>
+                Volt Garage nie wdraża dostawcy analityki, reklamy, marketingowego trackera,
+                profilowania ani zewnętrznego systemu zgód.
+              </p>
+              <a class="legal-backtotop" href="#legal-top" aria-label="Powrót na górę strony"
+                ><span aria-hidden="true">↑</span
+                ><span class="visually-hidden">Powrót na górę</span></a
+              >
+            </section>
+
             <section class="legal-section" aria-labelledby="cookies-8">
               <h2 id="cookies-8">8. Zmiany Polityki cookies</h2>
+
               <p>
-                Operator zastrzega sobie prawo do wprowadzania zmian w niniejszej Polityce cookies,
-                w szczególności w przypadku zmian przepisów prawa, aktualizacji funkcjonalności
-                Serwisu lub zmiany stosowanych technologii.
+                Polityka może być aktualizowana wraz ze zmianą funkcjonalności Serwisu, sposobu
+                działania pamięci przeglądarki, Service Workera, usług zewnętrznych lub przepisów
+                prawa.
               </p>
               <p>
-                Aktualna wersja Polityki cookies publikowana jest w Serwisie. Zmiany wchodzą w życie
-                z dniem ich opublikowania, o ile nie wskazano innego terminu obowiązywania.
+                Aktualna wersja jest publikowana w Serwisie wraz z datą ostatniej aktualizacji i
+                obowiązuje od dnia publikacji, o ile nie wskazano innego terminu. Istotne zmiany
+                techniczne zostaną opisane odpowiednio do charakteru Projektu.
               </p>
-              <a class="legal-backtotop" href="#legal-top" aria-label="Powrót na górę strony">
-                <span aria-hidden="true">↑</span>
-                <span class="visually-hidden">Powrót na górę</span>
-              </a>
+              <a class="legal-backtotop" href="#legal-top" aria-label="Powrót na górę strony"
+                ><span aria-hidden="true">↑</span
+                ><span class="visually-hidden">Powrót na górę</span></a
+              >
             </section>
 
-            <!-- 9 Kontakt -->
             <section class="legal-section" aria-labelledby="cookies-9">
               <h2 id="cookies-9">9. Kontakt</h2>
-              <p>
-                W sprawach związanych ze stosowaniem plików cookies, zasadami przetwarzania danych
-                lub realizacją praw Użytkownika można skontaktować się z Operatorem za pośrednictwem
-                adresu e-mail:
-                <a href="mailto:kontakt@kp-code.pl">kontakt@kp-code.pl</a>.
-              </p>
-              <p>
-                Operator udziela odpowiedzi w możliwie najkrótszym terminie, z uwzględnieniem
-                charakteru zgłoszenia oraz obowiązujących przepisów prawa.
-              </p>
-              <a class="legal-backtotop" href="#legal-top" aria-label="Powrót na górę strony">
-                <span aria-hidden="true">↑</span>
-                <span class="visually-hidden">Powrót na górę</span>
-              </a>
-            </section>
 
-            <!-- Date last updated -->
+              <p>
+                Pytania dotyczące tej Polityki, pamięci przeglądarki lub technologii używanych w
+                Serwisie można kierować do Kamila Króla działającego pod marką KP_Code Digital
+                Studio: <a href="mailto:kontakt@kp-code.pl">kontakt@kp-code.pl</a>.
+              </p>
+              <p>
+                Zasady przetwarzania danych osobowych opisuje
+                <a href="privacy-policy.html">Polityka prywatności</a>, a zasady korzystania z
+                demonstracyjnego Serwisu – <a href="terms.html">Regulamin</a>.
+              </p>
+              <a class="legal-backtotop" href="#legal-top" aria-label="Powrót na górę strony"
+                ><span aria-hidden="true">↑</span
+                ><span class="visually-hidden">Powrót na górę</span></a
+              >
+            </section>
             <p class="legal-meta">
-              <small>
-                Data ostatniej aktualizacji:
-                <time datetime="2026-03-31">31.03.2026</time>
-              </small>
+              <small
+                >Data ostatniej aktualizacji: <time datetime="2026-09-12">12.09.2026</time></small
+              >
             </p>
           </article>
         </div>

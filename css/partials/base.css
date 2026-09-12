@@ -175,7 +175,6 @@ html.reveal-ready [data-reveal].is-visible {
   }
 }
 
-/* Keep sprite definitions available without occupying layout space. */
 #volt-icon-sprite {
   position: absolute;
   overflow: hidden;

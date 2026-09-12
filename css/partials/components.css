@@ -807,6 +807,85 @@
   }
 }
 
+/* Scroll to top */
+
+/* The control is fixed beside the footer rather than laid out inside it, so it claims no room in
+   the document and cannot shift the page when it arrives. Its 24px box is the sprite's own
+   framing: the up chevron is drawn across the middle half of a 60x60 viewBox, so at 24px it
+   paints the same delicate 14x8 stroke as the select chevron, inside a 40px target a thumb or a
+   Tab key can still land on. */
+.scroll-top {
+  --scroll-top-inline: var(--space-05);
+  --scroll-top-block: var(--space-05);
+  --scroll-top-clearance: 0px;
+
+  position: fixed;
+  right: var(--scroll-top-inline);
+  bottom: calc(var(--scroll-top-block) + var(--scroll-top-clearance));
+  z-index: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 40px;
+  block-size: 40px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-muted);
+  box-shadow: var(--shadow-sm);
+  opacity: 0;
+  transform: translateY(6px);
+  /* Hidden is hidden: visibility keeps the button out of the tab order and deaf to pointers
+     until the footer says otherwise, which opacity alone would not. */
+  visibility: hidden;
+  transition:
+    opacity var(--transition-base),
+    transform var(--transition-base),
+    visibility var(--transition-base),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+.scroll-top.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
+.scroll-top:is(:hover, :focus-visible) {
+  border-color: color-mix(in srgb, var(--color-accent) 55%, var(--color-border));
+  color: var(--color-accent-ink);
+  transform: translateY(-1px);
+}
+.scroll-top__icon {
+  inline-size: 24px;
+  block-size: 24px;
+}
+
+/* The install offer parks in the same corner and is the louder message. Collapsed it is a known
+   34px chip, so the button steps above it; expanded, the card's height follows its copy, and a
+   guessed clearance would sooner or later cover it - there the button stands down instead. Below
+   the width at which the offer already treats the toast as sharing the bottom band, a shown
+   toast gets the same courtesy. */
+body:has(.install-cta[data-install-state='collapsed']) .scroll-top {
+  --scroll-top-clearance: calc(34px + var(--space-03));
+}
+body:has(.install-cta[data-install-state='expanded']) .scroll-top {
+  opacity: 0;
+  visibility: hidden;
+}
+@media (max-width: 1023px) {
+  body:has(.toast:not([hidden])) .scroll-top {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+@media (max-width: 719px) {
+  .scroll-top {
+    --scroll-top-inline: var(--space-04);
+    --scroll-top-block: calc(var(--space-04) + env(safe-area-inset-bottom, 0px));
+  }
+}
+
 /* Cart item */
 
 .cart-item {

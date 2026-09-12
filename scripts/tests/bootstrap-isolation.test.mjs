@@ -17,6 +17,7 @@ const order = [
   'initHeader',
   'initTheme',
   'initReveal',
+  'initScrollTop',
   'initCart',
   'initFeaturedProducts',
   'initFilters',

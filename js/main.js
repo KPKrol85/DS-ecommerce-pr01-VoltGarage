@@ -3,6 +3,7 @@ import { mountIconSprite } from '../icons.js';
 import { initHeader } from './ui/header.js';
 import { initTheme } from './ui/theme.js';
 import { initReveal } from './ui/reveal.js';
+import { initScrollTop } from './ui/scroll-top.js';
 import { initAccessibility } from './ui/accessibility.js';
 import { initProjectModal } from './ui/project-modal.js';
 import { initGlobalErrorHandling } from './core/errors.js';
@@ -242,6 +243,7 @@ const initApp = () => {
   if (has('[data-header]')) runInitializer('initHeader', initHeader);
   if (has('[data-theme-toggle]')) runInitializer('initTheme', initTheme);
   if (has('[data-reveal]')) runInitializer('initReveal', initReveal);
+  if (has('[data-scroll-top]')) runInitializer('initScrollTop', initScrollTop);
   if (has('[data-cart-count]')) runInitializer('initCart', initCart);
   if (has('[data-products="featured"]'))
     runInitializer('initFeaturedProducts', initFeaturedProducts);

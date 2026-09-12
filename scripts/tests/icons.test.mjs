@@ -185,22 +185,25 @@ for (const file of discoverHtml(root)) {
     const hasSummary = ['pages/cart.html', 'pages/checkout.html'].includes(file);
     const cartIcons = uses.filter((m) => m[2] === 'cart');
     assert.equal(cartIcons.length, hasSummary ? 2 : 1);
-    // The shop filter panel is the only place a chevron replaces a system arrow, and only the
-    // downward one: the upward symbol waits in the sprite for the scroll-to-top control.
+    // The shop filter panel is the only place a downward chevron replaces a system arrow. The
+    // upward one belongs to the scroll-to-top control in the shared shell, so every document
+    // carries exactly one, after the footer that control watches.
     const isShop = file === 'pages/shop.html';
     const chevrons = uses.filter((m) => m[2].startsWith('chevron-'));
     assert.deepEqual(
       chevrons.map((m) => m[2]),
-      isShop ? ['chevron-down', 'chevron-down'] : [],
+      isShop ? ['chevron-down', 'chevron-down', 'chevron-up'] : ['chevron-up'],
       `${file}: unexpected chevron inventory`
     );
     assert.equal(
       uses.length,
       (file === 'pages/contact.html' ? 8 : 6) + cartIcons.length + chevrons.length
     );
-    for (const [, attributes] of chevrons) {
-      assert.match(attributes, /class="select-chevron"/);
-      assert.match(attributes, /viewBox="0 0 35 20"/);
+    for (const [, attributes, name] of chevrons) {
+      const [className, viewBox] =
+        name === 'chevron-up' ? ['scroll-top__icon', '0 0 60 60'] : ['select-chevron', '0 0 35 20'];
+      assert.match(attributes, new RegExp(`class="${className}"`), name);
+      assert.match(attributes, new RegExp(`viewBox="${viewBox}"`), name);
     }
     for (const id of isShop ? ['filter-category', 'filter-sort'] : []) {
       // The select keeps every native semantic; the icon is a sibling, so it can never be read
@@ -246,17 +249,32 @@ for (const file of discoverHtml(root)) {
   });
 }
 
-test('the upward chevron is prepared in the sprite but not yet wired into the UI', async () => {
+// The upward chevron now has one consumer: the scroll-to-top control the shared shell renders.
+// Claimed once has to mean claimed through the sprite, so the artwork itself is searched for as
+// well - a page that grew its own copy of the stroke would satisfy every assertion above.
+test('the upward chevron is claimed once per document, by the shared control', async () => {
   assert.match(source, /<symbol id="icon-chevron-up" /, 'the sprite must define the symbol');
-  const consumers = [];
+  const geometry = symbols.find((m) => m[1] === 'chevron-up')[3].match(/\bd="([^"]+)"/)[1];
   for (const file of discoverHtml(root)) {
     const html = await renderHtml(
       root,
       file,
       await fs.readFile(new URL('../../' + file, import.meta.url), 'utf8')
     );
-    if (html.includes('icon-chevron-up')) consumers.push(file);
+    assert.equal(
+      (html.match(/<use href="#icon-chevron-up"><\/use>/g) || []).length,
+      1,
+      `${file}: the upward chevron is rendered once, by the scroll-to-top control`
+    );
+    assert.equal(
+      (html.match(/data-scroll-top(?![-\w])/g) || []).length,
+      1,
+      `${file}: one scroll-to-top control per document`
+    );
+    assert.ok(!html.includes(geometry), `${file}: the chevron artwork belongs to the sprite`);
   }
+  // Neither a stylesheet nor a module may reintroduce what the sprite already publishes: the
+  // control reaches the symbol through the reference in the shared partial and nowhere else.
   for (const directory of ['css', 'js']) {
     const entries = await fs.readdir(new URL(`../../${directory}/`, import.meta.url), {
       recursive: true,
@@ -265,12 +283,12 @@ test('the upward chevron is prepared in the sprite but not yet wired into the UI
     for (const entry of entries) {
       if (!entry.isFile()) continue;
       const file = path.join(entry.parentPath, entry.name);
-      if ((await fs.readFile(file, 'utf8')).includes('icon-chevron-up')) {
-        consumers.push(path.relative(root, file).split(path.sep).join('/'));
-      }
+      const contents = await fs.readFile(file, 'utf8');
+      const name = path.relative(root, file).split(path.sep).join('/');
+      assert.ok(!contents.includes(geometry), `${name}: duplicates the chevron artwork`);
+      assert.ok(!contents.includes('icon-chevron-up'), `${name}: claims the shared symbol`);
     }
   }
-  assert.deepEqual(consumers, [], 'scroll-to-top is a separate task; nothing may claim it yet');
 });
 
 test('temporary standalone source icons are no longer published', async () => {

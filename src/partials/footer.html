@@ -1,4 +1,4 @@
-<footer class="footer">
+<footer class="footer" data-scroll-top-target>
   <div class="container">
     <div class="footer-grid">
       <div>
@@ -130,6 +130,21 @@
     </div>
   </div>
 </footer>
+
+<!-- Scroll to top. Fixed to the viewport, so it sits beside the footer instead of inside its
+     layout and reserves no space in the document. js/ui/scroll-top.js watches the footer above
+     and reveals the control once the visitor reaches it. -->
+<button
+  class="scroll-top"
+  type="button"
+  aria-label="Wróć na górę"
+  title="Wróć na górę"
+  data-scroll-top
+>
+  <svg class="scroll-top__icon" aria-hidden="true" focusable="false" viewBox="0 0 60 60">
+    <use href="#icon-chevron-up"></use>
+  </svg>
+</button>
 
 <!-- Project Modal -->
 <div class="project-modal" data-project-modal hidden>

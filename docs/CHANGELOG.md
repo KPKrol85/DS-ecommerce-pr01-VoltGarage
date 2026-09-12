@@ -41,6 +41,8 @@ All significant changes to this project are documented in this file.
 - Replaced unsupported homepage hero statistics with catalog-backed product, category, and new-arrival counts, and removed unused fabricated `rating` data from all product records.
 - Refined the PWA install prompt into a compact two-state interface that automatically collapses after 30 seconds while remaining available through a small `VOLT APP` chip, with explicit dismissal limited to the current browser session.
 - Refined the project-information modal with stronger VoltGarage branding, a six-segment racing accent, clearer demonstration copy, a `PRZEJDŹ DO SERWISU` continuation action, and consolidated privacy, cookie, and terms links while preserving the existing acknowledgement flow.
+- Refined the VoltGarage color system around a cooler premium automotive palette, replacing the previous pink and red hero wash with neutral steel and graphite surfaces while preserving warm gold-orange as a restrained brand accent.
+- Decoupled shared subpage hero styling from the photographic homepage hero, introducing dedicated theme-aware hero tokens and more consistent light and dark mode treatments across internal pages.
 
 ### Security
 
@@ -122,5 +124,6 @@ All significant changes to this project are documented in this file.
 - Added regression coverage for the bundled font contract, including expected font artifacts, weight mappings, preload references, retired font paths, and artifact integrity.
 - Added regression coverage for PWA install-prompt expansion, timed collapse, chip reopening, session dismissal, native installation, timer cleanup, focus-safe collapse, and separation from Service Worker update notifications.
 - Added regression coverage for the project disclosure content, continuation action, legal-link contract, acknowledgement persistence, and keyboard focus behavior, with responsive light and dark theme verification.
+- Verified the refined color and hero system across homepage, shop, contact, shared components, responsive breakpoints, both themes, focused theme tests, the full QA suite, and the production build.
 
 

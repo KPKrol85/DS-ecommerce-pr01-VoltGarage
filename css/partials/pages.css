@@ -1,17 +1,17 @@
 /* Page Hero */
 
+/* One brushed-steel plate in both themes: a cool sheen sweeps in behind the mark, a restrained
+   warm ember anchors the lower left, and the vertical base resolves into the page background so
+   the hero meets the content below without a seam. Only the token values differ per theme, so
+   the shared subpage heroes stay one treatment rather than two. */
 .page-hero {
   position: relative;
   overflow: hidden;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
   background:
-    radial-gradient(circle at top left, var(--hero-light-accent), transparent 55%),
-    radial-gradient(circle at top right, var(--hero-light-glow), transparent 55%),
-    linear-gradient(180deg, var(--hero-light-base), #f7f9fb);
-  --page-hero-mark-opacity: 0.24;
-}
-[data-theme='dark'] .page-hero {
-  background: var(--gradient-hero);
-  --page-hero-mark-opacity: 0.12;
+    radial-gradient(110% 150% at 76% -10%, var(--page-hero-sheen), transparent 58%),
+    radial-gradient(56% 120% at -4% 112%, var(--page-hero-accent), transparent 64%),
+    linear-gradient(180deg, var(--page-hero-top), var(--page-hero-bottom));
 }
 .page-hero .container {
   position: relative;
@@ -66,7 +66,7 @@
 
 .page--shop .notice {
   margin-bottom: var(--space-02);
-  color: var(--color-accent);
+  color: var(--color-accent-ink);
 }
 .filter-panel {
   display: grid;
@@ -283,7 +283,7 @@
 }
 .page--stats .stats-card__support a:hover,
 .page--stats .stats-card__support a:focus-visible {
-  color: var(--color-accent);
+  color: var(--color-accent-ink);
 }
 
 @media (min-width: 640px) {
@@ -315,7 +315,7 @@
 }
 @media (hover: hover) and (pointer: fine) {
   .page--contact .contact-details__item:hover {
-    color: var(--color-accent);
+    color: var(--color-accent-ink);
   }
 }
 .page--contact .contact-details__icon {
@@ -406,7 +406,7 @@
     transform var(--transition-fast);
 }
 .page--collections .card .badge:hover {
-  background: color-mix(in srgb, var(--color-accent) 26%, transparent);
+  background: color-mix(in srgb, var(--color-accent) 14%, transparent);
   opacity: 0.99;
 }
 .page--collections .card p {
@@ -498,7 +498,7 @@
   opacity: 0.9;
   font-size: var(--fs-02);
   border: none;
-  color: var(--color-accent);
+  color: var(--color-accent-ink);
 }
 
 @media (min-width: 760px) {
@@ -648,7 +648,7 @@
 }
 .doc-toc a:hover,
 .doc-toc a:focus-visible {
-  color: var(--color-accent);
+  color: var(--color-accent-ink);
 }
 .legal-doc {
   background: var(--color-card);
@@ -697,7 +697,7 @@
 .legal-lead a:focus-visible,
 .legal-doc a:hover,
 .legal-doc a:focus-visible {
-  color: var(--color-accent);
+  color: var(--color-accent-ink);
 }
 .legal-note,
 .legal-meta {
@@ -733,10 +733,10 @@
 }
 .legal-backtotop:hover,
 .legal-backtotop:focus-visible {
-  color: color-mix(in srgb, var(--color-accent) 72%, var(--color-ink));
+  color: color-mix(in srgb, var(--color-accent-ink) 72%, var(--color-ink));
   transform: translateY(-1px);
 }
 .legal-backtotop:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--color-accent) 36%, transparent);
+  outline: 2px solid color-mix(in srgb, var(--color-accent-ink) 36%, transparent);
   outline-offset: 4px;
 }

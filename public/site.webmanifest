@@ -61,13 +61,13 @@
   "screenshots": [
     {
       "src": "/assets/icons/screenshots/desktop-home.png",
-      "sizes": "1280x800",
+      "sizes": "1440x919",
       "type": "image/png",
       "form_factor": "wide"
     },
     {
       "src": "/assets/icons/screenshots/mobile-home.png",
-      "sizes": "390x844",
+      "sizes": "402x874",
       "type": "image/png",
       "form_factor": "narrow"
     }

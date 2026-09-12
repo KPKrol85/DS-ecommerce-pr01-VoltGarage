@@ -109,9 +109,12 @@
   --ease-elastic-3: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-elastic-4: cubic-bezier(0.34, 1.8, 0.64, 1);
 
-  /* Logo sizes */
-  --logo-footer-size: 104px;
-  --logo-header-size: clamp(40px, 4vw, 46px);
+  /* Logo sizes. The horizontal lockup is 262 × 48, so header and footer both set a width and let
+     aspect-ratio supply the height. The header upper bound puts the badge at the 36px the logo
+     sheet specifies; the lower bound is the widest lockup a 375px header fits beside its
+     controls. */
+  --logo-footer-size: 216px;
+  --logo-header-size: clamp(142px, 22vw, 196px);
   --logo-mark-size: clamp(104px, 12vw, 208px);
 }
 
@@ -142,6 +145,11 @@
   --page-hero-mark-opacity: 0.2;
   --icon-fill: var(--color-ink);
   --icon-fill-hover: var(--color-accent-ink);
+  /* The approved lockup ships one file per surface rather than a filtered single asset: the
+     "light" file carries the #141a22 wordmark for a light header, the "dark" file the #f4f6f8
+     one. The footer plate is dark in both themes, so its markup names the dark file directly
+     instead of following this token. */
+  --brand-lockup: url('/assets/images/logo/logo-lockup-light.svg');
 }
 
 [data-theme='dark'] {
@@ -170,6 +178,7 @@
   --page-hero-mark-opacity: 0.14;
   --icon-fill: var(--color-ink);
   --icon-fill-hover: var(--color-accent);
+  --brand-lockup: url('/assets/images/logo/logo-lockup-dark.svg');
 }
 
 /* No-JavaScript fallback: without the runtime no data-theme lands on <html>, so a dark system
@@ -204,5 +213,6 @@
     --page-hero-mark-opacity: 0.14;
     --icon-fill: var(--color-ink);
     --icon-fill-hover: var(--color-accent);
+    --brand-lockup: url('/assets/images/logo/logo-lockup-dark.svg');
   }
 }

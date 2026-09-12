@@ -6,7 +6,8 @@ import { safeSessionStorage, safeStorage } from '../services/storage.js';
 const INSTALL_DISMISSED_KEY = 'vg_install_cta_dismissed';
 const INSTALL_SESSION_DISMISSED_KEY = 'vg_install_cta_session_dismissed';
 const AUTO_COLLAPSE_DELAY = 30000;
-const INSTALL_MARK = '/assets/images/logo/logo.svg';
+// Symbol only: the offer is a compact chip, so the wordmark beside it belongs to the copy.
+const INSTALL_MARK = '/assets/images/logo/logo-badge.svg';
 
 const createElement = (tag, className, attrs = {}) => {
   const el = document.createElement(tag);
@@ -51,8 +52,8 @@ const createMark = () =>
     src: INSTALL_MARK,
     alt: '',
     'aria-hidden': 'true',
-    width: '32',
-    height: '29',
+    width: '48',
+    height: '48',
     decoding: 'async',
   });
 

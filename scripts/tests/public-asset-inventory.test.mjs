@@ -8,6 +8,19 @@ const publicDir = fileURLToPath(new URL('../../public/', import.meta.url));
 const shortcutDir = 'assets/icons/shortcuts';
 const shortcuts = ['shortcut-new.png', 'shortcut-sale.png', 'shortcut-shop.png'];
 const heroSizes = ['800x600', '1280x720', '1920x1080'];
+// The approved brand set: two theme lockups for the header and footer, the symbol-only badge for
+// compact marks, its outline variant for the page-hero watermark, and the square raster the
+// storefront's JSON-LD names as the organisation logo. The car-silhouette family this replaced
+// shipped the same megabyte of embedded PNG twice, and the worker precaches this whole directory,
+// so an exact inventory is what keeps that from creeping back.
+const logoDir = 'assets/images/logo';
+const logoFiles = [
+  'logo-512.png',
+  'logo-badge-outline.svg',
+  'logo-badge.svg',
+  'logo-lockup-dark.svg',
+  'logo-lockup-light.svg',
+];
 const readManifest = async () =>
   JSON.parse(await fs.readFile(path.join(publicDir, 'site.webmanifest'), 'utf8'));
 
@@ -40,6 +53,11 @@ test('shortcuts publish only the three canonical files used by the manifest', as
     manifest.shortcuts.flatMap((shortcut) => shortcut.icons.map((icon) => icon.src)).sort(),
     shortcuts.map((file) => `/${shortcutDir}/${file}`).sort()
   );
+});
+
+test('the logo directory publishes the approved badge and lockup set only', async () => {
+  await assertOnlyFiles(logoDir, logoFiles);
+  for (const file of logoFiles) await assertPublicFile(`${logoDir}/${file}`);
 });
 
 test('the published hero inventory contains all nine hero-05 variants only', async () => {

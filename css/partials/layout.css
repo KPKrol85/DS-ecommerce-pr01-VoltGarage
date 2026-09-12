@@ -168,21 +168,21 @@ main > section {
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 0;
-  font-family: var(--font-display);
-  font-size: var(--fs-04);
-  font-weight: var(--fw-03);
-  letter-spacing: var(--ls-03);
+  min-width: 0;
 }
 
+/* The lockup already sets the wordmark, so the header paints one asset instead of a mark beside
+   live text. The theme picks the file through --brand-lockup, which keeps the switch declarative
+   and lets the no-JavaScript dark fallback in themes.css reach it. aspect-ratio reserves the box
+   from the 262 × 48 artwork, so nothing reflows once the file arrives; min-width lets a header
+   narrower than the token scale the whole lockup down instead of pushing the controls out of the
+   container. */
 .brand-logo {
-  height: var(--logo-header-size);
-  width: auto;
-  flex-shrink: 0;
-}
-
-.brand-text {
-  display: none;
+  display: block;
+  width: var(--logo-header-size);
+  aspect-ratio: 262 / 48;
+  min-width: 0;
+  background: var(--brand-lockup) center / contain no-repeat;
 }
 
 .nav {
@@ -326,6 +326,8 @@ main > section {
   display: flex;
   align-items: center;
   gap: var(--space-03);
+  /* The controls hold their hit areas; the brand lockup beside them is what gives width back. */
+  flex-shrink: 0;
 }
 
 .nav-toggle {
@@ -360,15 +362,6 @@ main > section {
 
 .nav-toggle[aria-expanded='true'] .line--bottom {
   transform: translateY(-5.25px) rotate(-45deg);
-}
-
-@media (min-width: 480px) {
-  .brand {
-    gap: var(--space-04);
-  }
-  .brand-text {
-    display: inline;
-  }
 }
 
 @media (min-width: 900px) {
@@ -636,18 +629,14 @@ main > section {
   gap: var(--space-03);
   margin-bottom: var(--space-02);
 }
+/* The footer plate is dark in both themes, so the markup names the dark-surface lockup outright.
+   The token is a width here: height follows the artwork, and max-width from base.css lets the
+   lockup shrink with the brand column on the narrower footer grids. */
 .footer-logo {
   width: var(--logo-footer-size);
   height: auto;
   flex-shrink: 0;
   margin-bottom: var(--space-02);
-  transform: translateY(1px);
-}
-.footer-brand-text {
-  font-family: var(--font-display);
-  font-weight: var(--fw-03);
-  font-size: var(--fs-05);
-  letter-spacing: var(--ls-04);
 }
 .footer-brand p {
   max-width: 32ch;

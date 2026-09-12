@@ -43,6 +43,8 @@ All significant changes to this project are documented in this file.
 - Refined the project-information modal with stronger VoltGarage branding, a six-segment racing accent, clearer demonstration copy, a `PRZEJDŹ DO SERWISU` continuation action, and consolidated privacy, cookie, and terms links while preserving the existing acknowledgement flow.
 - Refined the VoltGarage color system around a cooler premium automotive palette, replacing the previous pink and red hero wash with neutral steel and graphite surfaces while preserving warm gold-orange as a restrained brand accent.
 - Decoupled shared subpage hero styling from the photographic homepage hero, introducing dedicated theme-aware hero tokens and more consistent light and dark mode treatments across internal pages.
+- Replaced the legacy VoltGarage branding with the approved vector logo system, using dedicated light and dark lockups in the header and footer and the approved symbol-only badge across favicon, PWA, install-prompt, project-modal, structured-data, and watermark contexts.
+- Migrated browser and PWA icon assets to badge-derived variants, including maskable-safe application icons, while removing obsolete duplicated raster-backed logo assets and substantially reducing the packaged branding payload.
 
 ### Security
 
@@ -81,6 +83,7 @@ All significant changes to this project are documented in this file.
 - Aligned the cart and primary product-detail regions with the existing progressive-enhancement fallback contract, preventing unverified cart totals and checkout actions from appearing before successful JavaScript initialization.
 - Repaired self-hosted font delivery by replacing incomplete subset assets with verified upstream Manrope static weights and the Space Grotesk variable font, restoring complete Latin and Polish glyph coverage without browser fallback.
 - Corrected hidden toast rendering and collapsed install-prompt pointer handling so inactive UI no longer remains visually present or blocks underlying page interactions.
+- Restored a persistent accessible name for the responsive header brand link and aligned logo sizing across desktop and mobile without changing navigation or control hit areas.
 
 ### Testing
 
@@ -125,5 +128,6 @@ All significant changes to this project are documented in this file.
 - Added regression coverage for PWA install-prompt expansion, timed collapse, chip reopening, session dismissal, native installation, timer cleanup, focus-safe collapse, and separation from Service Worker update notifications.
 - Added regression coverage for the project disclosure content, continuation action, legal-link contract, acknowledgement persistence, and keyboard focus behavior, with responsive light and dark theme verification.
 - Verified the refined color and hero system across homepage, shop, contact, shared components, responsive breakpoints, both themes, focused theme tests, the full QA suite, and the production build.
+- Added exact logo-asset inventory coverage and verified the complete branding system across light, dark and no-JavaScript themes, responsive layouts, favicon and PWA packaging, Service Worker precaching, structured data, the full QA suite, and the production build.
 
 

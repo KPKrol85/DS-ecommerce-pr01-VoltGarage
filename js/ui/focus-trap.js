@@ -47,6 +47,11 @@ export const createFocusTrap = (root) => {
   const deactivate = () => {
     document.removeEventListener('keydown', handleKeydown);
     if (previousActive && previousActive.focus) previousActive.focus();
+    // On a first visit nothing held focus before the trap opened, so restoring to the body is a
+    // no-op and focus would stay on a control the caller is about to hide. Release it instead, and
+    // the next Tab resumes from the top of the document rather than leaving it.
+    const active = document.activeElement;
+    if (active && active.blur && root.contains(active)) active.blur();
     previousActive = null;
   };
 

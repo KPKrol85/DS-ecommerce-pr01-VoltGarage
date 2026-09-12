@@ -959,70 +959,197 @@
     opacity var(--transition-base),
     visibility var(--transition-base);
 }
+
+/* The page stays recognizable behind the disclosure: a moderate scrim and a light blur keep the
+   panel unmistakably in front without burying the hero under a heavy frosted sheet. */
 .project-modal__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(9, 12, 18, 0.62);
-  backdrop-filter: blur(6px);
+  background: rgba(9, 12, 18, 0.46);
+  backdrop-filter: blur(3px);
 }
+
 .project-modal.is-visible {
   opacity: 1;
   visibility: visible;
 }
+
 .project-modal__panel {
   position: relative;
-  max-width: 480px;
+  max-width: 520px;
   width: 100%;
-  background: color-mix(in srgb, var(--color-surface) 90%, var(--color-bg));
-  border: 1px solid color-mix(in srgb, var(--color-border) 75%, transparent);
+  /* The grid area already excludes the container padding, so this keeps short viewports scrollable
+     instead of pushing the acknowledgement below the fold. */
+  max-height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  padding: var(--space-06);
-  box-shadow: var(--shadow-lg);
+  padding: var(--space-07);
+  box-shadow: var(--shadow-md), var(--shadow-lg);
   display: grid;
   gap: var(--space-03);
 }
+
+/* Brand lockup: the existing storefront mark plus the wordmark, signed off by a six-segment racing
+   tick. Segments run 36/28/22/17/13/10px with 6px gaps, so the motif tapers like a velocity trail
+   and closes at 156px — the width the mark and wordmark above it occupy across the whole clamp
+   range (147-161px). Painted as one background gradient, so the accent adds nothing to the markup
+   and nothing to the accessibility tree. */
+.project-modal__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-03);
+  margin-bottom: var(--space-02);
+  padding-bottom: var(--space-03);
+  background: linear-gradient(
+      90deg,
+      var(--color-accent) 0 36px,
+      transparent 36px 42px,
+      color-mix(in srgb, var(--color-accent) 88%, transparent) 42px 70px,
+      transparent 70px 76px,
+      color-mix(in srgb, var(--color-accent) 76%, transparent) 76px 98px,
+      transparent 98px 104px,
+      color-mix(in srgb, var(--color-accent) 64%, transparent) 104px 121px,
+      transparent 121px 127px,
+      color-mix(in srgb, var(--color-accent) 52%, transparent) 127px 140px,
+      transparent 140px 146px,
+      color-mix(in srgb, var(--color-accent) 40%, transparent) 146px 156px
+    )
+    bottom left / 156px 2px no-repeat;
+}
+
+.project-modal__mark {
+  width: 34px;
+  height: auto;
+}
+
+.project-modal__wordmark {
+  font-family: var(--font-display);
+  font-size: var(--fs-04);
+  font-weight: var(--fw-03);
+  letter-spacing: var(--ls-04);
+  line-height: var(--lh-01);
+}
+
 .project-modal__panel h2 {
   margin: 0;
-  font-size: var(--fs-06);
-  text-align: center;
-  text-transform: uppercase;
+  font-size: var(--fs-07);
+  letter-spacing: var(--ls-01);
 }
+
 .project-modal__panel p {
   margin: 0;
   color: var(--color-ink-muted);
 }
+
+.project-modal__note {
+  font-size: var(--fs-03);
+}
+
 .project-modal__actions {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-03);
-  margin: var(--space-02) auto;
+  margin-top: var(--space-03);
 }
-.project-modal .btn {
-  justify-self: start;
-  width: 180px;
+
+.project-modal__cta {
+  min-width: 200px;
+  height: 44px;
+  padding-inline: var(--space-06);
 }
+
+/* Links sit inside muted copy, so they carry ink weight: never colour alone. */
 .project-modal__panel a {
-  color: inherit;
+  color: var(--color-ink);
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in srgb, var(--color-ink-muted) 45%, transparent);
+  text-underline-offset: 3px;
+  transition:
+    color var(--transition-fast),
+    text-decoration-color var(--transition-fast);
 }
+
+/* The legal row is navigation, so it reads as navigation at rest. */
+.project-modal__links a {
+  text-decoration-line: underline;
+}
+
+/* The studio credit runs mid-sentence: weight carries it at rest, so no rule cuts the paragraph.
+   Its underline arrives with hover and focus, where the link is being acted on. */
+.project-modal__studio {
+  font-weight: var(--fw-02);
+}
+
 @media (hover: hover) and (pointer: fine) {
   .project-modal__panel a:hover {
     color: var(--color-accent);
+    text-decoration-line: underline;
+    text-decoration-color: currentcolor;
   }
 }
+
 .project-modal__panel a:focus-visible {
   color: var(--color-accent);
+  text-decoration-line: underline;
+  text-decoration-color: currentcolor;
+  border-radius: var(--radius-sm);
 }
+
 .project-modal__links {
   display: flex;
   flex-wrap: wrap;
-  text-align: center;
-  margin: 0 auto;
-  gap: var(--space-02);
+  align-items: center;
+  gap: var(--space-02) var(--space-03);
+  margin-top: var(--space-03);
+  padding-top: var(--space-04);
+  border-top: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
   font-size: var(--fs-03);
   color: var(--color-ink-muted);
 }
+
+.project-modal__separator {
+  color: var(--color-border-strong);
+}
+
 .project-modal-open {
   overflow: hidden;
+}
+
+/* The panel settles into place; the container fade carries the entrance when motion is reduced. */
+@media (prefers-reduced-motion: no-preference) {
+  .project-modal__panel {
+    transform: translateY(8px);
+    transition: transform var(--transition-base) var(--ease-out-5);
+  }
+  .project-modal.is-visible .project-modal__panel {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .project-modal {
+    padding: var(--space-04);
+  }
+  .project-modal__panel {
+    padding: var(--space-05);
+  }
+  .project-modal__cta {
+    width: 100%;
+  }
+}
+
+/* Under this width the row cannot hold all three destinations, and wrapping it would strand a
+   separator at the end of a line. The bullets step aside and spacing carries the separation. */
+@media (max-width: 359px) {
+  .project-modal__links {
+    gap: var(--space-02) var(--space-04);
+  }
+  .project-modal__separator {
+    display: none;
+  }
 }
 
 /* Tags */

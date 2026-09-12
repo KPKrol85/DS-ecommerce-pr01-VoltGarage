@@ -201,25 +201,43 @@
     aria-labelledby="project-modal-title"
     aria-describedby="project-modal-description"
   >
+    <div class="project-modal__brand">
+      <img
+        class="project-modal__mark"
+        src="/assets/images/logo/logo.svg"
+        alt=""
+        aria-hidden="true"
+        width="32"
+        height="29"
+        decoding="async"
+      />
+      <span class="project-modal__wordmark">VOLT GARAGE</span>
+    </div>
     <h2 id="project-modal-title">Informacja o projekcie</h2>
     <p id="project-modal-description">
       Volt Garage to projekt demonstracyjny przygotowany przez
-      <a href="https://kp-code.pl/" target="_blank" rel="noopener noreferrer"
+      <a
+        class="project-modal__studio"
+        href="https://kp-code.pl/"
+        target="_blank"
+        rel="noopener noreferrer"
         >KP_Code Digital Studio</a
       >
-      jako przykładowa strona internetowa dla branży e-commerce i akcesoriów motoryzacyjnych.
+      jako przykładowa realizacja dla branży e-commerce i motoryzacyjnej. Serwis nie realizuje
+      rzeczywistych zamówień ani płatności.
     </p>
-    <p>
-      Korzystanie z serwisu oznacza akceptację
-      <a href="{{pagesPrefix}}terms.html">Regulaminu</a>.
-    </p>
+    <p class="project-modal__note">Szczegóły działania i zasady korzystania znajdziesz poniżej.</p>
     <div class="project-modal__actions">
-      <button class="btn btn-accent" type="button" data-project-accept>Akceptuję</button>
+      <button class="btn btn-accent project-modal__cta" type="button" data-project-accept>
+        Przejdź do serwisu
+      </button>
     </div>
     <div class="project-modal__links">
       <a href="{{pagesPrefix}}privacy-policy.html">Polityka prywatności</a>
-      <span aria-hidden="true">•</span>
+      <span class="project-modal__separator" aria-hidden="true">•</span>
       <a href="{{pagesPrefix}}cookies.html">Cookies</a>
+      <span class="project-modal__separator" aria-hidden="true">•</span>
+      <a href="{{pagesPrefix}}terms.html">Regulamin</a>
     </div>
   </div>
 </div>

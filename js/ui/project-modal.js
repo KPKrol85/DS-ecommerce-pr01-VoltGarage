@@ -8,8 +8,13 @@ const showModal = (modal, trap, initialFocus) => {
   document.body.classList.add('project-modal-open');
   requestAnimationFrame(() => {
     modal.classList.add('is-visible');
-    trap.activate();
-    initialFocus?.focus();
+    // The entrance transition still reports the panel as visibility:hidden for the frame the class
+    // lands in, and a hidden element refuses focus: the trap would then arm around an empty modal
+    // while the visitor's next Tab walked into the page behind it. Focus waits one more frame.
+    requestAnimationFrame(() => {
+      trap.activate();
+      initialFocus?.focus();
+    });
   });
 };
 

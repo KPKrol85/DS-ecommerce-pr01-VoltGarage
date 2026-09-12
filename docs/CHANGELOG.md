@@ -40,6 +40,7 @@ All significant changes to this project are documented in this file.
 - Separated full-resolution product masters from published raster fallbacks and resized the deployed fallbacks to measured runtime needs, reducing the production package by approximately 8.34 MiB while preserving existing product image URLs and AVIF/WebP assets.
 - Replaced unsupported homepage hero statistics with catalog-backed product, category, and new-arrival counts, and removed unused fabricated `rating` data from all product records.
 - Refined the PWA install prompt into a compact two-state interface that automatically collapses after 30 seconds while remaining available through a small `VOLT APP` chip, with explicit dismissal limited to the current browser session.
+- Refined the project-information modal with stronger VoltGarage branding, a six-segment racing accent, clearer demonstration copy, a `PRZEJDŹ DO SERWISU` continuation action, and consolidated privacy, cookie, and terms links while preserving the existing acknowledgement flow.
 
 ### Security
 
@@ -120,5 +121,6 @@ All significant changes to this project are documented in this file.
 - Extended CSP regression coverage to reject inline style attributes, embedded style blocks, unsafe style directives, and known runtime inline-style sinks.
 - Added regression coverage for the bundled font contract, including expected font artifacts, weight mappings, preload references, retired font paths, and artifact integrity.
 - Added regression coverage for PWA install-prompt expansion, timed collapse, chip reopening, session dismissal, native installation, timer cleanup, focus-safe collapse, and separation from Service Worker update notifications.
+- Added regression coverage for the project disclosure content, continuation action, legal-link contract, acknowledgement persistence, and keyboard focus behavior, with responsive light and dark theme verification.
 
 

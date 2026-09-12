@@ -130,15 +130,25 @@
             </div>
             <div class="input-group">
               <label for="filter-category">Kategoria</label>
-              <select id="filter-category" name="category" data-native-select="true">
-                <option value="all">Wszystkie</option>
-                <option value="Emblematy">Emblematy</option>
-                <option value="Naklejki">Naklejki</option>
-                <option value="Gadżety">Gadżety</option>
-                <option value="Wnętrze">Wnętrze</option>
-                <option value="Zewnętrzne">Zewnętrzne</option>
-                <option value="Detailing">Detailing</option>
-              </select>
+              <div class="select-input">
+                <select id="filter-category" name="category" data-native-select="true">
+                  <option value="all">Wszystkie</option>
+                  <option value="Emblematy">Emblematy</option>
+                  <option value="Naklejki">Naklejki</option>
+                  <option value="Gadżety">Gadżety</option>
+                  <option value="Wnętrze">Wnętrze</option>
+                  <option value="Zewnętrzne">Zewnętrzne</option>
+                  <option value="Detailing">Detailing</option>
+                </select>
+                <svg
+                  class="select-chevron"
+                  aria-hidden="true"
+                  focusable="false"
+                  viewBox="0 0 35 20"
+                >
+                  <use href="#icon-chevron-down"></use>
+                </svg>
+              </div>
             </div>
             <div class="input-group">
               <label for="filter-price">Cena do <span data-price-output>400</span> zł</label>
@@ -146,12 +156,22 @@
             </div>
             <div class="input-group">
               <label for="filter-sort">Sortowanie</label>
-              <select id="filter-sort" name="sort">
-                <option value="featured">Polecane</option>
-                <option value="price-asc">Cena rosnąco</option>
-                <option value="price-desc">Cena malejąco</option>
-                <option value="name-asc">Nazwa A-Z</option>
-              </select>
+              <div class="select-input">
+                <select id="filter-sort" name="sort">
+                  <option value="featured">Polecane</option>
+                  <option value="price-asc">Cena rosnąco</option>
+                  <option value="price-desc">Cena malejąco</option>
+                  <option value="name-asc">Nazwa A-Z</option>
+                </select>
+                <svg
+                  class="select-chevron"
+                  aria-hidden="true"
+                  focusable="false"
+                  viewBox="0 0 35 20"
+                >
+                  <use href="#icon-chevron-down"></use>
+                </svg>
+              </div>
             </div>
           </aside>
 

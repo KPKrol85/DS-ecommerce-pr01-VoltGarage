@@ -595,6 +595,31 @@
   background: var(--color-surface);
   opacity: 0.96;
 }
+
+/* The control stays a native <select> with its own dropdown, keyboard and focus behaviour; only
+   the system arrow is swapped for the centralized chevron. Border, background, radius and every
+   interaction state still come from the shared field rule above - which is also why the room for
+   the chevron is claimed at that rule's scope, since its padding shorthand would otherwise win
+   the cascade and let a long option run under the icon. */
+.select-input {
+  position: relative;
+}
+.input-group .select-input select {
+  width: 100%;
+  appearance: none;
+  padding-right: calc(var(--space-04) + 22px);
+}
+/* The icon overlays the closed control, so it must never swallow the click that opens it. */
+.select-chevron {
+  position: absolute;
+  right: var(--space-04);
+  top: 50%;
+  width: 14px;
+  height: 8px;
+  transform: translateY(-50%);
+  color: var(--color-muted);
+  pointer-events: none;
+}
 .footer-form input[type='email'] {
   padding: var(--space-02) var(--space-03);
   border-radius: var(--radius-sm);

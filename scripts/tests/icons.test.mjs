@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import vm from 'node:vm';
 import { createHash } from 'node:crypto';
+import path from 'node:path';
 import { discoverHtml, renderHtml } from '../html.mjs';
 import { fileURLToPath } from 'node:url';
 
@@ -38,13 +39,23 @@ const approved = {
     viewBox: '0 0 32 32',
     hash: 'e1aa4077e09b2fa003497d73b6adb0a1eb34834b76cd19499e938bebec14dfa5',
   },
+  // Both chevrons keep the viewBox and path the supplied sources were drawn in: the down
+  // chevron's stroke fills its 35x20 box edge to edge, the up chevron sits inside a 60x60 one.
+  'chevron-down': {
+    viewBox: '0 0 35 20',
+    hash: '10c58322c1cdd53ba309e0f0c82913cf3aa350324b8f2ef09387f0731e55e65a',
+  },
+  'chevron-up': {
+    viewBox: '0 0 60 60',
+    hash: '1e4737ab25c43e013665b64a96e7c49b3befa8e23b3ab8a222f25a115dd1abde',
+  },
 };
 const symbols = [
   ...source.matchAll(/<symbol id="icon-([^"]+)" viewBox="([^"]+)"[^>]*>([\s\S]*?)<\/symbol>/g),
 ];
 
-test('all seven unique symbols preserve approved path geometry and viewBoxes', () => {
-  assert.equal(symbols.length, 7);
+test('all nine unique symbols preserve approved path geometry and viewBoxes', () => {
+  assert.equal(symbols.length, 9);
   assert.deepEqual(symbols.map((m) => m[1]).sort(), Object.keys(approved).sort());
   for (const [, name, viewBox, body] of symbols) {
     assert.equal(viewBox, approved[name].viewBox);
@@ -57,10 +68,49 @@ test('all seven unique symbols preserve approved path geometry and viewBoxes', (
   for (const name of ['email', 'phone', 'x', 'github', 'cart']) {
     assert.match(symbols.find((m) => m[1] === name)[3], /fill="currentColor"/);
   }
+  // The chevrons are the one stroked pair, so the UI color they inherit rides the stroke. The
+  // sources shipped a hard-coded black; only that may change on the way into the sprite.
+  for (const name of ['chevron-down', 'chevron-up']) {
+    const chevron = symbols.find((m) => m[1] === name)[3];
+    assert.equal((chevron.match(/<path\b/g) || []).length, 1, name);
+    assert.match(chevron, /stroke="currentColor"/, name);
+    assert.match(chevron, /stroke-width="5"/, name);
+    assert.match(chevron, /stroke-linecap="round" stroke-linejoin="round"/, name);
+    assert.doesNotMatch(chevron, /\bfill="/, name);
+  }
+  assert.doesNotMatch(source, /="black"/);
   const instagram = symbols.find((m) => m[1] === 'instagram')[3];
   assert.equal((instagram.match(/<radialGradient /g) || []).length, 2);
   assert.match(instagram, /fill="white"/);
   assert.match(symbols.find((m) => m[1] === 'facebook')[3], /fill="#1977F3"/);
+});
+
+// The chevrons are one stroke and its mirror, so swapping the two names would satisfy every
+// assertion above: each hash would still match some entry in the inventory. Read the apex out
+// of the path instead, so the sprite cannot start serving an up arrow to a closed dropdown.
+test('each chevron points the way its name promises, centred in its own viewBox', () => {
+  for (const [name, direction] of [
+    ['chevron-down', 'down'],
+    ['chevron-up', 'up'],
+  ]) {
+    const geometry = symbols.find((m) => m[1] === name)[3].match(/\bd="([^"]+)"/)[1];
+    const points = [...geometry.matchAll(/[ML]\s*(-?[\d.]+)[\s,]+(-?[\d.]+)/g)].map(([, x, y]) => ({
+      x: Number(x),
+      y: Number(y),
+    }));
+    assert.equal(points.length, 3, `${name}: a chevron is two arms meeting at one apex`);
+    const [start, apex, end] = points;
+    assert.ok(start.x < apex.x && apex.x < end.x, `${name}: the stroke must run left to right`);
+    assert.equal(start.y, end.y, `${name}: the arms must end level with each other`);
+    // SVG y grows downwards, so a down chevron's apex is its lowest point on screen.
+    assert.equal(
+      apex.y > start.y,
+      direction === 'down',
+      `${name}: this chevron points the wrong way`
+    );
+    const width = Number(approved[name].viewBox.split(' ')[2]);
+    assert.equal(apex.x, width / 2, `${name}: the apex must sit on the centre of the viewBox`);
+  }
 });
 
 test('mounting repeatedly, even from another module instance, inserts one decorative sprite', () => {
@@ -106,7 +156,7 @@ test('mounting repeatedly, even from another module instance, inserts one decora
 });
 
 for (const file of discoverHtml(root)) {
-  test(`${file}: rendered contact, social and cart icons use accessible symbol references`, async () => {
+  test(`${file}: rendered contact, social, cart and chevron icons use accessible symbol references`, async () => {
     const html = await renderHtml(
       root,
       file,
@@ -135,7 +185,36 @@ for (const file of discoverHtml(root)) {
     const hasSummary = ['pages/cart.html', 'pages/checkout.html'].includes(file);
     const cartIcons = uses.filter((m) => m[2] === 'cart');
     assert.equal(cartIcons.length, hasSummary ? 2 : 1);
-    assert.equal(uses.length, (file === 'pages/contact.html' ? 8 : 6) + cartIcons.length);
+    // The shop filter panel is the only place a chevron replaces a system arrow, and only the
+    // downward one: the upward symbol waits in the sprite for the scroll-to-top control.
+    const isShop = file === 'pages/shop.html';
+    const chevrons = uses.filter((m) => m[2].startsWith('chevron-'));
+    assert.deepEqual(
+      chevrons.map((m) => m[2]),
+      isShop ? ['chevron-down', 'chevron-down'] : [],
+      `${file}: unexpected chevron inventory`
+    );
+    assert.equal(
+      uses.length,
+      (file === 'pages/contact.html' ? 8 : 6) + cartIcons.length + chevrons.length
+    );
+    for (const [, attributes] of chevrons) {
+      assert.match(attributes, /class="select-chevron"/);
+      assert.match(attributes, /viewBox="0 0 35 20"/);
+    }
+    for (const id of isShop ? ['filter-category', 'filter-sort'] : []) {
+      // The select keeps every native semantic; the icon is a sibling, so it can never be read
+      // as option content, and appearance:none is only ever paired with a supplied chevron.
+      const group = html.match(
+        new RegExp(
+          String.raw`<div class="select-input">\s*<select\b[^>]*\bid="${id}"[\s\S]*?</div>`
+        )
+      );
+      assert.ok(group, `${id} must sit in a .select-input wrapper`);
+      assert.match(group[0], /<\/select>\s*<svg\b[^>]*\bclass="select-chevron"/, id);
+      assert.doesNotMatch(group[0], /<select\b[^>]*\s(?:role|tabindex|aria-expanded)=/, id);
+      assert.doesNotMatch(group[0], /<option\b[^>]*>[^<]*<svg/, id);
+    }
     for (const [, attributes] of cartIcons) {
       assert.match(attributes, /viewBox="0 0 32 32"/);
       assert.match(attributes, /width="24"/);
@@ -167,8 +246,44 @@ for (const file of discoverHtml(root)) {
   });
 }
 
+test('the upward chevron is prepared in the sprite but not yet wired into the UI', async () => {
+  assert.match(source, /<symbol id="icon-chevron-up" /, 'the sprite must define the symbol');
+  const consumers = [];
+  for (const file of discoverHtml(root)) {
+    const html = await renderHtml(
+      root,
+      file,
+      await fs.readFile(new URL('../../' + file, import.meta.url), 'utf8')
+    );
+    if (html.includes('icon-chevron-up')) consumers.push(file);
+  }
+  for (const directory of ['css', 'js']) {
+    const entries = await fs.readdir(new URL(`../../${directory}/`, import.meta.url), {
+      recursive: true,
+      withFileTypes: true,
+    });
+    for (const entry of entries) {
+      if (!entry.isFile()) continue;
+      const file = path.join(entry.parentPath, entry.name);
+      if ((await fs.readFile(file, 'utf8')).includes('icon-chevron-up')) {
+        consumers.push(path.relative(root, file).split(path.sep).join('/'));
+      }
+    }
+  }
+  assert.deepEqual(consumers, [], 'scroll-to-top is a separate task; nothing may claim it yet');
+});
+
 test('temporary standalone source icons are no longer published', async () => {
-  await assert.rejects(fs.stat(new URL('../../public/assets/icons/svg-icons/', import.meta.url)), {
-    code: 'ENOENT',
-  });
+  const sources = [
+    'public/assets/icons/svg-icons/',
+    'public/assets/icons/Vector.svg',
+    'public/assets/icons/chevron-up_svgrepo.com.svg',
+  ];
+  for (const file of sources) {
+    await assert.rejects(
+      fs.stat(new URL('../../' + file, import.meta.url)),
+      { code: 'ENOENT' },
+      file
+    );
+  }
 });

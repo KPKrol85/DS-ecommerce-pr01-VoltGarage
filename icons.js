@@ -1,5 +1,6 @@
 // Canonical UI artwork migrated from the approved SVG templates, including the updated Instagram artwork.
 // Monochrome silhouettes inherit UI color; authored brand fills and gradient stay intact.
+// The chevrons are stroked outlines, so their inherited color rides stroke rather than fill.
 const spriteMarkup = `
 <svg id="volt-icon-sprite" xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true" focusable="false">
 
@@ -67,6 +68,14 @@ const spriteMarkup = `
   <path d="M10 28C11.1046 28 12 27.1046 12 26C12 24.8954 11.1046 24 10 24C8.89543 24 8 24.8954 8 26C8 27.1046 8.89543 28 10 28Z" fill="currentColor"/>
   <path d="M23.3333 28C24.4379 28 25.3333 27.1046 25.3333 26C25.3333 24.8954 24.4379 24 23.3333 24C22.2288 24 21.3333 24.8954 21.3333 26C21.3333 27.1046 22.2288 28 23.3333 28Z" fill="currentColor"/>
 </symbol>
+
+  <symbol id="icon-chevron-down" viewBox="0 0 35 20" fill="none">
+    <path d="M2.5 2.5L17.5 17.5L32.5 2.5" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="icon-chevron-up" viewBox="0 0 60 60" fill="none">
+    <path d="M15 37.5L30 22.5L45 37.5" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
 </svg>`;
 
 export const mountIconSprite = () => {

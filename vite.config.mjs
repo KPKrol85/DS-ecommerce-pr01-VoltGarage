@@ -11,6 +11,7 @@ export default defineConfig({
   appType: 'mpa',
   publicDir: 'public',
   plugins: [voltGarage(root)],
+  css: { devSourcemap: true },
   server: { host: '127.0.0.1', strictPort: true },
   preview: { host: '127.0.0.1', port: 4173, strictPort: true },
   build: {

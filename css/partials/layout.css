@@ -583,14 +583,17 @@ main > section {
   padding: var(--section-py-lg) 0 var(--section-footer-bottom);
   text-align: left;
 }
+
 .footer-col h2 {
   text-transform: uppercase;
   font-size: var(--fs-04);
 }
+
 .footer-grid p {
   color: color-mix(in srgb, var(--color-hero-text) 78%, transparent);
   line-height: var(--lh-03);
 }
+
 .footer a:not(.footer-social-link) {
   color: color-mix(in srgb, var(--color-hero-text) 82%, transparent);
   text-decoration: none;
@@ -609,19 +612,23 @@ main > section {
     color var(--transition-fast),
     background-size var(--transition-fast);
 }
+
 .footer a:not(.footer-social-link):hover {
   color: color-mix(in srgb, var(--color-accent) 90%, white 10%);
   background-size: 100% 2px;
 }
+
 .footer a:not(.footer-social-link):focus-visible {
   outline: 2px solid color-mix(in srgb, var(--color-hero-text) 70%, white);
   outline-offset: 3px;
   border-radius: var(--radius-md);
 }
+
 .footer a.is-current:not(.footer-social-link) {
   color: color-mix(in srgb, var(--color-accent) 92%, white 6%);
   background-size: 100% 2px;
 }
+
 .footer-brand {
   display: flex;
   flex-direction: column;
@@ -629,43 +636,48 @@ main > section {
   gap: var(--space-03);
   margin-bottom: var(--space-02);
 }
-/* The footer plate is dark in both themes, so the markup names the dark-surface lockup outright.
-   The token is a width here: height follows the artwork, and max-width from base.css lets the
-   lockup shrink with the brand column on the narrower footer grids. */
+
 .footer-logo {
   width: var(--logo-footer-size);
   height: auto;
   flex-shrink: 0;
   margin-bottom: var(--space-02);
 }
+
 .footer-brand p {
   max-width: 32ch;
 }
+
 .footer-col--contact .stacked {
   display: grid;
   gap: var(--space-03);
 }
+
 .footer-col--contact .stacked li {
   display: inline-flex;
   align-items: center;
   gap: var(--space-02);
 }
+
 .footer-col--contact .stacked span {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
+
 .footer-col--contact .stacked svg {
   width: 18px;
   height: 18px;
 }
+
 .footer-social {
   display: flex;
   justify-content: flex-start;
   padding-top: var(--space-08);
   margin-inline: var(--space-02);
 }
+
 .footer-social-list {
   display: flex;
   align-items: center;
@@ -675,6 +687,7 @@ main > section {
   padding: 0;
   list-style: none;
 }
+
 .footer-social-link {
   inline-size: 40px;
   block-size: 40px;
@@ -688,23 +701,28 @@ main > section {
     transform var(--transition-fast),
     box-shadow var(--transition-fast);
 }
+
 .footer-social-link:hover {
   color: color-mix(in srgb, var(--color-hero-text) 100%, white 10%);
   transform: translateY(-1px);
 }
+
 .footer-social-link:focus-visible {
   outline: 2px solid color-mix(in srgb, var(--color-hero-text) 70%, white);
   outline-offset: 3px;
 }
+
 .footer-social-link svg {
   inline-size: 18px;
   block-size: 18px;
 }
+
 .footer-bottom {
   margin-top: var(--space-06);
   padding-top: var(--space-04);
   border-top: 1px solid color-mix(in srgb, var(--color-hero-text) 20%, transparent);
 }
+
 .footer small {
   color: color-mix(in srgb, var(--color-hero-text) 70%, transparent);
   font-size: var(--fs-02);

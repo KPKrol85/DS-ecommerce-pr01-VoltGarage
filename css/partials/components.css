@@ -12,6 +12,7 @@
   background: var(--color-ink);
   color: var(--color-surface);
   font-size: var(--fs-02);
+  letter-spacing: var(--ls-03);
   text-transform: uppercase;
   font-weight: var(--fw-02);
   transition:
@@ -27,7 +28,6 @@
 
 .btn-outline {
   border-color: color-mix(in srgb, var(--color-border) 72%, transparent);
-  color: color-mix(in srgb, white 92%, transparent);
   color: var(--color-ink);
   background: color-mix(in srgb, white 4%, transparent);
   backdrop-filter: blur(8px);
@@ -857,23 +857,28 @@
   width: 100%;
   min-width: 0;
 }
+
 .form-grid > * {
   min-width: 0;
 }
+
 .form-row {
   display: grid;
   gap: var(--space-03);
   grid-template-columns: 1fr;
 }
+
 .form-grid .input-group {
   gap: var(--space-02);
 }
+
 .form-grid .input-group span {
   color: var(--color-ink-muted);
   font-size: var(--fs-03);
   font-weight: var(--fw-01);
   letter-spacing: var(--ls-01);
 }
+
 .form-grid :is(input, select, textarea):not([type='hidden']) {
   width: 100%;
   min-width: 0;

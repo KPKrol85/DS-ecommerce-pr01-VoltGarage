@@ -16,6 +16,18 @@ const ORDINARY_DOCUMENTS = ['index.html', 'thank-you.html', 'pages/shop.html'];
 const SHARED_SHELL =
   '<!-- @include src/partials/header.html --><!-- @include src/partials/footer.html -->';
 const REFERENCE = /\b(?:href|src|action|poster)\s*=\s*"([^"]*)"/gi;
+const SHARED_ROUTES = [
+  '/index.html',
+  '/pages/cart.html',
+  '/pages/collections.html',
+  '/pages/contact.html',
+  '/pages/cookies.html',
+  '/pages/new-arrivals.html',
+  '/pages/privacy-policy.html',
+  '/pages/promotions.html',
+  '/pages/shop.html',
+  '/pages/terms.html',
+];
 
 const source = (file) => fs.readFile(path.join(ROOT, file), 'utf8');
 const render = async (file, markup) => renderHtml(ROOT, file, markup ?? (await source(file)));
@@ -86,7 +98,7 @@ test('the shared header and footer reach the same routes from a fallback documen
     referencesIn(await render('index.html', SHARED_SHELL)).filter(isPageReference),
     `${ORIGIN}/index.html`
   );
-  assert.ok(home.length >= 11, 'the shared shell should link the whole navigation');
+  assert.deepEqual(home, SHARED_ROUTES, 'the shared shell should link the approved navigation');
   for (const file of FALLBACK_DOCUMENTS) {
     const shell = referencesIn(await render(file, SHARED_SHELL)).filter(isPageReference);
     assert.ok(

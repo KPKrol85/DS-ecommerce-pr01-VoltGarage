@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { renderHtml } from '../html.mjs';
+import { getProductLink } from '../../js/features/products.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const ORIGIN = 'https://volt-garage.invalid';
@@ -26,7 +27,6 @@ const KEPT_ENTRIES = [
   ['Strona główna', '/index.html'],
   ['Wszystkie produkty', '/pages/shop.html'],
   ['Nowości', '/pages/new-arrivals.html'],
-  ['Produkt', '/pages/product.html'],
   ['Kolekcje / Kategorie', '/pages/collections.html'],
   ['Promocje', '/pages/promotions.html'],
   ['Formularz', '/pages/contact.html'],
@@ -40,6 +40,16 @@ const SHOP_ENTRIES = [
   ['Nowości', '/pages/new-arrivals.html'],
   ['Kolekcje / Kategorie', '/pages/collections.html'],
   ['Promocje', '/pages/promotions.html'],
+];
+const FOOTER_ENTRIES = [
+  ['Wszystkie produkty', '/pages/shop.html'],
+  ['Nowości', '/pages/new-arrivals.html'],
+  ['Kolekcje / Kategorie', '/pages/collections.html'],
+  ['Promocje', '/pages/promotions.html'],
+  ['Kontakt', '/pages/contact.html'],
+  ['Polityka prywatności', '/pages/privacy-policy.html'],
+  ['Cookies', '/pages/cookies.html'],
+  ['Regulamin', '/pages/terms.html'],
 ];
 
 const source = (file) => fs.readFile(path.join(ROOT, file), 'utf8');
@@ -59,6 +69,13 @@ const entriesIn = (markup, file) =>
 
 const sharedEntries = async (file) => entriesIn(await render(file, SHARED_SHELL), file);
 
+const footerEntries = async (file) => {
+  const markup = await render(file, FOOTER);
+  const footer = markup.match(/<footer\b[^>]*>([\s\S]*?)<\/footer>/i);
+  assert.ok(footer, `${file}: the shared footer should render`);
+  return entriesIn(footer[1], file).map((entry) => [entry.label, entry.route]);
+};
+
 const shopEntries = async (file) => {
   const header = await render(file, HEADER);
   const dropdown = header.match(
@@ -74,10 +91,9 @@ test('the Sklep dropdown contains exactly the four approved destinations', async
   }
 });
 
-test('Produkt stays in the footer but not in the main navigation', async () => {
+test('the generic Produkt route is absent from the shared header and footer', async () => {
   for (const file of DOCUMENTS) {
     const headerEntries = entriesIn(await render(file, HEADER), file);
-    const footerEntries = entriesIn(await render(file, FOOTER), file);
 
     assert.ok(
       !headerEntries.some(
@@ -85,12 +101,28 @@ test('Produkt stays in the footer but not in the main navigation', async () => {
       ),
       `${file}: the main navigation still offers a generic product route`
     );
-    assert.ok(
-      footerEntries.some(
-        (entry) => entry.label === 'Produkt' && entry.route === '/pages/product.html'
-      ),
-      `${file}: the separately maintained footer product route was removed`
-    );
+    assert.deepEqual(await footerEntries(file), FOOTER_ENTRIES, file);
+  }
+});
+
+test('selected product actions keep their id when linking to product details', () => {
+  const previousWindow = globalThis.window;
+  try {
+    for (const page of [
+      'index.html',
+      'pages/shop.html',
+      'pages/new-arrivals.html',
+      'pages/promotions.html',
+    ]) {
+      const pageUrl = new URL(page, `${ORIGIN}/`);
+      globalThis.window = { location: { pathname: pageUrl.pathname } };
+      const destination = new URL(getProductLink('emblem-carbon'), pageUrl);
+
+      assert.equal(destination.pathname, '/pages/product.html', page);
+      assert.equal(destination.searchParams.get('id'), 'emblem-carbon', page);
+    }
+  } finally {
+    globalThis.window = previousWindow;
   }
 });
 

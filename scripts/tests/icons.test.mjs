@@ -10,6 +10,10 @@ const root = fileURLToPath(new URL('../../', import.meta.url));
 const source = await fs.readFile(new URL('../../icons.js', import.meta.url), 'utf8');
 // Fingerprints of the approved path data, including the supplied complete Instagram SVG.
 const approved = {
+  cart: {
+    viewBox: '0 0 32 32',
+    hash: '826b712308fb46b8901ceb657f0da3bb35b95454fa7ebd3beb81e0cbc4d5f427',
+  },
   email: {
     viewBox: '0 0 31 23',
     hash: 'f557e58eacfb58a23bc7c5ced539a316a061a36997ff56d10de66998c57a4885',
@@ -39,8 +43,8 @@ const symbols = [
   ...source.matchAll(/<symbol id="icon-([^"]+)" viewBox="([^"]+)"[^>]*>([\s\S]*?)<\/symbol>/g),
 ];
 
-test('all six unique symbols preserve approved path geometry and viewBoxes', () => {
-  assert.equal(symbols.length, 6);
+test('all seven unique symbols preserve approved path geometry and viewBoxes', () => {
+  assert.equal(symbols.length, 7);
   assert.deepEqual(symbols.map((m) => m[1]).sort(), Object.keys(approved).sort());
   for (const [, name, viewBox, body] of symbols) {
     assert.equal(viewBox, approved[name].viewBox);
@@ -50,7 +54,7 @@ test('all six unique symbols preserve approved path geometry and viewBoxes', () 
   const ids = [...source.matchAll(/\bid="([^"]+)"/g)].map((m) => m[1]);
   assert.equal(new Set(ids).size, ids.length);
   for (const [, id] of source.matchAll(/url\(#([^)]+)\)/g)) assert.ok(ids.includes(id), id);
-  for (const name of ['email', 'phone', 'x', 'github']) {
+  for (const name of ['email', 'phone', 'x', 'github', 'cart']) {
     assert.match(symbols.find((m) => m[1] === name)[3], /fill="currentColor"/);
   }
   const instagram = symbols.find((m) => m[1] === 'instagram')[3];
@@ -102,7 +106,7 @@ test('mounting repeatedly, even from another module instance, inserts one decora
 });
 
 for (const file of discoverHtml(root)) {
-  test(`${file}: rendered contact and social icons use accessible symbol references`, async () => {
+  test(`${file}: rendered contact, social and cart icons use accessible symbol references`, async () => {
     const html = await renderHtml(
       root,
       file,
@@ -128,7 +132,28 @@ for (const file of discoverHtml(root)) {
     const uses = [
       ...html.matchAll(/<svg\b([^>]*)>\s*<use href="#icon-([^"]+)"><\/use>\s*<\/svg>/g),
     ];
-    assert.equal(uses.length, file === 'pages/contact.html' ? 8 : 6);
+    const hasSummary = ['pages/cart.html', 'pages/checkout.html'].includes(file);
+    const cartIcons = uses.filter((m) => m[2] === 'cart');
+    assert.equal(cartIcons.length, hasSummary ? 2 : 1);
+    assert.equal(uses.length, (file === 'pages/contact.html' ? 8 : 6) + cartIcons.length);
+    for (const [, attributes] of cartIcons) {
+      assert.match(attributes, /viewBox="0 0 32 32"/);
+      assert.match(attributes, /width="24"/);
+      assert.match(attributes, /height="24"/);
+      assert.doesNotMatch(attributes, /\bstroke(?:-[a-z]+)?=/);
+    }
+    const cartLink = html.match(/<a class="cart-link"[\s\S]*?<\/a>/)[0];
+    assert.match(cartLink, /aria-label="Koszyk"/);
+    assert.match(cartLink, /<use href="#icon-cart"><\/use>/);
+    assert.match(cartLink, /data-cart-count>0<\/span>/);
+    assert.doesNotMatch(cartLink, /<path/);
+    const href = cartLink.match(/href="([^"]+)"/)[1];
+    assert.equal(new URL(href, 'https://volt-garage.invalid/' + file).pathname, '/pages/cart.html');
+    if (hasSummary) {
+      const summary = html.match(/<h[23]>\s*Podsumowanie[\s\S]*?<\/h[23]>/)[0];
+      assert.match(summary, /<use href="#icon-cart"><\/use>/);
+      assert.doesNotMatch(summary, /<path/);
+    }
     for (const [, attributes] of uses) {
       assert.match(attributes, /aria-hidden="true"/);
       assert.match(attributes, /focusable="false"/);

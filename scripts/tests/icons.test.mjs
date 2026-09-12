@@ -53,6 +53,12 @@ const approved = {
 const symbols = [
   ...source.matchAll(/<symbol id="icon-([^"]+)" viewBox="([^"]+)"[^>]*>([\s\S]*?)<\/symbol>/g),
 ];
+// Which documents claim the downward chevron, and how many times. A document absent from this
+// map renders none, so a new consumer has to be declared here rather than appearing unnoticed.
+const DOWNWARD_CHEVRONS = {
+  'pages/shop.html': { class: 'select-chevron', count: 2 },
+  'pages/faq.html': { class: 'faq-item__icon', count: 12 },
+};
 
 test('all nine unique symbols preserve approved path geometry and viewBoxes', () => {
   assert.equal(symbols.length, 9);
@@ -185,14 +191,17 @@ for (const file of discoverHtml(root)) {
     const hasSummary = ['pages/cart.html', 'pages/checkout.html'].includes(file);
     const cartIcons = uses.filter((m) => m[2] === 'cart');
     assert.equal(cartIcons.length, hasSummary ? 2 : 1);
-    // The shop filter panel is the only place a downward chevron replaces a system arrow. The
-    // upward one belongs to the scroll-to-top control in the shared shell, so every document
-    // carries exactly one, after the footer that control watches.
+    // The downward chevron has exactly two consumers, each naming itself with its own class:
+    // the shop filter panel, where it replaces two system select arrows, and the FAQ, where one
+    // per question turns to show whether that answer is open. The upward one belongs to the
+    // scroll-to-top control in the shared shell, so every document carries exactly one, after
+    // the footer that control watches.
+    const downward = DOWNWARD_CHEVRONS[file] ?? { class: null, count: 0 };
     const isShop = file === 'pages/shop.html';
     const chevrons = uses.filter((m) => m[2].startsWith('chevron-'));
     assert.deepEqual(
       chevrons.map((m) => m[2]),
-      isShop ? ['chevron-down', 'chevron-down', 'chevron-up'] : ['chevron-up'],
+      [...Array.from({ length: downward.count }, () => 'chevron-down'), 'chevron-up'],
       `${file}: unexpected chevron inventory`
     );
     assert.equal(
@@ -201,7 +210,7 @@ for (const file of discoverHtml(root)) {
     );
     for (const [, attributes, name] of chevrons) {
       const [className, viewBox] =
-        name === 'chevron-up' ? ['scroll-top__icon', '0 0 60 60'] : ['select-chevron', '0 0 35 20'];
+        name === 'chevron-up' ? ['scroll-top__icon', '0 0 60 60'] : [downward.class, '0 0 35 20'];
       assert.match(attributes, new RegExp(`class="${className}"`), name);
       assert.match(attributes, new RegExp(`viewBox="${viewBox}"`), name);
     }

@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <!-- Meta -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Odpowiedzi na najczęstsze pytania o VOLT GARAGE – demonstracyjny charakter sklepu, działanie koszyka i symulowanego zamówienia, formularz kontaktowy oraz dane zapisywane w przeglądarce."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#0f172a" />
+    <!-- Title -->
+    <title>FAQ / Pomoc | VOLT GARAGE – pytania i odpowiedzi</title>
+    <!-- Canonical -->
+    <link rel="canonical" href="https://e-commerce-pr01-voltgarage.netlify.app/pages/faq.html" />
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="FAQ / Pomoc | VOLT GARAGE – pytania i odpowiedzi" />
+    <meta
+      property="og:description"
+      content="Odpowiedzi na najczęstsze pytania o VOLT GARAGE – demonstracyjny charakter sklepu, działanie koszyka i symulowanego zamówienia, formularz kontaktowy oraz dane zapisywane w przeglądarce."
+    />
+    <meta
+      property="og:url"
+      content="https://e-commerce-pr01-voltgarage.netlify.app/pages/faq.html"
+    />
+    <meta
+      property="og:image"
+      content="https://e-commerce-pr01-voltgarage.netlify.app/assets/images/og/og-1200x630.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="FAQ / Pomoc | VOLT GARAGE – pytania i odpowiedzi" />
+    <meta
+      name="twitter:description"
+      content="Odpowiedzi na najczęstsze pytania o VOLT GARAGE – demonstracyjny charakter sklepu, działanie koszyka i symulowanego zamówienia, formularz kontaktowy oraz dane zapisywane w przeglądarce."
+    />
+    <meta
+      name="twitter:image"
+      content="https://e-commerce-pr01-voltgarage.netlify.app/assets/images/og/og-1200x630.jpg"
+    />
+    <!-- Favicons + manifest -->
+    <link rel="icon" href="/assets/icons/favicon/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon/favicon.svg" />
+    <link rel="apple-touch-icon" href="/assets/icons/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <!-- Theme preload -->
+    <script data-theme-preload>
+      (function () {
+        var storageKey = 'vg_theme';
+        var theme = null;
+        try {
+          theme = localStorage.getItem(storageKey);
+        } catch (e) {
+          theme = null;
+        }
+        if (theme !== 'light' && theme !== 'dark') {
+          var prefersDark =
+            window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          theme = prefersDark ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <!-- Preloads -->
+    <link
+      rel="preload"
+      href="/assets/fonts/space-grotesk/SpaceGrotesk-Variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/main.css" />
+  </head>
+
+  <!-- Body -->
+  <body class="page page--faq">
+    <!-- @include src/partials/header.html -->
+
+    <main id="main">
+      <nav class="breadcrumbs" aria-label="Okruszki">
+        <ol>
+          <li><a href="../index.html">Strona główna</a></li>
+          <li>FAQ / Pomoc</li>
+        </ol>
+      </nav>
+
+      <section class="page-hero">
+        <div class="container">
+          <h1>FAQ / Pomoc</h1>
+          <p>
+            Najczęstsze pytania dotyczące produktów, działania sklepu demonstracyjnego i kontaktu.
+          </p>
+          <span class="page-hero-mark" aria-hidden="true"></span>
+        </div>
+      </section>
+
+      <section>
+        <div class="container faq-layout">
+          <p class="faq-lead">
+            VOLT GARAGE jest projektem demonstracyjnym KP_Code Digital Studio. Poniższe odpowiedzi
+            opisują to, co serwis rzeczywiście robi i czego nie robi. Każde pytanie rozwija się
+            osobno, a odpowiedzi mogą pozostać otwarte równocześnie.
+          </p>
+
+          <!-- Każde pytanie jest osobnym ujawnieniem: nagłówek grupy nazywa temat, przycisk
+               przełącza wyłącznie swój panel, a js/ui/faq.js nie przenosi fokusu ani nie przewija
+               strony. Dokument wysyłany jest z rozwiniętymi odpowiedziami, więc treść pozostaje
+               czytelna, zanim moduł się uruchomi, i dla osoby, do której JavaScript nie dotrze. -->
+          <div class="faq" data-faq>
+            <section class="faq-group" aria-labelledby="faq-group-store" data-reveal>
+              <h2 class="faq-group__title" id="faq-group-store">Zakupy i produkty</h2>
+              <ul class="faq-list">
+                <li class="faq-item">
+                  <h3 class="faq-item__heading">
+                    <button
+                      class="faq-item__trigger"
+                      type="button"
+                      id="faq-question-1"
+                      aria-expanded="true"
+                      aria-controls="faq-answer-1"
+                      data-faq-trigger
+                    >
+                      <span class="faq-item__question"
+                        >Czym jest VOLT GARAGE i czy to prawdziwy sklep?</span
+                      >
+                      <svg
+                        class="faq-item__icon"
+                        aria-hidden="true"
+                        focusable="false"
+                        viewBox="0 0 35 20"
+                      >
+                        <use href="#icon-chevron-down"></use>
+                      </svg>
+                    </button>
+                  </h3>
+                  <div class="faq-item__answer" id="faq-answer-1" data-faq-answer>
+                    <p>
+                      VOLT GARAGE to demonstracyjny, statyczny front-end sklepu z akcesoriami
+                      motoryzacyjnymi, przygotowany jako projekt portfolio KP_Code Digital Studio.
+                      Interfejs katalogu, koszyka i zamówienia jest w pełni klikalny, ale nie stoi
+                      za nim system sprzedaży: serwis nie przyjmuje zamówień i niczego nie wysyła.
+                      Charakter projektu opisuje <a href="terms.html">Regulamin</a>.
+                    </p>
+                  </div>
+                </li>
+                <li class="faq-item">
+                  <h3 class="faq-item__heading">
+                    <button
+                      class="faq-item__trigger"
+                      type="button"
+                      id="faq-question-2"
+                      aria-expanded="true"
+                      aria-controls="faq-answer-2"
+                      data-faq-trigger
+                    >
+                      <span class="faq-item__question">Skąd pochodzą produkty, ceny i opisy?</span>
+                      <svg
+                        class="faq-item__icon"
+                        aria-hidden="true"
+                        focusable="false"
+                        viewBox="0 0 35 20"
+                      >
+                        <use href="#icon-chevron-down"></use>
+                      </svg>
+                    </button>
+                  </h3>
+                  <div class="faq-item__answer" id="faq-answer-2" data-faq-answer>
+                    <p>
+                      Cały katalog jest wczytywany z jednego pliku danych dołączonego do projektu
+                      (public/data/products.json). Serwis nie łączy się z zewnętrznym API, magazynem
+                      ani systemem cen. Nazwy, ceny, oznaczenia promocji i informacje o dostępności
+                      są materiałem przykładowym i nie stanowią oferty handlowej.
+                    </p>
+                  </div>
+                </li>
+                <li class="faq-item">
+                  <h3 class="faq-item__heading">
+                    <button
+                      class="faq-item__trigger"
+                      type="button"
+                      id="faq-question-3"
+                      aria-expanded="true"
+                      aria-controls="faq-answer-3"
+                      data-faq-trigger
+                    >
+                      <span class="faq-item__question"
+                        >Jak otworzyć stronę szczegółów produktu?</span
+                      >
+                      <svg
+                        class="faq-item__icon"
+                        aria-hidden="true"
+                        focusable="false"
+                        viewBox="0 0 35 20"
+                      >
+                        <use href="#icon-chevron-down"></use>
+                      </svg>
+                    </button>
+                  </h3>
+                  <div class="faq-item__answer" id="faq-answer-3" data-faq-answer>
+                    <p>
+                      Stronę produktu otwiera przycisk „Szczegóły” na kafelku — w
+                      <a href="shop.html">katalogu</a>, <a href="new-arrivals.html">nowościach</a>,
+                      <a href="promotions.html">promocjach</a> i na stronie głównej. Adres tej
+                      strony zawiera identyfikator wybranej pozycji, dlatego w menu nie ma ogólnego
+                      odnośnika „Produkt”: szczegóły zawsze dotyczą produktu wskazanego na liście.
+                    </p>
+                  </div>
+                </li>
+              </ul>
+            </section>
+
+            <section class="faq-group" aria-labelledby="faq-group-order" data-reveal>
+              <h2 class="faq-group__title" id="faq-group-order">Koszyk i płatności</h2>
+              <ul class="faq-list">
+                <li class="faq-item">
+                  <h3 class="faq-item__heading">
+                    <button
+                      class="faq-item__trigger"
+                      type="button"
+                      id="faq-question-4"
+                      aria-expanded="true"
+                      aria-controls="faq-answer-4"
+                      data-faq-trigger
+                    >
+                      <span class="faq-item__question">Jak działa koszyk?</span>
+                      <svg
+                        class="faq-item__icon"
+                        aria-hidden="true"
+                        focusable="false"
+                        viewBox="0 0 35 20"
+                      >
+                        <use href="#icon-chevron-down"></use>
+                      </svg>
+                    </button>
+                  </h3>
+                  <div class="faq-item__answer" id="faq-answer-4" data-faq-answer>
+                    <p>
+                      <a href="cart.html">Koszyk</a> działa wyłącznie w Twojej przeglądarce. Pozycje
+                      i ilości zapisuje pamięć lokalna (localStorage) pod kluczem volt_cart, więc
+                      zawartość przetrwa odświeżenie strony, ale nie trafia na żaden serwer i nie
+                      przenosi się między urządzeniami ani przeglądarkami. Podsumowanie przelicza
+                      wartość produktów, koszt dostawy (20 zł, od 300 zł bez opłaty) i sumę — jest
+                      to wyliczenie poglądowe, a nie rezerwacja towaru. Wyczyszczenie danych witryny
+                      w przeglądarce opróżnia koszyk.
+                    </p>
+                  </div>
+                </li>
+                <li class="faq-item">
+                  <h3 class="faq-item__heading">
+                    <button
+                      class="faq-item__trigger"
+                      type="button"
+                      id="faq-question-5"
+                      aria-expanded="true"
+                      aria-controls="faq-answer-5"
+                      data-faq-trigger
+                    >
+                      <span class="faq-item__question"
+                        >Co dzieje się po kliknięciu „Złóż zamówienie”?</span
+                      >
+                      <svg
+                        class="faq-item__icon"
+                        aria-hidden="true"
+                        focusable="false"
+                        viewBox="0 0 35 20"
+                      >
+                        <use href="#icon-chevron-down"></use>
+                      </svg>
+                    </button>
+                  </h3>
+                  <div class="faq-item__answer" id="faq-answer-5" data-faq-answer>
+                    <p>
+                      Formularz <a href="checkout.html">zamówienia</a> sprawdza poprawność pól i
+                      przenosi fokus do pierwszego błędu, a po poprawnym wypełnieniu wyświetla
+                      komunikat o zakończonej symulacji i czyści pola. Dane zamówienia nie są
+                      wysyłane ani zapisywane, nie powstaje numer zamówienia i nikt nie otrzymuje
+                      powiadomienia. Ten krok wymaga włączonego JavaScriptu — bez niego przycisk
+                      pozostaje nieaktywny, a strona informuje o tym komunikatem.
+                    </p>
+                  </div>
+                </li>
+                <li class="faq-item">
+                  <h3 class="faq-item__heading">
+                    <button
+                      class="faq-item__trigger"
+                      type="button"
+                      id="faq-question-6"
+                      aria-expanded="true"
+                      aria-controls="faq-answer-6"
+                      data-faq-trigger
+                    >
+                      <span class="faq-item__question"
+                        >Czy serwis obsługuje płatności, wysyłkę i zwroty?</span
+                      >
+                      <svg
+                        class="faq-item__icon"
+                        aria-hidden="true"
+                        focusable="false"
+                        viewBox="0 0 35 20"
+                      >
+                        <use href="#icon-chevron-down"></use>
+                      </svg>
+                    </button>
+                  </h3>
+                  <div class="faq-item__answer" id="faq-answer-6" data-faq-answer>
+                    <p>
+                      Nie. Projekt nie ma integracji z bramką płatniczą, nie przetwarza transakcji i
+                      nigdzie nie prosi o dane karty ani inne dane płatnicze. Koszt dostawy w
+                      podsumowaniu jest wyłącznie elementem przykładowego wyliczenia — skoro
+                      zamówienie nie powstaje, serwis nie realizuje wysyłek, zwrotów, reklamacji
+                      towaru ani gwarancji.
+                    </p>
+                  </div>
+                </li>
+              </ul>
+            </section>
+
+            <section class="faq-group" aria-labelledby="faq-group-contact" data-reveal>
+              <h2 class="faq-group__title" id="faq-group-contact">Konto, kontakt i dokumenty</h2>
+              <ul class="faq-list">
+                <li class="faq-item">
+                  <h3 class="faq-item__heading">
+                    <button
+                      class="faq-item__trigger"
+                      type="button"
+                      id="faq-question-7"
+                      aria-expanded="true"
+                      aria-controls="faq-answer-7"
+                      data-faq-trigger
+                    >
+                      <span class="faq-item__question"
+                        >Czy do korzystania z serwisu potrzebne jest konto?</span
+                      >
+                      <svg
+                        class="faq-item__icon"
+                        aria-hidden="true"
+                        focusable="false"
+                        viewBox="0 0 35 20"
+                      >
+                        <use href="#icon-chevron-down"></use>
+                      </svg>
+                    </button>
+                  </h3>
+                  <div class="faq-item__answer" id="faq-answer-7" data-faq-answer>
+                    <p>
+                      Nie. W serwisie nie ma rejestracji, logowania, profilu klienta ani historii
+                      zamówień, a wszystkie widoki są dostępne bez zakładania konta. To, co strona
+                      zapamiętuje — wybrany motyw i zawartość koszyka — zostaje w pamięci Twojej
+                      przeglądarki i nie tworzy konta użytkownika.
+                    </p>
+                  </div>
+                </li>
+                <li class="faq-item">
+                  <h3 class="faq-item__heading">
+                    <button
+                      class="faq-item__trigger"
+                      type="button"
+                      id="faq-question-8"
+                      aria-expanded="true"
+                      aria-controls="faq-answer-8"
+                      data-faq-trigger
+                    >
+                      <span class="faq-item__question"
+                        >Czy formularz kontaktowy naprawdę wysyła wiadomość?</span
+                      >
+                      <svg
+                        class="faq-item__icon"
+                        aria-hidden="true"
+                        focusable="false"
+                        viewBox="0 0 35 20"
+                      >
+                        <use href="#icon-chevron-down"></use>
+                      </svg>
+                    </button>
+                  </h3>
+                  <div class="faq-item__answer" id="faq-answer-8" data-faq-answer>
+                    <p>
+                      Tak — to jedyny formularz w serwisie z prawdziwą wysyłką.
+                      <a href="contact.html">Formularz kontaktowy</a> korzysta z usługi Netlify
+                      Forms, przesyła dane zwykłym żądaniem POST i po poprawnym wysłaniu otwiera
+                      stronę potwierdzenia. Cel i zakres przetwarzania tych danych opisuje
+                      <a href="privacy-policy.html">Polityka prywatności</a>. Formularz zamówienia
+                      działa zupełnie inaczej: jest symulacją i nie wysyła niczego.
+                    </p>
+                  </div>
+                </li>
+                <li class="faq-item">
+                  <h3 class="faq-item__heading">
+                    <button
+                      class="faq-item__trigger"
+                      type="button"
+                      id="faq-question-9"
+                      aria-expanded="true"
+                      aria-controls="faq-answer-9"
+                      data-faq-trigger
+                    >
+                      <span class="faq-item__question"
+                        >Gdzie znajdę regulamin, politykę prywatności i zasady cookies?</span
+                      >
+                      <svg
+                        class="faq-item__icon"
+                        aria-hidden="true"
+                        focusable="false"
+                        viewBox="0 0 35 20"
+                      >
+                        <use href="#icon-chevron-down"></use>
+                      </svg>
+                    </button>
+                  </h3>
+                  <div class="faq-item__answer" id="faq-answer-9" data-faq-answer>
+                    <p>
+                      Wszystkie dokumenty są w menu „Informacje” oraz w stopce każdej strony:
+                      <a href="terms.html">Regulamin</a> opisuje zasady korzystania i demonstracyjny
+                      charakter projektu, <a href="privacy-policy.html">Polityka prywatności</a> —
+                      przetwarzanie danych z formularza kontaktowego, a
+                      <a href="cookies.html">Polityka cookies</a> — technologie przechowywania
+                      danych w przeglądarce. Odpowiedzi na tej stronie są skrótem; w razie
+                      rozbieżności rozstrzyga treść dokumentów.
+                    </p>
+                  </div>
+                </li>
+              </ul>
+            </section>
+
+            <section class="faq-group" aria-labelledby="faq-group-tech" data-reveal>
+              <h2 class="faq-group__title" id="faq-group-tech">Technologia i aplikacja</h2>
+              <ul class="faq-list">
+                <li class="faq-item">
+                  <h3 class="faq-item__heading">
+                    <button
+                      class="faq-item__trigger"
+                      type="button"
+                      id="faq-question-10"
+                      aria-expanded="true"
+                      aria-controls="faq-answer-10"
+                      data-faq-trigger
+                    >
+                      <span class="faq-item__question">Jakie dane zapisuje moja przeglądarka?</span>
+                      <svg
+                        class="faq-item__icon"
+                        aria-hidden="true"
+                        focusable="false"
+                        viewBox="0 0 35 20"
+                      >
+                        <use href="#icon-chevron-down"></use>
+                      </svg>
+                    </button>
+                  </h3>
+                  <div class="faq-item__answer" id="faq-answer-10" data-faq-answer>
+                    <p>
+                      Serwis korzysta z pamięci przeglądarki, a nie z własnych plików cookies. W
+                      localStorage zapisywane są: koszyk (volt_cart), wybrany motyw (vg_theme),
+                      potwierdzenie informacji o projekcie (vg_project_terms_accepted) oraz
+                      zakończona instalacja aplikacji (vg_install_cta_dismissed); w sessionStorage —
+                      odłożenie zaproszenia do instalacji na czas sesji karty
+                      (vg_install_cta_session_dismissed). Gdy przeglądarka blokuje ten magazyn,
+                      strona działa dalej, tylko bez zapamiętywania. Pełną listę zawiera
+                      <a href="cookies.html">Polityka cookies</a>.
+                    </p>
+                  </div>
+                </li>
+                <li class="faq-item">
+                  <h3 class="faq-item__heading">
+                    <button
+                      class="faq-item__trigger"
+                      type="button"
+                      id="faq-question-11"
+                      aria-expanded="true"
+                      aria-controls="faq-answer-11"
+                      data-faq-trigger
+                    >
+                      <span class="faq-item__question"
+                        >Czy VOLT GARAGE można zainstalować i czy działa offline?</span
+                      >
+                      <svg
+                        class="faq-item__icon"
+                        aria-hidden="true"
+                        focusable="false"
+                        viewBox="0 0 35 20"
+                      >
+                        <use href="#icon-chevron-down"></use>
+                      </svg>
+                    </button>
+                  </h3>
+                  <div class="faq-item__answer" id="faq-answer-11" data-faq-answer>
+                    <p>
+                      Projekt ma manifest aplikacji i Service Workera, więc przeglądarka wspierająca
+                      PWA może zaproponować instalację — zaproszenie pojawia się tylko wtedy, gdy
+                      przeglądarka zgłosi odpowiednie zdarzenie, a sam Service Worker jest
+                      rejestrowany wyłącznie w wersji produkcyjnej. Obsługa offline jest częściowa:
+                      po wcześniejszej wizycie wyświetlane są zapisane strony, a gdy kopii brakuje —
+                      strona informacyjna offline. Pierwsza wizyta bez połączenia nie zadziała.
+                    </p>
+                  </div>
+                </li>
+                <li class="faq-item">
+                  <h3 class="faq-item__heading">
+                    <button
+                      class="faq-item__trigger"
+                      type="button"
+                      id="faq-question-12"
+                      aria-expanded="true"
+                      aria-controls="faq-answer-12"
+                      data-faq-trigger
+                    >
+                      <span class="faq-item__question">Czy serwis działa bez JavaScriptu?</span>
+                      <svg
+                        class="faq-item__icon"
+                        aria-hidden="true"
+                        focusable="false"
+                        viewBox="0 0 35 20"
+                      >
+                        <use href="#icon-chevron-down"></use>
+                      </svg>
+                    </button>
+                  </h3>
+                  <div class="faq-item__answer" id="faq-answer-12" data-faq-answer>
+                    <p>
+                      Częściowo. Treści statyczne — w tym te odpowiedzi, strony prawne i dane
+                      kontaktowe — pozostają czytelne, a formularz kontaktowy przesyła dane natywnym
+                      żądaniem przeglądarki. Listy produktów, wyszukiwarka, filtry, koszyk i
+                      symulacja zamówienia wymagają włączonego JavaScriptu; w ich miejscu strona
+                      pokazuje wtedy komunikat zamiast pustego obszaru.
+                    </p>
+                  </div>
+                </li>
+              </ul>
+            </section>
+          </div>
+
+          <div class="faq-help" data-reveal>
+            <h2 class="faq-help__title">Nie ma tu Twojego pytania?</h2>
+            <p>
+              Napisz przez <a href="contact.html">formularz kontaktowy</a> — to jedyna ścieżka w
+              serwisie, która naprawdę wysyła wiadomość. Znajdziesz tam również adres e-mail, numer
+              telefonu i adres studia.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- @include src/partials/footer.html -->
+
+    <script type="module" src="../js/main.js"></script>
+  </body>
+</html>

@@ -778,3 +778,183 @@
   outline: 2px solid color-mix(in srgb, var(--color-accent-ink) 36%, transparent);
   outline-offset: 4px;
 }
+
+/* Page: FAQ */
+
+.faq-layout {
+  display: grid;
+  gap: var(--space-08);
+  max-width: 78ch;
+}
+.faq-lead {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--fs-04);
+}
+.faq-lead a,
+.faq-item__answer a,
+.faq-help a {
+  color: var(--color-ink);
+  font-weight: var(--fw-02);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
+  text-underline-offset: 3px;
+  transition: color var(--transition-fast);
+}
+.faq-lead a:hover,
+.faq-lead a:focus-visible,
+.faq-item__answer a:hover,
+.faq-item__answer a:focus-visible,
+.faq-help a:hover,
+.faq-help a:focus-visible {
+  color: var(--color-accent-ink);
+}
+.faq {
+  display: grid;
+  gap: var(--space-08);
+}
+.faq-group {
+  display: grid;
+  gap: var(--space-04);
+}
+.faq-group__title {
+  margin: 0;
+  font-size: var(--fs-06);
+  letter-spacing: var(--ls-03);
+}
+.faq-list {
+  display: grid;
+  gap: var(--space-03);
+}
+.faq-item {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-card);
+  overflow: hidden;
+  transition: border-color var(--transition-fast);
+}
+.faq-item:has(.faq-item__trigger[aria-expanded='true']) {
+  border-color: color-mix(in srgb, var(--color-accent) 42%, var(--color-border));
+}
+.faq-item__heading {
+  margin: 0;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* The trigger is a real button, so Enter and Space stay the browser's own. The icon holds a
+   column of its own, so a long Polish question wraps beside the chevron and never under it. */
+.faq-item__trigger {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: var(--space-04);
+  width: 100%;
+  padding: var(--space-04);
+  border: 0;
+  background: transparent;
+  text-align: left;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+}
+
+/* The card clips its corners, so the shared focus ring is drawn inside the control rather than
+   in the overflow the radius removes. The ring itself is the one base.css defines. */
+.faq-item__trigger:focus-visible {
+  outline-offset: -3px;
+}
+.faq-item__question {
+  font-size: var(--fs-05);
+  font-weight: var(--fw-02);
+  line-height: var(--lh-02);
+  text-wrap: pretty;
+}
+
+/* One sprite chevron, turned by state: closed it points down at the answer it opens, open it
+   points back at the question. Nothing here redraws the artwork. */
+.faq-item__icon {
+  inline-size: 14px;
+  block-size: 8px;
+  margin-top: 0.45em;
+  color: var(--color-muted);
+  transition:
+    transform var(--transition-base),
+    color var(--transition-fast);
+}
+.faq-item__trigger[aria-expanded='true'] .faq-item__icon {
+  transform: rotate(180deg);
+  color: var(--color-accent-ink);
+}
+.faq-item__answer {
+  display: grid;
+  gap: var(--space-03);
+  padding: var(--space-04);
+  border-top: 1px solid color-mix(in srgb, var(--color-border) 55%, transparent);
+  animation: faq-answer-in var(--transition-base) var(--ease-out-5) both;
+}
+
+/* The grid above outranks the user-agent rule for the hidden attribute, and a collapsed answer
+   has to leave the accessibility tree and the tab order, not merely go out of sight. */
+.faq-item__answer[hidden] {
+  display: none;
+}
+.faq-item__answer p {
+  margin: 0;
+  font-size: var(--fs-04);
+  color: var(--color-ink-muted);
+}
+.faq-help {
+  display: grid;
+  gap: var(--space-02);
+  padding: var(--space-06);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+}
+.faq-help__title {
+  margin: 0;
+  font-size: var(--fs-06);
+}
+.faq-help p {
+  margin: 0;
+  font-size: var(--fs-04);
+  color: var(--color-ink-muted);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .faq-item:hover {
+    border-color: var(--color-border-strong);
+  }
+  .faq-item__trigger:hover .faq-item__icon {
+    color: var(--color-accent-ink);
+  }
+}
+
+@media (min-width: 760px) {
+  .faq-item__trigger,
+  .faq-item__answer {
+    padding-inline: var(--space-05);
+  }
+}
+
+/* The answer arrives at its final height in one step, so opening a question never nudges the
+   ones below it mid-transition. Only the arrival itself is animated. */
+@keyframes faq-answer-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-item__answer {
+    animation: none;
+  }
+  .faq-item__icon {
+    transition: none;
+  }
+}

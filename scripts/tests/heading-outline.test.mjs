@@ -8,8 +8,8 @@ import { discoverHtml, renderHtml } from '../html.mjs';
 const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 const documents = discoverHtml(ROOT);
 
-test('the heading scan covers all 15 Vite HTML entries', () => {
-  assert.equal(documents.length, 15);
+test('the heading scan covers all 16 Vite HTML entries', () => {
+  assert.equal(documents.length, 16);
 });
 
 for (const file of documents) {

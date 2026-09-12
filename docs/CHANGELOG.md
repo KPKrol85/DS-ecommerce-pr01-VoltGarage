@@ -11,6 +11,7 @@ All significant changes to this project are documented in this file.
 - Added installable PWA metadata, Service Worker registration, installation and update prompts, runtime caching, and an offline fallback for previously controlled visits.
 - Added accessibility foundations including skip navigation, visible keyboard focus, modal focus trapping and restoration, reduced-motion handling, live status regions, and field-level validation associations.
 - Added canonical and social metadata, sitemap and robots directives, and static or runtime JSON-LD for the store, catalog, breadcrumb, and product views.
+- Added a new FAQ / Help page with an accessible accordion, project-specific guidance, CONTACT navigation integration, sitemap coverage, and focused automated tests.
 
 ### Changed
 

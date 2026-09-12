@@ -94,8 +94,8 @@ function mountTheme(t, { stored = null, systemDark = false } = {}) {
   };
 }
 
-test('the theme scan covers all 15 Vite HTML entries', () => {
-  assert.equal(documents.length, 15);
+test('the theme scan covers all 16 Vite HTML entries', () => {
+  assert.equal(documents.length, 16);
   for (const file of ['index.html', 'pages/shop.html', '404.html', 'offline.html']) {
     assert.ok(documents.includes(file), `${file} should be a rendered document`);
   }

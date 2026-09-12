@@ -22,6 +22,7 @@ const SHARED_ROUTES = [
   '/pages/collections.html',
   '/pages/contact.html',
   '/pages/cookies.html',
+  '/pages/faq.html',
   '/pages/new-arrivals.html',
   '/pages/privacy-policy.html',
   '/pages/promotions.html',

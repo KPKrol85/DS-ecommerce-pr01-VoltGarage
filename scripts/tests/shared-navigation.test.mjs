@@ -30,10 +30,15 @@ const KEPT_ENTRIES = [
   ['Kolekcje / Kategorie', '/pages/collections.html'],
   ['Promocje', '/pages/promotions.html'],
   ['Formularz', '/pages/contact.html'],
+  ['FAQ / Pomoc', '/pages/faq.html'],
   ['Kontakt', '/pages/contact.html'],
   ['Polityka prywatności', '/pages/privacy-policy.html'],
   ['Cookies', '/pages/cookies.html'],
   ['Regulamin', '/pages/terms.html'],
+];
+const CONTACT_ENTRIES = [
+  ['Formularz', '/pages/contact.html'],
+  ['FAQ / Pomoc', '/pages/faq.html'],
 ];
 const SHOP_ENTRIES = [
   ['Wszystkie produkty', '/pages/shop.html'],
@@ -76,18 +81,29 @@ const footerEntries = async (file) => {
   return entriesIn(footer[1], file).map((entry) => [entry.label, entry.route]);
 };
 
-const shopEntries = async (file) => {
+const dropdownEntries = async (file, name) => {
   const header = await render(file, HEADER);
   const dropdown = header.match(
-    /<button\b[^>]*data-dropdown-toggle[^>]*>\s*Sklep\s*<\/button>\s*<ul\b[^>]*data-dropdown-menu[^>]*>([\s\S]*?)<\/ul>/i
+    new RegExp(
+      String.raw`<button\b[^>]*data-dropdown-toggle[^>]*>\s*${name}\s*</button>\s*<ul\b[^>]*data-dropdown-menu[^>]*>([\s\S]*?)</ul>`,
+      'i'
+    )
   );
-  assert.ok(dropdown, `${file}: the shared header should render the Sklep dropdown`);
+  assert.ok(dropdown, `${file}: the shared header should render the ${name} dropdown`);
   return entriesIn(dropdown[1], file).map((entry) => [entry.label, entry.route]);
 };
 
 test('the Sklep dropdown contains exactly the four approved destinations', async () => {
   for (const file of DOCUMENTS) {
-    assert.deepEqual(await shopEntries(file), SHOP_ENTRIES, file);
+    assert.deepEqual(await dropdownEntries(file, 'Sklep'), SHOP_ENTRIES, file);
+  }
+});
+
+// The contact section answers the two questions a visitor arrives with: write to us, or
+// read the answer first. Both are listed, in that order, and nothing else joins them.
+test('the Kontakt dropdown contains exactly the two approved destinations', async () => {
+  for (const file of DOCUMENTS) {
+    assert.deepEqual(await dropdownEntries(file, 'Kontakt'), CONTACT_ENTRIES, file);
   }
 });
 

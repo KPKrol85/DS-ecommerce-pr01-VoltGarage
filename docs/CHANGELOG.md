@@ -45,6 +45,7 @@ All significant changes to this project are documented in this file.
 - Decoupled shared subpage hero styling from the photographic homepage hero, introducing dedicated theme-aware hero tokens and more consistent light and dark mode treatments across internal pages.
 - Replaced the legacy VoltGarage branding with the approved vector logo system, using dedicated light and dark lockups in the header and footer and the approved symbol-only badge across favicon, PWA, install-prompt, project-modal, structured-data, and watermark contexts.
 - Migrated browser and PWA icon assets to badge-derived variants, including maskable-safe application icons, while removing obsolete duplicated raster-backed logo assets and substantially reducing the packaged branding payload.
+- Removed the generic `Produkt` entry from the SKLEP dropdown so product detail pages are reached through selected-product actions instead of global navigation.
 
 ### Security
 

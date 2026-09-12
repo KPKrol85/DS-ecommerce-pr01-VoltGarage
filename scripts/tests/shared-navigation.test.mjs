@@ -7,8 +7,9 @@ import { renderHtml } from '../html.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const ORIGIN = 'https://volt-garage.invalid';
-const SHARED_SHELL =
-  '<!-- @include src/partials/header.html --><!-- @include src/partials/footer.html -->';
+const HEADER = '<!-- @include src/partials/header.html -->';
+const FOOTER = '<!-- @include src/partials/footer.html -->';
+const SHARED_SHELL = `${HEADER}${FOOTER}`;
 // The shared shell renders at every document depth, and root-absolute on a fallback document,
 // so each entry is checked wherever rootPrefix and pagesPrefix can place its destination.
 const DOCUMENTS = ['index.html', 'thank-you.html', 'pages/shop.html', '404.html'];
@@ -34,6 +35,12 @@ const KEPT_ENTRIES = [
   ['Cookies', '/pages/cookies.html'],
   ['Regulamin', '/pages/terms.html'],
 ];
+const SHOP_ENTRIES = [
+  ['Wszystkie produkty', '/pages/shop.html'],
+  ['Nowości', '/pages/new-arrivals.html'],
+  ['Kolekcje / Kategorie', '/pages/collections.html'],
+  ['Promocje', '/pages/promotions.html'],
+];
 
 const source = (file) => fs.readFile(path.join(ROOT, file), 'utf8');
 const render = async (file, markup) => renderHtml(ROOT, file, markup ?? (await source(file)));
@@ -51,6 +58,41 @@ const entriesIn = (markup, file) =>
     .map((entry) => ({ ...entry, route: new URL(entry.href, `${ORIGIN}/${file}`).pathname }));
 
 const sharedEntries = async (file) => entriesIn(await render(file, SHARED_SHELL), file);
+
+const shopEntries = async (file) => {
+  const header = await render(file, HEADER);
+  const dropdown = header.match(
+    /<button\b[^>]*data-dropdown-toggle[^>]*>\s*Sklep\s*<\/button>\s*<ul\b[^>]*data-dropdown-menu[^>]*>([\s\S]*?)<\/ul>/i
+  );
+  assert.ok(dropdown, `${file}: the shared header should render the Sklep dropdown`);
+  return entriesIn(dropdown[1], file).map((entry) => [entry.label, entry.route]);
+};
+
+test('the Sklep dropdown contains exactly the four approved destinations', async () => {
+  for (const file of DOCUMENTS) {
+    assert.deepEqual(await shopEntries(file), SHOP_ENTRIES, file);
+  }
+});
+
+test('Produkt stays in the footer but not in the main navigation', async () => {
+  for (const file of DOCUMENTS) {
+    const headerEntries = entriesIn(await render(file, HEADER), file);
+    const footerEntries = entriesIn(await render(file, FOOTER), file);
+
+    assert.ok(
+      !headerEntries.some(
+        (entry) => entry.label === 'Produkt' && entry.route === '/pages/product.html'
+      ),
+      `${file}: the main navigation still offers a generic product route`
+    );
+    assert.ok(
+      footerEntries.some(
+        (entry) => entry.label === 'Produkt' && entry.route === '/pages/product.html'
+      ),
+      `${file}: the separately maintained footer product route was removed`
+    );
+  }
+});
 
 test('the shared navigation names no topic its destination does not contain', async () => {
   for (const file of DOCUMENTS) {

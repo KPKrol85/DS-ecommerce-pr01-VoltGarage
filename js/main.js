@@ -1,4 +1,5 @@
 // Entry point: bootstrap site modules.
+import { mountIconSprite } from '../icons.js';
 import { initHeader } from './ui/header.js';
 import { initTheme } from './ui/theme.js';
 import { initReveal } from './ui/reveal.js';
@@ -236,6 +237,7 @@ const initApp = () => {
 
   const has = (selector) => document.querySelector(selector);
 
+  if (document.body) runInitializer('mountIconSprite', mountIconSprite);
   if (document.body) runInitializer('initAccessibility', initAccessibility);
   if (has('[data-header]')) runInitializer('initHeader', initHeader);
   if (has('[data-theme-toggle]')) runInitializer('initTheme', initTheme);

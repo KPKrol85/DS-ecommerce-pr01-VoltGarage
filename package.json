@@ -23,7 +23,7 @@
     "qa": "npm run qa:html && npm run validate:jsonld && npm run qa:links && npm run qa:product-assets && npm run qa:js && npm run qa:css && npm run qa:build",
     "qa:format": "npm run format:check",
     "qa:html": "html-validate --config htmlvalidate.json \"*.html\" \"pages/**/*.html\"",
-    "qa:js": "eslint --max-warnings 0 \"js/**/*.js\" \"src/sw.js\" \"scripts/**/*.{js,mjs}\" \"tools/**/*.mjs\" \"vite.config.mjs\"",
+    "qa:js": "eslint --max-warnings 0 icons.js \"js/**/*.js\" \"src/sw.js\" \"scripts/**/*.{js,mjs}\" \"tools/**/*.mjs\" \"vite.config.mjs\"",
     "qa:css": "stylelint --max-warnings 0 \"css/**/*.css\"",
     "format": "prettier . --write",
     "format:html-tight": "prettier --write \"index.html\" \"404.html\" \"offline.html\" \"thank-you.html\" \"pages/**/*.html\" && node scripts/format-html-tight.js",

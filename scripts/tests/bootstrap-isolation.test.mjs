@@ -12,6 +12,7 @@ const bootstrap = mainSource
   .replace('import.meta.env.PROD', 'production');
 const order = [
   'initGlobalErrorHandling',
+  'mountIconSprite',
   'initAccessibility',
   'initHeader',
   'initTheme',

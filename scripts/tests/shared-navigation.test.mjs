@@ -29,16 +29,21 @@ const KEPT_ENTRIES = [
   ['Nowości', '/pages/new-arrivals.html'],
   ['Kolekcje / Kategorie', '/pages/collections.html'],
   ['Promocje', '/pages/promotions.html'],
-  ['Formularz', '/pages/contact.html'],
+  ['Formularz kontaktowy', '/pages/contact.html'],
   ['FAQ / Pomoc', '/pages/faq.html'],
-  ['Kontakt', '/pages/contact.html'],
   ['Polityka prywatności', '/pages/privacy-policy.html'],
   ['Cookies', '/pages/cookies.html'],
   ['Regulamin', '/pages/terms.html'],
 ];
 const CONTACT_ENTRIES = [
-  ['Formularz', '/pages/contact.html'],
+  ['Formularz kontaktowy', '/pages/contact.html'],
   ['FAQ / Pomoc', '/pages/faq.html'],
+];
+// Wsparcie is the footer half of the header Kontakt dropdown: the same two destinations, so a
+// visitor who scrolled past the header finds the identical pair under the identical names.
+const SUPPORT_ENTRIES = [
+  ['FAQ / Pomoc', '/pages/faq.html'],
+  ['Formularz kontaktowy', '/pages/contact.html'],
 ];
 const SHOP_ENTRIES = [
   ['Wszystkie produkty', '/pages/shop.html'],
@@ -51,7 +56,8 @@ const FOOTER_ENTRIES = [
   ['Nowości', '/pages/new-arrivals.html'],
   ['Kolekcje / Kategorie', '/pages/collections.html'],
   ['Promocje', '/pages/promotions.html'],
-  ['Kontakt', '/pages/contact.html'],
+  ['FAQ / Pomoc', '/pages/faq.html'],
+  ['Formularz kontaktowy', '/pages/contact.html'],
   ['Polityka prywatności', '/pages/privacy-policy.html'],
   ['Cookies', '/pages/cookies.html'],
   ['Regulamin', '/pages/terms.html'],
@@ -93,6 +99,17 @@ const dropdownEntries = async (file, name) => {
   return entriesIn(dropdown[1], file).map((entry) => [entry.label, entry.route]);
 };
 
+// The headings are authored in sentence case and uppercased by .footer-col h2, so WSPARCIE and
+// KONTAKT are read here under the names the partial actually carries.
+const footerColumn = async (file, heading) => {
+  const markup = await render(file, FOOTER);
+  const column = markup.match(
+    new RegExp(String.raw`<div class="footer-col[^"]*">\s*<h2>${heading}</h2>([\s\S]*?)</div>`)
+  );
+  assert.ok(column, `${file}: the shared footer should render the ${heading} column`);
+  return column[1];
+};
+
 test('the Sklep dropdown contains exactly the four approved destinations', async () => {
   for (const file of DOCUMENTS) {
     assert.deepEqual(await dropdownEntries(file, 'Sklep'), SHOP_ENTRIES, file);
@@ -104,6 +121,35 @@ test('the Sklep dropdown contains exactly the four approved destinations', async
 test('the Kontakt dropdown contains exactly the two approved destinations', async () => {
   for (const file of DOCUMENTS) {
     assert.deepEqual(await dropdownEntries(file, 'Kontakt'), CONTACT_ENTRIES, file);
+  }
+});
+
+// The footer repeats itself only if its two columns overlap: Wsparcie owns the routes a visitor
+// can follow, and Kontakt owns the line and the address those routes lead to.
+test('the footer support column holds the routes and the contact column the details', async () => {
+  for (const file of DOCUMENTS) {
+    const support = entriesIn(await footerColumn(file, 'Wsparcie'), file);
+    assert.deepEqual(
+      support.map((entry) => [entry.label, entry.route]),
+      SUPPORT_ENTRIES,
+      file
+    );
+
+    const contact = await footerColumn(file, 'Kontakt');
+    const hrefs = [...contact.matchAll(/href="([^"]*)"/g)].map(([, href]) => href);
+    assert.ok(
+      hrefs.some((href) => href.startsWith('tel:')),
+      `${file}: the footer contact column lost its telephone line`
+    );
+    assert.ok(
+      hrefs.some((href) => href.startsWith('mailto:')),
+      `${file}: the footer contact column lost its address`
+    );
+    assert.deepEqual(
+      entriesIn(contact, file),
+      [],
+      `${file}: the footer contact column duplicates a route Wsparcie already owns`
+    );
   }
 });
 

@@ -171,12 +171,6 @@ main > section {
   min-width: 0;
 }
 
-/* The lockup already sets the wordmark, so the header paints one asset instead of a mark beside
-   live text. The theme picks the file through --brand-lockup, which keeps the switch declarative
-   and lets the no-JavaScript dark fallback in themes.css reach it. aspect-ratio reserves the box
-   from the 262 × 48 artwork, so nothing reflows once the file arrives; min-width lets a header
-   narrower than the token scale the whole lockup down instead of pushing the controls out of the
-   container. */
 .brand-logo {
   display: block;
   width: var(--logo-header-size);
@@ -326,7 +320,6 @@ main > section {
   display: flex;
   align-items: center;
   gap: var(--space-03);
-  /* The controls hold their hit areas; the brand lockup beside them is what gives width back. */
   flex-shrink: 0;
 }
 
@@ -339,6 +332,7 @@ main > section {
   border: none;
   background: var(--color-surface);
 }
+
 .nav-toggle__icon {
   width: 24px;
   height: 24px;
@@ -736,6 +730,7 @@ main > section {
   grid-template-columns: minmax(0, 1fr);
   align-items: start;
 }
+
 .page-layout--contact {
   grid-template-areas:
     'promo'
@@ -743,19 +738,23 @@ main > section {
     'map';
   grid-template-rows: auto auto auto;
 }
+
 .page-layout--contact .promo {
   grid-area: promo;
 }
+
 .page-layout--contact .form-grid {
   grid-area: form;
   align-self: stretch;
 }
+
 .page-layout--contact .map-card {
   grid-area: map;
   align-self: stretch;
   display: flex;
   min-height: 0;
 }
+
 .page-layout--contact .map-card iframe {
   flex: 1;
   height: 100%;

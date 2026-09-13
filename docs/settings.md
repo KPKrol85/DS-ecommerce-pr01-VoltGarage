@@ -8,7 +8,7 @@
 - Required Node.js version: `^20.19.0 || >=22.12.0`
 - Package manager: `npm`; install the locked dependencies with `npm ci`
 - Main source entrypoints:
-  - HTML: [index.html](../index.html), the other root `*.html` files, and `pages/**/*.html` (15 documents)
+  - HTML: [index.html](../index.html), the other root `*.html` files, and `pages/**/*.html` (16 documents)
   - Shared HTML: `src/partials/`
   - CSS: [css/main.css](../css/main.css), importing `css/partials/`
   - JS: [js/main.js](../js/main.js), importing the application modules
@@ -32,7 +32,7 @@ Commands below match `package.json` and run from the repository root.
 | `qa`                | `npm run qa:html && npm run validate:jsonld && npm run qa:links && npm run qa:product-assets && npm run qa:js && npm run qa:css && npm run qa:build` | Runs source HTML, JSON-LD, internal-link, product-asset, JS, CSS, and build-contract checks.                       | Use before release or after broader source changes.                  |
 | `qa:format`         | `npm run format:check`                                                                                                                               | Alias for formatting verification.                                                                                 | Use when you only want a formatting compliance check.                |
 | `qa:html`           | `html-validate --config htmlvalidate.json "*.html" "pages/**/*.html"`                                                                                | Runs `html-validate` against root HTML and `pages/**/*.html`.                                                      | Use after HTML edits or route/page changes.                          |
-| `qa:js`             | `eslint --max-warnings 0 "js/**/*.js" "src/sw.js" "scripts/**/*.{js,mjs}" "tools/**/*.mjs" "vite.config.mjs"`                                        | Lints app JS, worker source, project scripts, image tooling, and Vite configuration.                               | Use after JS or build-script changes.                                |
+| `qa:js`             | `eslint --max-warnings 0 icons.js "js/**/*.js" "src/sw.js" "scripts/**/*.{js,mjs}" "tools/**/*.mjs" "vite.config.mjs"`                               | Lints the icon sprite module, app JS, worker source, project scripts, image tooling, and Vite configuration.       | Use after JS or build-script changes.                                |
 | `qa:css`            | `stylelint --max-warnings 0 "css/**/*.css"`                                                                                                          | Lints source CSS.                                                                                                  | Use after CSS changes.                                               |
 | `format`            | `prettier . --write`                                                                                                                                 | Formats repository files in place using Prettier.                                                                  | Use when you want to normalize formatting across the repo.           |
 | `format:html-tight` | `prettier --write "index.html" "404.html" "offline.html" "thank-you.html" "pages/**/*.html" && node scripts/format-html-tight.js`                    | Formats HTML with Prettier and then reapplies the project's tighter head-spacing convention.                       | Use after larger HTML edits.                                         |

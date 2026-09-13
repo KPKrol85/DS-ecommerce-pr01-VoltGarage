@@ -14,7 +14,7 @@ Projekt prezentuje interfejs katalogu, koszyka i checkoutu, ale nie jest aktywny
 
 ### Kluczowe funkcje
 
-- Wielostronicowa nawigacja obejmująca stronę główną, katalog, szczegóły produktu, nowości, promocje, kolekcje, kontakt, koszyk, checkout oraz strony prawne.
+- Wielostronicowa nawigacja obejmująca stronę główną, katalog, szczegóły produktu, nowości, promocje, kolekcje, kontakt, koszyk, checkout, stronę FAQ / Pomoc oraz strony prawne.
 - Dynamiczne listy i szczegóły produktów z obsługą stanów ładowania, pustego wyniku i błędu.
 - Filtrowanie katalogu według kategorii i ceny, sortowanie oraz wyszukiwanie z podpowiedziami.
 - Koszyk w `localStorage`: dodawanie i usuwanie pozycji, zmiana ilości oraz obliczanie wartości produktów, dostawy i sumy.
@@ -43,9 +43,9 @@ Projekt prezentuje interfejs katalogu, koszyka i checkoutu, ale nie jest aktywny
 
 ### Architektura
 
-- Projekt pozostaje Vanilla HTML/CSS/JavaScript MPA. Vite 8.2.2 obsługuje development, build i preview, automatycznie wykrywając wszystkie 15 dokumentów HTML w katalogu głównym i `pages/`.
+- Projekt pozostaje Vanilla HTML/CSS/JavaScript MPA. Vite 8.2.2 obsługuje development, build i preview, automatycznie wykrywając wszystkie 16 dokumentów HTML w katalogu głównym i `pages/`.
 - Wspólny renderer `scripts/html.mjs`, podłączony przez `scripts/vite-volt-garage.mjs`, rozwija `@include`, warunki i tokeny zarówno w trybie dev, jak i podczas budowania. Partiale `src/partials/header.html` i `src/partials/footer.html` pozostają źródłami; ich edycja przeładowuje stronę w dev. Brakujące lub niedozwolone include'y, cykle i nierozwiązane tokeny powodują błąd.
-- `js/main.js` uruchamia moduły tylko dla elementów obecnych na bieżącej stronie. Funkcje katalogu i koszyka znajdują się w `js/features/`, dostęp do danych i pamięci w `js/services/`, a zachowania interfejsu w `js/ui/`.
+- `js/main.js` uruchamia moduły tylko dla elementów obecnych na bieżącej stronie. Funkcje katalogu i koszyka znajdują się w `js/features/`, dostęp do danych i pamięci w `js/services/`, a zachowania interfejsu w `js/ui/`. Współdzielony sprite ikon SVG pochodzi z modułu `icons.js` w katalogu głównym, montowanego w runtime przez `js/main.js`.
 - `public/data/products.json` jest kanonicznym źródłem katalogu, dostępnym pod `/data/products.json`. Fetch API pobiera dane z rewalidacją, a aplikacja przechowuje je w pamięci na czas bieżącej sesji strony.
 - `css/main.css` importuje warstwy z `css/partials/`. Vite przetwarza CSS i moduły JS, minifikuje je oraz aktualizuje odwołania w produkcyjnym HTML.
 - `public/` zawiera statyczne zasoby kopiowane bez zmiany nazw do `dist/`, z zachowaniem URL-i takich jak `/assets/`, `/data/products.json` i `/site.webmanifest`. Kanoniczny `src/sw.js` jest osobno przekształcany w produkcyjny `dist/sw.js`.
@@ -56,7 +56,7 @@ Projekt prezentuje interfejs katalogu, koszyka i checkoutu, ale nie jest aktywny
 .
 ├── index.html                             # Strona główna i źródłowy entry HTML
 ├── 404.html, offline.html, thank-you.html # Pozostałe główne dokumenty HTML
-├── pages/                                 # 11 widoków sklepu, kontaktu i stron prawnych
+├── pages/                                 # 12 widoków sklepu, pomocy, kontaktu i stron prawnych
 ├── src/
 │   ├── partials/                          # Współdzielone partiale headera i footera
 │   └── sw.js                              # Kanoniczny Service Worker
@@ -69,6 +69,7 @@ Projekt prezentuje interfejs katalogu, koszyka i checkoutu, ale nie jest aktywny
 │   ├── features/                          # Produkty, filtry i koszyk
 │   ├── services/                          # Dane produktów i bezpieczny dostęp do storage
 │   └── ui/                                # Nawigacja, motyw, dostępność, PWA i JSON-LD
+├── icons.js                               # Centralny sprite SVG ikon montowany w runtime
 ├── public/                                # Zasoby kopiowane z zachowaniem publicznych URL-i
 │   ├── assets/                            # Obrazy, fonty, ikony i warianty _optimized
 │   ├── data/products.json                 # Lokalne dane produktowe
@@ -224,7 +225,7 @@ The project presents catalog, cart, and checkout interfaces, but it is not an ac
 
 ### Key Features
 
-- Multi-page navigation covering the homepage, catalog, product details, new arrivals, promotions, collections, contact, cart, checkout, and legal pages.
+- Multi-page navigation covering the homepage, catalog, product details, new arrivals, promotions, collections, contact, cart, checkout, the FAQ / help page, and legal pages.
 - Dynamic product lists and details with loading, empty, and error states.
 - Catalog filtering by category and price, sorting, and search suggestions.
 - `localStorage` cart with item addition and removal, quantity updates, and product, shipping, and total calculations.
@@ -253,9 +254,9 @@ The project presents catalog, cart, and checkout interfaces, but it is not an ac
 
 ### Architecture
 
-- The project remains a Vanilla HTML/CSS/JavaScript MPA. Vite 8.2.2 handles development, build, and preview, automatically discovering all 15 HTML documents in the repository root and `pages/`.
+- The project remains a Vanilla HTML/CSS/JavaScript MPA. Vite 8.2.2 handles development, build, and preview, automatically discovering all 16 HTML documents in the repository root and `pages/`.
 - The shared `scripts/html.mjs` renderer, integrated through `scripts/vite-volt-garage.mjs`, expands `@include`, conditionals, and tokens in both dev and production builds. The `src/partials/header.html` and `src/partials/footer.html` partials remain source files; editing them reloads the page in dev. Missing or disallowed includes, cycles, and unresolved tokens fail validation.
-- `js/main.js` initializes modules only for elements present on the current page. Catalog and cart features live in `js/features/`, data and storage access in `js/services/`, and interface behavior in `js/ui/`.
+- `js/main.js` initializes modules only for elements present on the current page. Catalog and cart features live in `js/features/`, data and storage access in `js/services/`, and interface behavior in `js/ui/`. The shared SVG icon sprite comes from the root `icons.js` module, which `js/main.js` mounts at runtime.
 - `public/data/products.json` is the canonical catalog source, served at `/data/products.json`. The Fetch API retrieves it with revalidation, and the application holds it in memory for the current page session.
 - `css/main.css` imports layers from `css/partials/`. Vite processes CSS and JS modules, minifies them, and updates references in production HTML.
 - `public/` holds static resources copied without renaming into `dist/`, preserving URLs such as `/assets/`, `/data/products.json`, and `/site.webmanifest`. The canonical `src/sw.js` is separately transformed into production `dist/sw.js`.
@@ -266,7 +267,7 @@ The project presents catalog, cart, and checkout interfaces, but it is not an ac
 .
 ├── index.html                             # Homepage and source HTML entry
 ├── 404.html, offline.html, thank-you.html # Other root HTML documents
-├── pages/                                 # 11 store, contact, and legal views
+├── pages/                                 # 12 store, help, contact, and legal views
 ├── src/
 │   ├── partials/                          # Shared header and footer partials
 │   └── sw.js                              # Canonical Service Worker
@@ -279,6 +280,7 @@ The project presents catalog, cart, and checkout interfaces, but it is not an ac
 │   ├── features/                          # Products, filters, and cart
 │   ├── services/                          # Product data and safe storage access
 │   └── ui/                                # Navigation, theme, accessibility, PWA, and JSON-LD
+├── icons.js                               # Centralized SVG icon sprite mounted at runtime
 ├── public/                                # Resources copied with public URLs preserved
 │   ├── assets/                            # Images, fonts, icons, and _optimized variants
 │   ├── data/products.json                 # Local product data

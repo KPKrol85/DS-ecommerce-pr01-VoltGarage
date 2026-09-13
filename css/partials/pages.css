@@ -1,5 +1,12 @@
 /* Page Hero */
 
+:root {
+  /* Wide enough to carry real artwork, narrow enough that the heading keeps the hero. The
+     16 / 10 frame below fixes the height the media reserves at every width, so a page swapping
+     in its own picture cannot move the copy beside it. */
+  --page-hero-media-width: clamp(200px, 32vw, 360px);
+}
+
 .page-hero {
   position: relative;
   overflow: hidden;
@@ -10,28 +17,35 @@
     linear-gradient(180deg, var(--page-hero-top), var(--page-hero-bottom));
 }
 
+/* Copy first, media after it: one column until the hero is wide enough to seat artwork beside
+   the heading without crowding the lead paragraph. */
 .page-hero .container {
   position: relative;
   z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-06);
 }
 
-.page-hero .container > :not(.page-hero-mark) {
-  position: relative;
-  z-index: 1;
+.page-hero-copy {
+  min-width: 0;
 }
 
-.page-hero-mark {
-  position: absolute;
-  top: 50%;
-  right: 6%;
-  width: var(--logo-mark-size);
-  height: var(--logo-mark-size);
-  pointer-events: none;
-  z-index: 0;
-  opacity: var(--page-hero-mark-opacity);
-  transform: translateY(-30%);
-  background: url('/assets/images/logo/logo-badge-outline.svg') center / contain no-repeat;
-  animation: page-hero-mark-in 0.9s ease-out forwards;
+/* The frame, not the file, decides how much room the hero gives a picture. Every page points
+   .page-hero-image at its own source; nothing else here has to change. */
+.page-hero-media {
+  width: min(100%, var(--page-hero-media-width));
+  aspect-ratio: 16 / 10;
+}
+
+.page-hero-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  animation: page-hero-media-in 0.7s var(--ease-out-5) both;
 }
 
 .page-hero h1 {
@@ -48,22 +62,32 @@
   letter-spacing: var(--ls-03);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .page-hero-mark {
-    animation: none;
-    opacity: var(--page-hero-mark-opacity);
-    transform: translate3d(0, -50%, 0);
+@media (min-width: 900px) {
+  .page-hero .container {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: var(--space-09);
+  }
+  .page-hero-media {
+    justify-self: end;
   }
 }
 
-@keyframes page-hero-mark-in {
+/* animation: none leaves the image at its own end state — visible, untransformed — rather than
+   stranded at the opacity the keyframes open on. */
+@media (prefers-reduced-motion: reduce) {
+  .page-hero-image {
+    animation: none;
+  }
+}
+
+@keyframes page-hero-media-in {
   from {
     opacity: 0;
-    transform: translate3d(18%, 0%, 0);
+    transform: translate3d(0, 10px, 0) scale(0.985);
   }
   to {
-    opacity: var(--page-hero-mark-opacity);
-    transform: translate3d(20%, -50%, 0);
+    opacity: 1;
+    transform: none;
   }
 }
 

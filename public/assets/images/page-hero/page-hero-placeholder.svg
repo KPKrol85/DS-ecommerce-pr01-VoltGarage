@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" fill="none"><title>Miejsce na grafikę podstrony — placeholder</title>
+<rect x="2" y="2" width="636" height="396" rx="22" stroke="#E8822E" stroke-width="3" stroke-dasharray="16 13" opacity="0.6"></rect>
+<rect x="26" y="26" width="588" height="348" rx="14" fill="#8A97AC" opacity="0.1"></rect>
+<rect x="228" y="126" width="184" height="132" rx="14" stroke="#8A97AC" stroke-width="4" opacity="0.75"></rect>
+<circle cx="270" cy="164" r="14" fill="#E8822E" opacity="0.8"></circle>
+<path d="M242 248 L292 190 L326 226 L354 198 L398 248" stroke="#8A97AC" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.75"></path>
+<path d="M268 300 h104 M292 322 h56" stroke="#8A97AC" stroke-width="10" stroke-linecap="round" opacity="0.22"></path>
+</svg>

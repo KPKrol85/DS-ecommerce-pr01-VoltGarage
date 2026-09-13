@@ -115,7 +115,6 @@
      controls. */
   --logo-footer-size: 216px;
   --logo-header-size: clamp(142px, 22vw, 196px);
-  --logo-mark-size: clamp(104px, 12vw, 208px);
 }
 
 :root,
@@ -142,7 +141,6 @@
   --page-hero-bottom: #f4f7fa;
   --page-hero-sheen: rgba(255, 255, 255, 0.85);
   --page-hero-accent: color-mix(in srgb, var(--color-accent) 9%, transparent);
-  --page-hero-mark-opacity: 0.2;
   --icon-fill: var(--color-ink);
   --icon-fill-hover: var(--color-accent-ink);
   /* The approved lockup ships one file per surface rather than a filtered single asset: the
@@ -175,7 +173,6 @@
   --page-hero-bottom: #0c0f14;
   --page-hero-sheen: rgba(140, 166, 204, 0.13);
   --page-hero-accent: color-mix(in srgb, var(--color-accent) 18%, transparent);
-  --page-hero-mark-opacity: 0.14;
   --icon-fill: var(--color-ink);
   --icon-fill-hover: var(--color-accent);
   --brand-lockup: url('/assets/images/logo/logo-lockup-dark.svg');
@@ -210,7 +207,6 @@
     --page-hero-bottom: #0c0f14;
     --page-hero-sheen: rgba(140, 166, 204, 0.13);
     --page-hero-accent: color-mix(in srgb, var(--color-accent) 18%, transparent);
-    --page-hero-mark-opacity: 0.14;
     --icon-fill: var(--color-ink);
     --icon-fill-hover: var(--color-accent);
     --brand-lockup: url('/assets/images/logo/logo-lockup-dark.svg');

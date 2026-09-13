@@ -54,11 +54,13 @@ test('the FAQ is a build entry, a sitemap route, and the page the navigation pro
 test('the page reuses the shared hero, and its h1 and breadcrumb name the same page', () => {
   const hero = faq.match(/<section class="page-hero">[\s\S]*?<\/section>/)?.[0];
   assert.ok(hero, 'the FAQ should reuse the shared page hero');
-  assert.match(hero, /<span class="page-hero-mark" aria-hidden="true"><\/span>/);
+  assert.doesNotMatch(hero, /page-hero-mark/, 'the retired logo watermark must be gone');
   assert.equal(textContent(hero.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/)[1]), TITLE);
   assert.ok(textContent(hero.match(/<p>([\s\S]*?)<\/p>/)[1]).length > 40, 'the hero needs a lead');
-  // No hero artwork of its own: the watermark and gradient are the shared treatment.
-  assert.ok(!hero.includes('<img'), 'the hero must not introduce artwork of its own');
+  // The heading and lead own the copy column; the media column is the shared image slot the
+  // page-specific artwork drops into, so the hero carries exactly one picture.
+  assert.match(hero, /<div class="page-hero-copy">/);
+  assert.equal((hero.match(/<img\b/g) ?? []).length, 1, 'the hero carries one hero image');
   const crumbs = faq.match(/<nav class="breadcrumbs"[\s\S]*?<\/nav>/)[0];
   assert.match(textContent(crumbs), new RegExp(`Strona główna ${TITLE}$`));
 });

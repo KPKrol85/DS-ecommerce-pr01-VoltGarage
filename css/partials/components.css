@@ -413,11 +413,13 @@
   justify-content: center;
   flex-shrink: 0;
 }
+
 .cart-link__svg {
   width: 24px;
   height: 24px;
   display: block;
 }
+
 .cart-count {
   width: 24px;
   height: 24px;
@@ -444,25 +446,31 @@
 .search-field {
   position: relative;
 }
+
 .products {
   position: relative;
   z-index: 1;
   min-height: clamp(720px, 100vh, 980px);
 }
+
 .products--featured {
   min-height: 0;
   align-content: start;
 }
+
 .products--loading {
   align-content: start;
 }
+
 .products-fallback {
   grid-column: 1 / -1;
   margin: 0;
 }
+
 .card--skeleton {
   pointer-events: none;
 }
+
 .card--skeleton
   :is(
     .card-skeleton__media,
@@ -482,28 +490,34 @@
   background-size: 220% 100%;
   animation: skeleton-shimmer 1.4s ease-in-out infinite;
 }
+
 .card-skeleton__media {
   aspect-ratio: 4 / 3;
 }
+
 .card-skeleton__badge {
   width: 46%;
   height: 24px;
   margin: 0 auto;
   border-radius: var(--radius-pill);
 }
+
 .card-skeleton__title {
   height: 20px;
   width: 76%;
   margin: 0 auto;
 }
+
 .card-skeleton__text {
   height: 16px;
   width: 100%;
 }
+
 .card-skeleton__meta {
   height: 16px;
   width: 65%;
 }
+
 .card-skeleton__actions {
   height: 40px;
   width: 100%;
@@ -531,9 +545,11 @@
 .search-input {
   position: relative;
 }
+
 .search-input input[type='search'] {
   padding-right: calc(var(--space-03) + 28px);
 }
+
 .search-clear {
   position: absolute;
   right: var(--space-03);
@@ -547,10 +563,12 @@
   padding: var(--space-01);
   cursor: pointer;
 }
+
 .search-clear:hover,
 .search-clear:focus-visible {
   color: var(--color-ink);
 }
+
 .search-suggestions {
   position: absolute;
   left: 0;
@@ -567,9 +585,11 @@
   overflow: auto;
   scrollbar-gutter: stable;
 }
+
 .search-suggestions:empty {
   display: none;
 }
+
 .search-option {
   border-radius: var(--radius-sm);
   padding: var(--space-02) var(--space-03);
@@ -579,16 +599,19 @@
   cursor: pointer;
   color: inherit;
 }
+
 .search-option mark {
   background: color-mix(in srgb, var(--color-accent) 25%, transparent);
   color: inherit;
   border-radius: var(--radius-pill);
   padding: 0 var(--space-01);
 }
+
 .search-option.is-active,
 .search-option:hover {
   background: color-mix(in srgb, var(--color-accent) 12%, transparent);
 }
+
 .input-group :is(input, select, textarea):not([type='hidden']) {
   padding: var(--space-02) var(--space-03);
   border-radius: var(--radius-sm);
@@ -597,11 +620,6 @@
   opacity: 0.96;
 }
 
-/* The control stays a native <select> with its own dropdown, keyboard and focus behaviour; only
-   the system arrow is swapped for the centralized chevron. Border, background, radius and every
-   interaction state still come from the shared field rule above - which is also why the room for
-   the chevron is claimed at that rule's scope, since its padding shorthand would otherwise win
-   the cascade and let a long option run under the icon. */
 .select-input {
   position: relative;
 }
@@ -610,7 +628,7 @@
   appearance: none;
   padding-right: calc(var(--space-04) + 22px);
 }
-/* The icon overlays the closed control, so it must never swallow the click that opens it. */
+
 .select-chevron {
   position: absolute;
   right: var(--space-04);
@@ -621,12 +639,14 @@
   color: var(--color-muted);
   pointer-events: none;
 }
+
 .footer-form input[type='email'] {
   padding: var(--space-02) var(--space-03);
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
   background: var(--color-surface);
 }
+
 .input-error {
   color: var(--color-danger);
   font-size: var(--fs-03);
@@ -662,9 +682,11 @@
   font-size: var(--fs-03);
   color: var(--color-ink-muted);
 }
+
 .state-block--loading {
   border-color: color-mix(in srgb, var(--color-accent) 40%, var(--color-border));
 }
+
 .state-block--error {
   border-color: color-mix(in srgb, var(--color-danger) 50%, var(--color-border));
 }
@@ -684,45 +706,42 @@
   border: 1px solid var(--color-border);
   box-shadow: var(--shadow-sm);
 }
+
 .toast__actions {
   display: flex;
   gap: var(--space-02);
 }
-/* The display above outranks the user-agent rule for the hidden attribute, so without this the
-   toast stays painted after hideToast() marks it hidden - and the install offer below, which
-   steps aside only for a toast that is still shown, would clear a notification nobody can see. */
+
 .toast[hidden] {
   display: none !important;
 }
 
 /* Install CTA */
 
-/* The wrapper is only ever as wide as the state it shows, so it parks against the bottom-right
-   edge without covering the product grid behind it. */
 .install-cta {
   --install-cta-inline: var(--space-05);
   --install-cta-block: var(--space-05);
   --install-cta-toast-clearance: 0px;
-
   position: fixed;
   right: var(--install-cta-inline);
   bottom: calc(var(--install-cta-block) + var(--install-cta-toast-clearance));
   z-index: 850;
   display: flex;
   justify-content: flex-end;
-  /* On narrow screens the wrapper spans the bottom band, so only the visible state itself may
-     take pointer input; the empty remainder must never swallow taps meant for the page. */
   pointer-events: none;
 }
+
 .install-cta__card,
 .install-cta__chip {
   pointer-events: auto;
 }
+
 .install-cta[hidden],
 .install-cta__card[hidden],
 .install-cta__chip[hidden] {
   display: none !important;
 }
+
 .install-cta__card {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -735,16 +754,19 @@
   border: 1px solid var(--color-border);
   box-shadow: var(--shadow-md);
 }
+
 .install-cta__mark {
   width: 28px;
   height: auto;
 }
+
 .install-cta__text {
   margin: 0;
   font-size: var(--fs-03);
   line-height: var(--lh-02);
   color: var(--color-ink);
 }
+
 .install-cta__actions {
   grid-column: 1 / -1;
   display: flex;
@@ -752,10 +774,12 @@
   gap: var(--space-02);
   flex-wrap: wrap;
 }
+
 .install-cta__actions .btn {
   height: 32px;
   padding: var(--space-02) var(--space-04);
 }
+
 .install-cta__chip {
   display: inline-flex;
   align-items: center;
@@ -776,20 +800,22 @@
     border-color var(--transition-fast),
     box-shadow var(--transition-fast);
 }
+
 .install-cta__chip:hover {
   transform: translateY(-1px);
   border-color: color-mix(in srgb, var(--color-accent) 70%, var(--color-border));
   box-shadow: var(--shadow-md);
 }
+
 .install-cta__chip:focus-visible {
   outline: 2px solid var(--color-accent-ink);
   outline-offset: 3px;
 }
+
 .install-cta__chip .install-cta__mark {
   width: 18px;
 }
 
-/* Below this width the toast shares the bottom band, so the offer steps above it. */
 @media (max-width: 1023px) {
   body:has(.toast:not([hidden])) .install-cta {
     --install-cta-toast-clearance: 96px;
@@ -996,13 +1022,16 @@ body:has(.install-cta[data-install-state='expanded']) .scroll-top {
     box-shadow var(--transition-fast),
     background var(--transition-fast);
 }
+
 .form-grid textarea {
   min-height: 110px;
   resize: vertical;
 }
+
 .form-grid :is(input, select, textarea):not([type='hidden']):hover {
   border-color: color-mix(in srgb, var(--color-border) 55%, var(--color-ink));
 }
+
 .form-grid :is(input, select, textarea):not([type='hidden']):focus-visible {
   outline: 2px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
   outline-offset: 2px;
@@ -1011,14 +1040,17 @@ body:has(.install-cta[data-install-state='expanded']) .scroll-top {
     0 0 0 4px color-mix(in srgb, var(--color-accent) 16%, transparent),
     0 10px 18px rgba(0, 0, 0, 0.18);
 }
+
 .form-grid ::placeholder {
   color: color-mix(in srgb, var(--color-ink-muted) 80%, transparent);
 }
+
 @media (min-width: 760px) {
   .form-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
 .legal-simple {
   padding: var(--space-06) 0;
 }
@@ -1031,6 +1063,7 @@ body:has(.install-cta[data-install-state='expanded']) .scroll-top {
   font-size: var(--fs-02);
   color: var(--color-ink-muted);
 }
+
 .breadcrumbs ol {
   list-style: none;
   margin: 0;
@@ -1039,15 +1072,18 @@ body:has(.install-cta[data-install-state='expanded']) .scroll-top {
   flex-wrap: wrap;
   gap: var(--space-02);
 }
+
 .breadcrumbs li + li::before {
   content: '/';
   color: var(--color-border-strong);
   margin-right: var(--space-02);
 }
+
 .breadcrumbs a {
   color: inherit;
   text-decoration: none;
 }
+
 .breadcrumbs a:hover,
 .breadcrumbs a:focus-visible {
   color: var(--color-ink);
@@ -1069,8 +1105,6 @@ body:has(.install-cta[data-install-state='expanded']) .scroll-top {
     visibility var(--transition-base);
 }
 
-/* The page stays recognizable behind the disclosure: a moderate scrim and a light blur keep the
-   panel unmistakably in front without burying the hero under a heavy frosted sheet. */
 .project-modal__backdrop {
   position: absolute;
   inset: 0;
@@ -1087,8 +1121,6 @@ body:has(.install-cta[data-install-state='expanded']) .scroll-top {
   position: relative;
   max-width: 520px;
   width: 100%;
-  /* The grid area already excludes the container padding, so this keeps short viewports scrollable
-     instead of pushing the acknowledgement below the fold. */
   max-height: 100%;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -1101,11 +1133,6 @@ body:has(.install-cta[data-install-state='expanded']) .scroll-top {
   gap: var(--space-03);
 }
 
-/* Brand lockup: the existing storefront mark plus the wordmark, signed off by a six-segment racing
-   tick. Segments run 36/28/22/17/13/10px with 6px gaps, so the motif tapers like a velocity trail
-   and closes at 156px — the width the mark and wordmark above it occupy across the whole clamp
-   range (147-161px). Painted as one background gradient, so the accent adds nothing to the markup
-   and nothing to the accessibility tree. */
 .project-modal__brand {
   display: flex;
   align-items: center;
@@ -1170,7 +1197,6 @@ body:has(.install-cta[data-install-state='expanded']) .scroll-top {
   padding-inline: var(--space-06);
 }
 
-/* Links sit inside muted copy, so they carry ink weight: never colour alone. */
 .project-modal__panel a {
   color: var(--color-ink);
   text-decoration-thickness: 1px;
@@ -1181,13 +1207,10 @@ body:has(.install-cta[data-install-state='expanded']) .scroll-top {
     text-decoration-color var(--transition-fast);
 }
 
-/* The legal row is navigation, so it reads as navigation at rest. */
 .project-modal__links a {
   text-decoration-line: underline;
 }
 
-/* The studio credit runs mid-sentence: weight carries it at rest, so no rule cuts the paragraph.
-   Its underline arrives with hover and focus, where the link is being acted on. */
 .project-modal__studio {
   font-weight: var(--fw-02);
 }
@@ -1227,7 +1250,6 @@ body:has(.install-cta[data-install-state='expanded']) .scroll-top {
   overflow: hidden;
 }
 
-/* The panel settles into place; the container fade carries the entrance when motion is reduced. */
 @media (prefers-reduced-motion: no-preference) {
   .project-modal__panel {
     transform: translateY(8px);
@@ -1250,8 +1272,6 @@ body:has(.install-cta[data-install-state='expanded']) .scroll-top {
   }
 }
 
-/* Under this width the row cannot hold all three destinations, and wrapping it would strand a
-   separator at the end of a line. The bullets step aside and spacing carries the separation. */
 @media (max-width: 359px) {
   .project-modal__links {
     gap: var(--space-02) var(--space-04);
@@ -1269,6 +1289,7 @@ body:has(.install-cta[data-install-state='expanded']) .scroll-top {
   gap: var(--space-02);
   justify-content: space-between;
 }
+
 .tag-list img {
   width: 84px;
   height: 64px;
@@ -1384,6 +1405,7 @@ body:has(.install-cta[data-install-state='expanded']) .scroll-top {
   gap: var(--space-04);
   grid-template-columns: repeat(2, 1fr);
 }
+
 .stat {
   display: flex;
   flex-direction: column;
@@ -1396,6 +1418,7 @@ body:has(.install-cta[data-install-state='expanded']) .scroll-top {
   border: 1px solid color-mix(in srgb, var(--color-border) 35%, transparent);
   backdrop-filter: blur(4px);
 }
+
 .stat strong {
   font-size: var(--fs-05);
   line-height: var(--lh-01);
@@ -1420,24 +1443,23 @@ body:has(.install-cta[data-install-state='expanded']) .scroll-top {
   gap: var(--space-03);
   margin-top: var(--space-02);
 }
+
 .footer-form input {
   width: 100%;
 }
+
 .footer-form .btn {
   width: min(100%, 180px);
   margin-inline: auto;
 }
 
-/* Animations */
-
-/* A single short rise when a state appears; no fill mode, so the chip keeps its own hover lift
-   and nothing loops for attention afterwards. */
 @keyframes install-cta-in {
   from {
     opacity: 0;
     transform: translateY(8px);
   }
 }
+
 @media (prefers-reduced-motion: no-preference) {
   .install-cta__card,
   .install-cta__chip {

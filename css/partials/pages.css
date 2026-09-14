@@ -48,6 +48,19 @@
   animation: page-hero-media-in 0.7s var(--ease-out-5) both;
 }
 
+/* Finished artwork earns the plate the product cards wear: a rounded edge, a hairline border and
+   a shallow shadow, so the hero picture reads as a component rather than a rectangle dropped into
+   the gradient. The rule hangs off <picture> rather than a page class, so each subpage picks the
+   treatment up as it swaps its own artwork in, while a page still holding the bare placeholder
+   keeps the plain presentation a placeholder should have. It dresses the image rather than the
+   frame so the border and shadow ride the entrance animation instead of standing still around it;
+   border-box sizing keeps the 16 / 10 box the frame reserved. */
+.page-hero-media picture .page-hero-image {
+  border: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
 .page-hero h1 {
   font-size: var(--fs-08);
   color: var(--color-text);

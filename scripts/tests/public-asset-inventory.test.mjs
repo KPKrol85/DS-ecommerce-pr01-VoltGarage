@@ -8,6 +8,12 @@ const publicDir = fileURLToPath(new URL('../../public/', import.meta.url));
 const shortcutDir = 'assets/icons/shortcuts';
 const shortcuts = ['shortcut-new.png', 'shortcut-sale.png', 'shortcut-shop.png'];
 const heroSizes = ['800x600', '1280x720', '1920x1080'];
+// Subpage heroes publish one shared placeholder plus, per page, a 16 / 10 family in the three
+// formats the picture negotiates. Shop is the first page to have one; the rest are still on the
+// placeholder, so its two sizes are the whole approved set until the next page's artwork lands.
+const pageHeroPlaceholder = 'page-hero-placeholder.svg';
+const pageHeroSizes = ['640x400', '1280x800'];
+const pageHeroPages = ['shop'];
 // The approved brand set: two theme lockups for the header and footer, the symbol-only badge for
 // compact marks, its outline variant — held with the set now that the page hero it watermarked
 // carries real artwork instead — and the square raster the storefront's JSON-LD names as the
@@ -70,6 +76,26 @@ test('the published hero inventory contains all nine hero-05 variants only', asy
     'assets/images/_optimized/hero',
     heroSizes.flatMap((size) => ['avif', 'webp'].map((ext) => `hero-05-${size}.${ext}`))
   );
+});
+
+test('the page-hero inventory is the shared placeholder plus the approved shop family', async () => {
+  const family = (extensions) =>
+    pageHeroPages.flatMap((page) =>
+      pageHeroSizes.flatMap((size) =>
+        extensions.map((extension) => `${page}-hero-${size}.${extension}`)
+      )
+    );
+  // Two JPEG fallbacks beside the placeholder, two AVIF and two WebP in _optimized. Listing the
+  // family instead of counting the directory means the next page's artwork has to be approved
+  // here before it ships, and a stray export can never ride along with it.
+  await assertOnlyFiles('assets/images/page-hero', [pageHeroPlaceholder, ...family(['jpg'])]);
+  await assertOnlyFiles('assets/images/_optimized/page-hero', family(['avif', 'webp']));
+  for (const file of [pageHeroPlaceholder, ...family(['jpg'])]) {
+    await assertPublicFile(`assets/images/page-hero/${file}`);
+  }
+  for (const file of family(['avif', 'webp'])) {
+    await assertPublicFile(`assets/images/_optimized/page-hero/${file}`);
+  }
 });
 
 test('the exterior product keeps canonical variants without the typo pair', async () => {

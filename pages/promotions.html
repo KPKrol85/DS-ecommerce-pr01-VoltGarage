@@ -97,15 +97,38 @@
             <p>Okazje ograniczone czasowo na produkty, które dodają charakteru Twojemu autu.</p>
           </div>
           <div class="page-hero-media">
-            <img
-              class="page-hero-image"
-              src="/assets/images/page-hero/page-hero-placeholder.svg"
-              width="640"
-              height="400"
-              alt=""
-              loading="eager"
-              decoding="async"
-            />
+            <picture>
+              <source
+                type="image/avif"
+                srcset="
+                  /assets/images/_optimized/page-hero/promotions-hero-640x400.avif   640w,
+                  /assets/images/_optimized/page-hero/promotions-hero-1280x800.avif 1280w
+                "
+                sizes="(min-width: 1125px) 360px, (min-width: 625px) 32vw, 200px"
+              />
+              <source
+                type="image/webp"
+                srcset="
+                  /assets/images/_optimized/page-hero/promotions-hero-640x400.webp   640w,
+                  /assets/images/_optimized/page-hero/promotions-hero-1280x800.webp 1280w
+                "
+                sizes="(min-width: 1125px) 360px, (min-width: 625px) 32vw, 200px"
+              />
+              <img
+                class="page-hero-image"
+                src="/assets/images/page-hero/promotions-hero-640x400.jpg"
+                srcset="
+                  /assets/images/page-hero/promotions-hero-640x400.jpg   640w,
+                  /assets/images/page-hero/promotions-hero-1280x800.jpg 1280w
+                "
+                sizes="(min-width: 1125px) 360px, (min-width: 625px) 32vw, 200px"
+                width="640"
+                height="400"
+                alt=""
+                loading="eager"
+                decoding="async"
+              />
+            </picture>
           </div>
         </div>
       </section>

@@ -7,17 +7,29 @@ import sharp from 'sharp';
 import { discoverHtml, renderHtml } from '../html.mjs';
 
 const ROOT = fileURLToPath(new URL('../../', import.meta.url));
-// Shop is the first page to swap the shared placeholder for artwork of its own. Both halves of
-// that split are asserted here so neither drifts: the page that has its family keeps every
+// Shop and collections have swapped the shared placeholder for artwork of their own. Both halves
+// of that split are asserted here so neither drifts: a page that has its family keeps every
 // candidate it publishes, and the pages still waiting keep pointing at the one placeholder.
 const FALLBACK_DIR = 'assets/images/page-hero';
 const VARIANT_DIR = 'assets/images/_optimized/page-hero';
 const PLACEHOLDER = `/${FALLBACK_DIR}/page-hero-placeholder.svg`;
-const SHOP = 'pages/shop.html';
-// The master stays in src/ as encoding input. Nothing may copy it into public/ and no document
+// The stem is the artwork's name rather than the route's — collections carries the category
+// artwork — so the pairing is declared here instead of being derived from the page name.
+// Each master stays in src/ as encoding input. Nothing may copy one into public/ and no document
 // may name it: two megabytes of PNG is not something a browser should ever be offered.
-const SHOP_MASTER = 'src/assets/images/page-hero/shop-hero.png';
-const SHOP_VARIANTS = [
+const ARTWORK = [
+  {
+    file: 'pages/shop.html',
+    stem: 'shop-hero',
+    master: 'src/assets/images/page-hero/shop-hero.png',
+  },
+  {
+    file: 'pages/collections.html',
+    stem: 'category-hero',
+    master: 'src/assets/images/page-hero/category-hero.png',
+  },
+];
+const VARIANTS = [
   ['640x400', 640, 400],
   ['1280x800', 1280, 800],
 ];
@@ -37,12 +49,12 @@ const candidates = (value) =>
     .split(',')
     .map((candidate) => candidate.trim().split(/\s+/))
     .filter(([url]) => url);
-const variantUrl = (size, extension) =>
+const variantUrl = (stem, size, extension) =>
   extension === 'jpg'
-    ? `/${FALLBACK_DIR}/shop-hero-${size}.jpg`
-    : `/${VARIANT_DIR}/shop-hero-${size}.${extension}`;
-const expectedSrcset = (extension) =>
-  SHOP_VARIANTS.map(([size, width]) => [variantUrl(size, extension), `${width}w`]);
+    ? `/${FALLBACK_DIR}/${stem}-${size}.jpg`
+    : `/${VARIANT_DIR}/${stem}-${size}.${extension}`;
+const expectedSrcset = (stem, extension) =>
+  VARIANTS.map(([size, width]) => [variantUrl(stem, size, extension), `${width}w`]);
 
 const pagesCss = await fs.readFile(path.join(ROOT, 'css/partials/pages.css'), 'utf8');
 const themesCss = await fs.readFile(path.join(ROOT, 'css/partials/themes.css'), 'utf8');
@@ -57,8 +69,8 @@ const documents = await Promise.all(
 const heroes = documents.flatMap(([file, content]) =>
   [...content.matchAll(HERO)].map(([markup]) => ({ file, markup }))
 );
-const shopHero = heroes.find(({ file }) => file === SHOP);
-const placeholderHeroes = heroes.filter(({ file }) => file !== SHOP);
+const artworkFiles = new Set(ARTWORK.map(({ file }) => file));
+const placeholderHeroes = heroes.filter(({ file }) => !artworkFiles.has(file));
 
 test('every shared hero pairs a copy column with the reusable media slot', () => {
   assert.ok(heroes.length >= 9, `expected the shared hero on more pages, found ${heroes.length}`);
@@ -96,7 +108,7 @@ test('the hero image reserves its box from intrinsic dimensions, so nothing shif
   // Placeholder and artwork reserve the same 640 x 400 box, so a page swapping its own source
   // in cannot move the copy beside it.
   const [, width, height] = placeholder.match(/viewBox="0 0 (\d+) (\d+)"/);
-  assert.deepEqual([Number(width), Number(height)], SHOP_VARIANTS[0].slice(1));
+  assert.deepEqual([Number(width), Number(height)], VARIANTS[0].slice(1));
   for (const { file, markup } of heroes) {
     const image = markup.match(/<img\b[\s\S]*?\/?>/)[0];
     assert.equal(attribute(image, 'width'), width, `${file}: hero image width attribute`);
@@ -107,51 +119,81 @@ test('the hero image reserves its box from intrinsic dimensions, so nothing shif
   }
 });
 
-test('shop negotiates its own artwork: AVIF, then WebP, then the JPEG every browser reads', () => {
-  assert.ok(shopHero, `${SHOP}: expected the shared hero`);
-  const media = shopHero.markup.match(/<div class="page-hero-media">([\s\S]*?)<\/div>/)[1];
-  assert.equal(
-    (media.match(/<picture>/g) ?? []).length,
-    1,
-    `${SHOP}: the media slot holds exactly one picture`
-  );
-  const sources = media.match(/<source\b[\s\S]*?\/?>/g) ?? [];
-  assert.deepEqual(
-    sources.map((source) => attribute(source, 'type')),
-    ['image/avif', 'image/webp'],
-    `${SHOP}: AVIF is offered first, WebP second`
-  );
-  for (const [source, extension] of [
-    [sources[0], 'avif'],
-    [sources[1], 'webp'],
-  ]) {
-    assert.deepEqual(
-      candidates(attribute(source, 'srcset')),
-      expectedSrcset(extension),
-      `${SHOP}: ${extension} candidates`
+test('artwork pages negotiate: AVIF, then WebP, then the JPEG every browser reads', () => {
+  for (const { file, stem } of ARTWORK) {
+    const hero = heroes.find((candidate) => candidate.file === file);
+    assert.ok(hero, `${file}: expected the shared hero`);
+    const media = hero.markup.match(/<div class="page-hero-media">([\s\S]*?)<\/div>/)[1];
+    assert.equal(
+      (media.match(/<picture>/g) ?? []).length,
+      1,
+      `${file}: the media slot holds exactly one picture`
     );
-  }
-  const image = media.match(/<img\b[\s\S]*?\/?>/)[0];
-  // The img closes the picture: it is the fallback, so no source may follow it.
-  assert.match(media, /<img\b[\s\S]*?\/?>\s*<\/picture>/, `${SHOP}: the img closes the picture`);
-  assert.match(image, /\sclass="page-hero-image"/, `${SHOP}: the fallback keeps the shared class`);
-  assert.equal(attribute(image, 'src'), variantUrl('640x400', 'jpg'), `${SHOP}: fallback src`);
-  assert.deepEqual(candidates(attribute(image, 'srcset')), expectedSrcset('jpg'), `${SHOP}: jpeg`);
-  assert.equal(attribute(image, 'loading'), 'eager', `${SHOP}: the hero is above the fold`);
-  // One sizes value across all three candidate lists: a browser that falls back must not also be
-  // told a different box to pick its width against.
-  for (const tag of [...sources, image]) {
-    assert.equal(attribute(tag, 'sizes'), SIZES, `${SHOP}: every candidate list shares one sizes`);
+    const sources = media.match(/<source\b[\s\S]*?\/?>/g) ?? [];
+    assert.deepEqual(
+      sources.map((source) => attribute(source, 'type')),
+      ['image/avif', 'image/webp'],
+      `${file}: AVIF is offered first, WebP second`
+    );
+    for (const [source, extension] of [
+      [sources[0], 'avif'],
+      [sources[1], 'webp'],
+    ]) {
+      assert.deepEqual(
+        candidates(attribute(source, 'srcset')),
+        expectedSrcset(stem, extension),
+        `${file}: ${extension} candidates`
+      );
+    }
+    const image = media.match(/<img\b[\s\S]*?\/?>/)[0];
+    // The img closes the picture: it is the fallback, so no source may follow it.
+    assert.match(media, /<img\b[\s\S]*?\/?>\s*<\/picture>/, `${file}: the img closes the picture`);
+    assert.match(
+      image,
+      /\sclass="page-hero-image"/,
+      `${file}: the fallback keeps the shared class`
+    );
+    assert.equal(
+      attribute(image, 'src'),
+      variantUrl(stem, '640x400', 'jpg'),
+      `${file}: fallback src`
+    );
+    assert.deepEqual(
+      candidates(attribute(image, 'srcset')),
+      expectedSrcset(stem, 'jpg'),
+      `${file}: jpeg`
+    );
+    assert.equal(attribute(image, 'loading'), 'eager', `${file}: the hero is above the fold`);
+    // One sizes value across all three candidate lists: a browser that falls back must not also
+    // be told a different box to pick its width against.
+    for (const tag of [...sources, image]) {
+      assert.equal(
+        attribute(tag, 'sizes'),
+        SIZES,
+        `${file}: every candidate list shares one sizes`
+      );
+    }
+    // Each page names its own artwork: a copy-paste that left the previous page's stem behind
+    // would otherwise satisfy every structural assertion above.
+    for (const { stem: other } of ARTWORK) {
+      if (other !== stem) assert.ok(!media.includes(other), `${file}: names ${other} artwork`);
+    }
   }
   // 360px is the widest the frame ever renders, so an ordinary display takes the 640w file and
   // only a denser screen reaches for 1280w. A 1280w-only picture would hand every phone the big
   // one; a 640w-only picture would leave a retina hero soft.
-  assert.ok(SHOP_VARIANTS[0][1] >= 360, 'the small candidate covers the frame at DPR 1');
-  assert.ok(SHOP_VARIANTS[1][1] >= 360 * 2, 'the large candidate covers the frame at DPR 2');
+  assert.ok(VARIANTS[0][1] >= 360, 'the small candidate covers the frame at DPR 1');
+  assert.ok(VARIANTS[1][1] >= 360 * 2, 'the large candidate covers the frame at DPR 2');
 });
 
 test('the pages still waiting for artwork keep pointing at the one shared placeholder', () => {
-  assert.ok(placeholderHeroes.length >= 8, 'the placeholder phase still covers the other pages');
+  // Every hero is one of the two states; nothing may sit between them.
+  assert.equal(
+    placeholderHeroes.length,
+    heroes.length - ARTWORK.length,
+    'each hero is either migrated artwork or the shared placeholder'
+  );
+  assert.ok(placeholderHeroes.length >= 7, 'the placeholder phase still covers the other pages');
   for (const { file, markup } of placeholderHeroes) {
     assert.doesNotMatch(markup, /<picture\b/, `${file}: still on the placeholder, so no picture`);
     assert.doesNotMatch(markup, /\ssrcset=/, `${file}: the placeholder has no responsive family`);
@@ -183,34 +225,43 @@ test('every source the heroes name resolves to a published file', async () => {
   }
 });
 
-test('every published shop variant is the format and the 16 / 10 size its name claims', async () => {
-  for (const [size, width, height] of SHOP_VARIANTS) {
-    for (const [extension, format] of [
-      ['avif', 'heif'],
-      ['webp', 'webp'],
-      ['jpg', 'jpeg'],
-    ]) {
-      const url = variantUrl(size, extension);
-      const metadata = await sharp(path.join(ROOT, 'public', url.slice(1))).metadata();
-      assert.equal(metadata.format, format, `${url}: encoded format`);
-      if (extension === 'avif') assert.equal(metadata.compression, 'av1', `${url}: AVIF codec`);
-      assert.deepEqual([metadata.width, metadata.height], [width, height], `${url}: dimensions`);
-      // The frame is 16 / 10 and the image is object-fit: contain, so a variant off the ratio
-      // would letterbox itself inside the hero rather than fill it.
-      assert.equal(metadata.width / metadata.height, 16 / 10, `${url}: aspect ratio`);
+test('every published variant is the format and the 16 / 10 size its name claims', async () => {
+  for (const { stem } of ARTWORK) {
+    for (const [size, width, height] of VARIANTS) {
+      for (const [extension, format] of [
+        ['avif', 'heif'],
+        ['webp', 'webp'],
+        ['jpg', 'jpeg'],
+      ]) {
+        const url = variantUrl(stem, size, extension);
+        const metadata = await sharp(path.join(ROOT, 'public', url.slice(1))).metadata();
+        assert.equal(metadata.format, format, `${url}: encoded format`);
+        if (extension === 'avif') assert.equal(metadata.compression, 'av1', `${url}: AVIF codec`);
+        assert.deepEqual([metadata.width, metadata.height], [width, height], `${url}: dimensions`);
+        // The frame is 16 / 10 and the image is object-fit: contain, so a variant off the ratio
+        // would letterbox itself inside the hero rather than fill it.
+        assert.equal(metadata.width / metadata.height, 16 / 10, `${url}: aspect ratio`);
+      }
     }
   }
 });
 
-test('the retained PNG master stays an encoding source and never reaches a browser', async () => {
-  assert.ok((await fs.stat(path.join(ROOT, SHOP_MASTER))).isFile(), 'the master is retained');
-  await assert.rejects(
-    fs.lstat(path.join(ROOT, 'public', SHOP_MASTER.replace(/^src\//, ''))),
-    { code: 'ENOENT' },
-    'the master must not be copied into public/'
-  );
+test('the retained PNG masters stay encoding sources and never reach a browser', async () => {
+  for (const { master } of ARTWORK) {
+    assert.ok(
+      (await fs.stat(path.join(ROOT, master))).isFile(),
+      `${master}: the master is retained`
+    );
+    await assert.rejects(
+      fs.lstat(path.join(ROOT, 'public', master.replace(/^src\//, ''))),
+      { code: 'ENOENT' },
+      `${master}: the master must not be copied into public/`
+    );
+  }
   for (const [file, content] of documents) {
-    assert.ok(!content.includes(path.posix.basename(SHOP_MASTER)), `${file}: names the master`);
+    for (const { master } of ARTWORK) {
+      assert.ok(!content.includes(path.posix.basename(master)), `${file}: names the master`);
+    }
     assert.ok(!content.includes('/src/assets/'), `${file}: reaches into the source tree`);
   }
 });

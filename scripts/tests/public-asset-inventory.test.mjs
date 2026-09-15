@@ -8,12 +8,14 @@ const publicDir = fileURLToPath(new URL('../../public/', import.meta.url));
 const shortcutDir = 'assets/icons/shortcuts';
 const shortcuts = ['shortcut-new.png', 'shortcut-sale.png', 'shortcut-shop.png'];
 const heroSizes = ['800x600', '1280x720', '1920x1080'];
-// Subpage heroes publish one shared placeholder plus, per page, a 16 / 10 family in the three
-// formats the picture negotiates. Shop is the first page to have one; the rest are still on the
-// placeholder, so its two sizes are the whole approved set until the next page's artwork lands.
+// Subpage heroes publish one shared placeholder plus, per migrated page, a 16 / 10 family in the
+// three formats the picture negotiates. Shop and collections have theirs; the rest are still on
+// the placeholder, so these two families are the whole approved set until the next one lands.
+// The prefix is the artwork's name rather than the page's — collections publishes the category
+// artwork — so the families are listed by file stem and not derived from the route.
 const pageHeroPlaceholder = 'page-hero-placeholder.svg';
 const pageHeroSizes = ['640x400', '1280x800'];
-const pageHeroPages = ['shop'];
+const pageHeroFamilies = ['shop', 'category'];
 // The approved brand set: two theme lockups for the header and footer, the symbol-only badge for
 // compact marks, its outline variant — held with the set now that the page hero it watermarked
 // carries real artwork instead — and the square raster the storefront's JSON-LD names as the
@@ -78,16 +80,16 @@ test('the published hero inventory contains all nine hero-05 variants only', asy
   );
 });
 
-test('the page-hero inventory is the shared placeholder plus the approved shop family', async () => {
+test('the page-hero inventory is the shared placeholder plus the approved families', async () => {
   const family = (extensions) =>
-    pageHeroPages.flatMap((page) =>
+    pageHeroFamilies.flatMap((name) =>
       pageHeroSizes.flatMap((size) =>
-        extensions.map((extension) => `${page}-hero-${size}.${extension}`)
+        extensions.map((extension) => `${name}-hero-${size}.${extension}`)
       )
     );
-  // Two JPEG fallbacks beside the placeholder, two AVIF and two WebP in _optimized. Listing the
-  // family instead of counting the directory means the next page's artwork has to be approved
-  // here before it ships, and a stray export can never ride along with it.
+  // Two JPEG fallbacks per family beside the placeholder, two AVIF and two WebP in _optimized.
+  // Listing the families instead of counting the directory means the next page's artwork has to
+  // be approved here before it ships, and a stray export can never ride along with it.
   await assertOnlyFiles('assets/images/page-hero', [pageHeroPlaceholder, ...family(['jpg'])]);
   await assertOnlyFiles('assets/images/_optimized/page-hero', family(['avif', 'webp']));
   for (const file of [pageHeroPlaceholder, ...family(['jpg'])]) {

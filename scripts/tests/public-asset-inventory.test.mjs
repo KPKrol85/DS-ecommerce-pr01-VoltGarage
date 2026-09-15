@@ -9,14 +9,14 @@ const shortcutDir = 'assets/icons/shortcuts';
 const shortcuts = ['shortcut-new.png', 'shortcut-sale.png', 'shortcut-shop.png'];
 const heroSizes = ['800x600', '1280x720', '1920x1080'];
 // Subpage heroes publish one shared placeholder plus, per migrated page, a 16 / 10 family in the
-// three formats the picture negotiates. Shop, collections, new arrivals and promotions have
-// theirs; the rest are still on the placeholder, so these four families are the whole approved set
-// until the next one lands.
+// three formats the picture negotiates. Shop, collections, new arrivals, promotions and contact
+// have theirs; the rest are still on the placeholder, so these five families are the whole
+// approved set until the next one lands.
 // The prefix is the artwork's name rather than the page's — collections publishes the category
 // artwork — so the families are listed by file stem and not derived from the route.
 const pageHeroPlaceholder = 'page-hero-placeholder.svg';
 const pageHeroSizes = ['640x400', '1280x800'];
-const pageHeroFamilies = ['shop', 'category', 'new-arrivals', 'promotions'];
+const pageHeroFamilies = ['shop', 'category', 'new-arrivals', 'promotions', 'contact'];
 // The approved brand set: two theme lockups for the header and footer, the symbol-only badge for
 // compact marks, its outline variant — held with the set now that the page hero it watermarked
 // carries real artwork instead — and the square raster the storefront's JSON-LD names as the

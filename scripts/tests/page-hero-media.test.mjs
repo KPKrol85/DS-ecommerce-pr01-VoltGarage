@@ -7,10 +7,10 @@ import sharp from 'sharp';
 import { discoverHtml, renderHtml } from '../html.mjs';
 
 const ROOT = fileURLToPath(new URL('../../', import.meta.url));
-// Shop, collections, new arrivals and promotions have swapped the shared placeholder for artwork
-// of their own. Both halves of that split are asserted here so neither drifts: a page that has its
-// family keeps every candidate it publishes, and the pages still waiting keep pointing at the one
-// placeholder.
+// Shop, collections, new arrivals, promotions and contact have swapped the shared placeholder
+// for artwork of their own. Both halves of that split are asserted here so neither drifts: a page
+// that has its family keeps every candidate it publishes, and the pages still waiting keep
+// pointing at the one placeholder.
 const FALLBACK_DIR = 'assets/images/page-hero';
 const VARIANT_DIR = 'assets/images/_optimized/page-hero';
 const PLACEHOLDER = `/${FALLBACK_DIR}/page-hero-placeholder.svg`;
@@ -38,6 +38,11 @@ const ARTWORK = [
     file: 'pages/promotions.html',
     stem: 'promotions-hero',
     master: 'src/assets/images/page-hero/promotions-hero.png',
+  },
+  {
+    file: 'pages/contact.html',
+    stem: 'contact-hero',
+    master: 'src/assets/images/page-hero/contact-hero.png',
   },
 ];
 const VARIANTS = [
@@ -204,7 +209,7 @@ test('the pages still waiting for artwork keep pointing at the one shared placeh
     heroes.length - ARTWORK.length,
     'each hero is either migrated artwork or the shared placeholder'
   );
-  assert.ok(placeholderHeroes.length >= 5, 'the placeholder phase still covers the other pages');
+  assert.ok(placeholderHeroes.length >= 4, 'the placeholder phase still covers the other pages');
   for (const { file, markup } of placeholderHeroes) {
     assert.doesNotMatch(markup, /<picture\b/, `${file}: still on the placeholder, so no picture`);
     assert.doesNotMatch(markup, /\ssrcset=/, `${file}: the placeholder has no responsive family`);

@@ -17,15 +17,19 @@
     linear-gradient(180deg, var(--page-hero-top), var(--page-hero-bottom));
 }
 
-/* Copy first, media after it: one column until the hero is wide enough to seat artwork beside
-   the heading without crowding the lead paragraph. */
+/* Copy first, media after it. The narrowest phones stack the pair and centre the stack: left
+   alignment there strands the artwork against an empty right edge instead of balancing it. From
+   the project's 480px breakpoint the hero seats the artwork beside the heading, and copy and
+   media return to the reading edge and the outer edge respectively. */
 .page-hero .container {
   position: relative;
   z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-items: center;
+  justify-items: center;
   gap: var(--space-06);
+  text-align: center;
 }
 
 .page-hero-copy {
@@ -75,13 +79,23 @@
   letter-spacing: var(--ls-03);
 }
 
-@media (min-width: 900px) {
+@media (min-width: 480px) {
   .page-hero .container {
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-    gap: var(--space-09);
+    justify-items: stretch;
+    text-align: left;
   }
+  /* minmax(0, …) on both tracks and min(100%, …) on the frame keep the pair inside the container
+     at the narrow end of this range: the artwork gives way to its column instead of widening the
+     row. The base gap carries the two columns until the hero is wide enough to want more. */
   .page-hero-media {
     justify-self: end;
+  }
+}
+
+@media (min-width: 900px) {
+  .page-hero .container {
+    gap: var(--space-09);
   }
 }
 

@@ -3,7 +3,7 @@
 Volt Garage bundles third-party font software under `public/assets/fonts/`. That software is
 **not** covered by the KP_CODE Proprietary Project License that governs this project. Rights to
 it remain with its respective authors, and it is used under its own license, as stated in
-section 8 ("Third-party materials" / "Materiały podmiotów trzecich") of [LICENSE](LICENSE).
+section 8 ("Third-party materials" / "Materiały podmiotów trzecich") of [LICENSE.md](LICENSE.md).
 
 The complete license text for each family is stored next to that family's font files.
 

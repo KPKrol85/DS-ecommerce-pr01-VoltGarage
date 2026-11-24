@@ -3,7 +3,7 @@
   "private": true,
   "description": "Static multi-page automotive accessories store demo by KP_Code Digital   Studio",
   "author": "Kamil Król — KP_Code Digital Studio",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "SEE LICENSE IN LICENSE.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KPKrol85/DS-ecommerce-pr01-VoltGarage.git"

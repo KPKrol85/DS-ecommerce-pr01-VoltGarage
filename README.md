@@ -84,7 +84,7 @@ Projekt prezentuje interfejs katalogu, koszyka i checkoutu, ale nie jest aktywny
 │   ├── .vite/manifest.json                # Manifest wyników Vite
 │   └── ...                                # HTML, kopie public/ i wygenerowany sw.js
 ├── package.json
-└── LICENSE
+└── LICENSE.md
 ```
 
 ### Instalacja
@@ -207,7 +207,7 @@ Projekt nie implementuje bazy danych, uwierzytelniania, kont użytkowników ani 
 
 ### Licencja
 
-Kod i materiały należące do właściciela projektu są udostępniane na warunkach **Własnościowej Licencji Projektu KP_CODE, wersja 1.0**. Projekt nie jest oprogramowaniem open source. Szczegółowe dozwolone użycie, ograniczenia i zasady dotyczące materiałów podmiotów trzecich znajdują się w pliku [LICENSE](LICENSE).
+Kod i materiały należące do właściciela projektu są udostępniane na warunkach **Własnościowej Licencji Projektu KP_CODE, wersja 1.0**. Projekt nie jest oprogramowaniem open source. Szczegółowe dozwolone użycie, ograniczenia i zasady dotyczące materiałów podmiotów trzecich znajdują się w pliku [LICENSE.md](LICENSE.md).
 
 Dołączone fonty podmiotów trzecich nie są objęte tą licencją i pozostają na warunkach własnych licencji. Noty dotyczące tych zasobów, informacje o prawach autorskich oraz lokalizacja pełnych tekstów licencji są opisane w pliku [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 
@@ -295,7 +295,7 @@ The project presents catalog, cart, and checkout interfaces, but it is not an ac
 │   ├── .vite/manifest.json                # Vite output manifest
 │   └── ...                                # HTML, public/ copies, and generated sw.js
 ├── package.json
-└── LICENSE
+└── LICENSE.md
 ```
 
 ### Installation
@@ -415,6 +415,6 @@ The project does not implement a database, authentication, user accounts, or cro
 
 ### License
 
-Code and materials owned by the project owner are provided under the **KP_CODE Proprietary Project License, version 1.0**. The project is not open-source software. Detailed permitted uses, restrictions, and rules for third-party materials are defined in [LICENSE](LICENSE).
+Code and materials owned by the project owner are provided under the **KP_CODE Proprietary Project License, version 1.0**. The project is not open-source software. Detailed permitted uses, restrictions, and rules for third-party materials are defined in [LICENSE.md](LICENSE.md).
 
 Bundled third-party fonts are not covered by that license and remain subject to their own terms. Notices for those assets, their copyright information, and the location of the full license texts are recorded in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
